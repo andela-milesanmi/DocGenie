@@ -1,0 +1,35 @@
+{
+  "name": "docgenie",
+  "version": "1.0.0",
+  "description": "A document management system to help users organize documents",
+  "main": "server.js",
+  "scripts": {
+    "start:dev": "nodemon ./server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andela-mharuna/DocGenie.git"
+  },
+  "keywords": [
+    "document",
+    "api"
+  ],
+  "author": "memuna haruna",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andela-mharuna/DocGenie/issues"
+  },
+  "homepage": "https://github.com/andela-mharuna/DocGenie#readme",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "morgan": "^1.8.2",
+    "pg": "^6.2.3",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.30.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
