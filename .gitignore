@@ -1,0 +1,8 @@
+node_modules
+coverage
+.nyc_output
+.setup.js
+.vscode
+.DS_Store
+.env
+bundle.js
