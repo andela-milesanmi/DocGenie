@@ -1,5 +1,5 @@
 'use strict';
-module.exports = function(sequelize, DataTypes) {
+module.exports = (sequelize, DataTypes) => {
   var Document = sequelize.define('Document', {
     userId: {
       type: DataTypes.INTEGER,
@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
     access: {
       type: DataTypes.STRING,
       allowNull: false,
-      defaultValue: public,
+      defaultValue: 'public',
       validate: {
         isIn: [['private', 'public', 'role']]
       },
