@@ -1,4 +1,5 @@
 const User = require('../models').User;
+const Document = require('../models').Document;
 
 module.exports = {
   createNewUser(request, response) {
@@ -75,6 +76,23 @@ module.exports = {
         .destroy()
         .then(() => response.status(200).send("User deleted successfully"))
         .catch(error => response.status(400).send(error));
+    })
+    .catch(error => response.status(400).send(error));
+  },
+  findUserDocuments(request, response) {
+  return Document
+    .findAll({
+      where: {
+        userId: request.params.id,
+      }
+    })
+    .then(document => {
+      if (!document.length) {
+        return response.status(404).send({
+          message: 'Document(s) Not Found',
+        });
+      }
+      return response.status(200).send(document);
     })
     .catch(error => response.status(400).send(error));
   },
