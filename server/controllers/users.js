@@ -23,9 +23,22 @@ module.exports = {
       .catch(error => response.status(400).send(error));
   },
   listAllUsers(request, response) {
+    const limit = request.query.limit || '5';
+    const offset = request.query.offset || '0';
     return User
-      .all()
-      .then(users => response.status(201).send(users))
+      .findAndCountAll({
+        limit,
+        offset,
+      })
+      .then(users => {
+        if (!users) {
+          return response.status(404).send({
+           message: 'No user found',
+         });
+        }
+        console.log("user.rows", users.rows)
+        return response.status(200).send(users);
+      })
       .catch(error => response.status(400).send(error));
   },
   findAUser(request, response) {
@@ -58,9 +71,7 @@ module.exports = {
           email: request.body.email || user.email,
           password: request.body.password || user.password,
         })
-        .then(() => response.status(200).send(user))  // Send back updated user
-        .catch((error) => response.status(400).send(error));
-    })
+    }).then(() => response.status(200).send(user))  // Send back updated user
     .catch((error) => response.status(400).send(error));
   },
   deleteAUser(request, response) {
@@ -74,9 +85,7 @@ module.exports = {
       }
       return user
         .destroy()
-        .then(() => response.status(200).send("User deleted successfully"))
-        .catch(error => response.status(400).send(error));
-    })
+    }).then(() => response.status(200).send("User deleted successfully"))
     .catch(error => response.status(400).send(error));
   },
   findUserDocuments(request, response) {
@@ -96,4 +105,57 @@ module.exports = {
     })
     .catch(error => response.status(400).send(error));
   },
+  searchForUser(request, response) {
+    return User
+      .findAll({
+        where: {
+          $or: [
+            {
+              username: {
+                $iLike: `%${request.params.searchKey}%`
+              }
+            },
+            {
+              fullname: {
+                $iLike: `%${request.params.searchKey}%`
+              }
+            }
+          ]
+        },
+        limit: 5,
+      }).then((searchResult) => {
+        if (!searchResult.length) {
+          return response.status(404).send({
+            message: 'No user found',
+          });
+        }
+        return response.status(200).send(searchResult);
+      })
+    .catch(error => response.status(400).send(error));
+  },
+
+
+  // fetchFiveUsers(request, response) {
+  //   const limit = request.params.limit || '5';
+  //   const offset = request.params.offset || '5';
+  //   return User.findAll({
+  //     limit: limit,
+  //     offset: offset,
+  //   }).then((users) => {
+  //     if (!users.length) {
+  //       return response.status(404).send({
+  //         message: 'No user found',
+  //       });
+  //     }
+  //     // const pagination = limit && offset ? {
+  //     //   totalCount: users.count,
+  //     //   pages: Math.ceil(users.count / limit),
+  //     //   currentPage: Math.floor(offset / limit) + 1,
+  //     //   pageSize: users.rows.length,
+  //     // }: null;
+  //     console.log("user.rows", users.rows)
+  //     return response.status(200).send(users);
+  //   })
+  //   .catch(error => response.status(400).send(error));
+  // }
 };

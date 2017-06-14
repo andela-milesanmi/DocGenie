@@ -6,14 +6,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
       validate: {
-        min: 3,
+        len: [3]
       }
     },
     fullname: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        min: 3,
+        len: [3]
       }
     },
     roleId: {
@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        min: 6,
+        len: [6],
       }
     }
   }, {

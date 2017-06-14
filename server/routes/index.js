@@ -26,4 +26,8 @@ module.exports = (app) => {
   app.get('/api/documents/:id', DocumentsController.findADocument);
   app.put('/api/documents/:id', DocumentsController.updateADocument);
   app.delete('/api/documents/:id', DocumentsController.deleteADocument);
+
+  // search routes
+  app.get('/api/search/users/:searchKey', UsersController.searchForUser)
+  app.get('/api/search/documents/:searchKey', DocumentsController.searchForDocument)
 };

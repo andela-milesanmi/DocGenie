@@ -13,9 +13,22 @@ module.exports = {
       .catch(error => response.status(400).send(error));
   },
   listAllDocuments(request, response) {
+    const limit = request.query.limit || '5';
+    const offset = request.query.offset || '0';
     return Document
-      .all()
-      .then(document => response.status(200).send(document))
+      .findAndCountAll({
+        limit,
+        offset,
+      })
+      .then(documents => {
+        if (!documents) {
+          return response.status(404).send({
+           message: 'No documents found',
+         });
+        }
+        console.log("documents.rows", documents.rows)
+        return response.status(200).send(documents);
+      })
       .catch(error => response.status(400).send(error));
   },
   findADocument(request, response) {
@@ -37,7 +50,7 @@ module.exports = {
     .then(document => {
       if (!document) {
         return response.status(404).send({
-          message: 'document Not Found',
+          message: 'Document Not Found',
         });
       }
       return document
@@ -68,4 +81,32 @@ module.exports = {
     })
     .catch(error => response.status(400).send(error));
   },
+  searchForDocument(request, response) {
+    return Document
+      .findAll({
+        where: {
+          $or: [
+            {
+              title: {
+                $iLike: `%${request.params.searchKey}%`
+              }
+            },
+            {
+              content: {
+                $iLike: `%${request.params.searchKey}%`
+              }
+            }
+          ]
+        },
+        limit: 5,
+      }).then((searchResult) => {
+        if (!searchResult.length) {
+          return response.status(404).send({
+            message: 'No documents found',
+          });
+        }
+        return response.status(200).send(searchResult);
+      })
+    .catch(error => response.status(400).send(error));
+  }
 };
