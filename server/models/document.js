@@ -1,6 +1,5 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
-  var Document = sequelize.define('Document', {
+  const Document = sequelize.define('Document', {
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -10,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
       validate: {
-        len: [3]
+        len: {
+          args: 3,
+          msg: 'Document title must be greater than 3 letters'
+        }
       }
     },
     access: {
@@ -18,23 +20,29 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 'public',
       validate: {
-        isIn: [['private', 'public', 'role']]
+        isIn: {
+          args: [['private', 'public', 'role']],
+          msg: 'Access must be either private, public or role'
+        }
       },
     },
     content: {
       type: DataTypes.TEXT,
       allowNull: false,
       validate: {
-        len: [3]
-      },
+        len: {
+          args: 3,
+          msg: 'Document content must be longer than 3 letters'
+        }
+       },
     }
   }, {
     classMethods: {
-      associate: function(models) {
+      associate: function (models) {
         // associations can be defined here
-      Document.belongsTo(models.User, {
-        foreignKey: 'userId',
-        onDelete: 'CASCADE',
+        Document.belongsTo(models.User, {
+          foreignKey: 'userId',
+          onDelete: 'CASCADE',
       });
       }
     }

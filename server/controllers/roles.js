@@ -15,7 +15,7 @@ module.exports = {
     .then(roles => response.status(200).send(roles))
     .catch(error => response.status(400).send(error));
   },
-  destroyArole(request, response) {
+  destroyARole(request, response) {
   return Role
     .findById(request.params.id)
     .then(role => {

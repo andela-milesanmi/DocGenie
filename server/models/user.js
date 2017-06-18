@@ -1,4 +1,5 @@
-'use strict';
+const bcrypt = require('bcrypt');
+
 module.exports = (sequelize, DataTypes) => {
   var User = sequelize.define('User', {
     username: {
@@ -6,14 +7,20 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
       validate: {
-        len: [3]
-      }
+        len: {
+          args: [2, 30],
+          msg: 'Username length must be between 2 and 30 characters'
+        }
+       }
     },
     fullname: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [3]
+        len: {
+          args: [3, 30],
+          msg: 'Fullname length must be between 3 and 30 characters'
+        }
       }
     },
     roleId: {
@@ -26,14 +33,24 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       allowNull: false,
       validate: {
-        isEmail: true,
+        isEmail: {
+          args: true,
+          msg: 'Not a valid email'
+        },
+        len: {
+          args: [6, 128],
+          msg: 'Email length must be between 6 and 128 characters'
+        }
       }
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [6],
+        len: {
+          args: [6, 20],
+          msg: 'Password length must be between 6 and 20 characters'
+        }
       }
     }
   }, {
@@ -48,6 +65,22 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: 'roleId',
           onDelete: 'CASCADE',
         });
+      }
+    },
+    instanceMethods: {
+      generatePasswordHash: (user) => {
+        user.password = bcrypt.hashSync(user.password, 8);
+      },
+      validatePassword: (password, user) => {
+        return bcrypt.compareSync(password, user.password);
+      },
+    },
+    hooks: {
+      beforeCreate: (user) => {
+        user.generatePasswordHash(user);
+      },
+      afterUpdate: (user) => {
+        user.generatePasswordHash(user);
       }
     }
   });

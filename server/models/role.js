@@ -1,4 +1,3 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
   var Role = sequelize.define('Role', {
     title: {
@@ -6,7 +5,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
       validate: {
-        len: [3]
+        len: {
+          args: 3,
+          msg: 'Role title must be longer than 3 letters'
+        }
       }
     }
   }, {

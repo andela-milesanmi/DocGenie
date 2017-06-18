@@ -13,28 +13,38 @@ module.exports = {
       .catch(error => response.status(400).send(error));
   },
   listAllDocuments(request, response) {
-    const limit = request.query.limit || '5';
+    const limit = request.query.limit || '10';
     const offset = request.query.offset || '0';
     return Document
       .findAndCountAll({
         limit,
         offset,
+        order: '"createdAt" DESC',
       })
-      .then(documents => {
+      .then((documents) => {
         if (!documents) {
           return response.status(404).send({
-           message: 'No documents found',
+            message: 'No documents found',
          });
         }
-        console.log("documents.rows", documents.rows)
-        return response.status(200).send(documents);
+        const pagination = limit && offset ? {
+          totalCount: documents.count,
+          pages: Math.ceil(documents.count / limit),
+          currentPage: Math.floor(offset / limit) + 1,
+          pageSize: documents.rows.length,
+        } : null;
+
+        return response.status(200).send({
+          documents: documents.rows,
+          pagination,
+        });
       })
       .catch(error => response.status(400).send(error));
   },
   findADocument(request, response) {
-  return Document
+    return Document
     .findById(request.params.id)
-    .then(document => {
+    .then((document) => {
       if (!document) {
         return response.status(404).send({
           message: 'Document Not Found',
@@ -45,9 +55,9 @@ module.exports = {
     .catch(error => response.status(400).send(error));
   },
   updateADocument(request, response) {
-  return Document
+    return Document
     .findById(request.params.id)
-    .then(document => {
+    .then((document) => {
       if (!document) {
         return response.status(404).send({
           message: 'Document Not Found',
@@ -55,20 +65,20 @@ module.exports = {
       }
       return document
         .update({
-        userId: request.body.userId || document.userId,
-        title: request.body.title || document.title,
-        access: request.body.access || document.access,
-        content: request.body.content || document.content,
+          userId: request.body.userId || document.userId,
+          title: request.body.title || document.title,
+          access: request.body.access || document.access,
+          content: request.body.content || document.content,
         })
         .then(() => response.status(200).send(document))
-        .catch((error) => response.status(400).send(error));
+        .catch((error) => { response.status(400).send(error); });
     })
-    .catch((error) => response.status(400).send(error));
+      .catch((error) => { response.status(400).send(error); });
   },
   deleteADocument(request, response) {
-  return Document
+    return Document
     .findById(request.params.id)
-    .then(document => {
+    .then((document) => {
       if (!document) {
         return response.status(400).send({
           message: 'Document Not Found',
@@ -98,7 +108,7 @@ module.exports = {
             }
           ]
         },
-        limit: 5,
+        limit: 10,
       }).then((searchResult) => {
         if (!searchResult.length) {
           return response.status(404).send({
