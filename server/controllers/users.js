@@ -7,6 +7,7 @@ const authentication = require('../middleware/authentication');
 
 module.exports = {
   createNewUser(request, response) {
+    console.log(request.body, 'this is a request');
     const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
     if (!emailRegex.test(request.body.email)) {
       return response.status(401).send({
@@ -16,6 +17,9 @@ module.exports = {
     if (!request.body.fullname || !request.body.email || !request.body.password
       || !request.body.username) {
       return response.status(401).send({ message: 'Please fill all the fields' });
+    }
+    if (request.body.password !== request.body.confirm_password) {
+      return response.status(401).send({ message: 'Password does not match' });
     }
 
     // check if roleId is 1
@@ -37,6 +41,7 @@ module.exports = {
         ]
       },
     }).then((existingUser) => {
+      console.log(existingUser, 'got to the existing user');
       if (existingUser.length > 0) {
         throw new Error({
           message: 'Username or email already exists'
@@ -59,7 +64,8 @@ module.exports = {
         token,
       });
     }).catch((error) => {
-      response.status(400).send(error);
+      console.log(JSON.stringify(error.message), 'error');
+      response.status(400).send(error.message);
     });
   },
   signIn(request, response) {
@@ -77,7 +83,7 @@ module.exports = {
         return response.status(400).send({
           message: 'User does not exist',
         });
-      } else if (!validatePassword(request.body.password)) {
+      } else if (!user.validatePassword(request.body.password, user)) {
         return response.status(400).send({
           message: 'Invalid password',
         });
@@ -91,7 +97,10 @@ module.exports = {
         user,
         token,
       });
-    }).catch(error => response.status(400).send(error));
+    }).catch((error) => {
+      const errorMessage = error.message || error;
+      response.status(400).send(errorMessage);
+    });
   },
   listAllUsers(request, response) {
     const limit = request.query.limit || '10';
@@ -123,21 +132,21 @@ module.exports = {
   },
   findAUser(request, response) {
     return User
-    .findById(request.params.id)
-    .then((user) => {
-      if (!user) {
-        return response.status(404).send({
-          message: 'User Not Found',
-        });
-      }
-      return response.status(200).send(user);
-    })
-    .catch(error => response.status(400).send(error));
+      .findById(request.params.id)
+      .then((user) => {
+        if (!user) {
+          return response.status(404).send({
+            message: 'User Not Found',
+          });
+        }
+        return response.status(200).send(user);
+      })
+      .catch(error => response.status(400).send(error));
   },
   updateAUser(request, response) {
-       // check if roleId is 1
+    // check if roleId is 1
     return User
-    .findById(request.params.id)
+      .findById(request.params.id)
       .then((user) => {
         if (!user) {
           throw new Error('User Not Found');
@@ -146,38 +155,38 @@ module.exports = {
           throw new Error('You are not authorized to change a user\'s role');
         }
         return user
-        .update(request.body);
-      }).then(user => response.status(200).send(user))  // Send back updated user
+          .update(request.body);
+      }).then(user => response.status(200).send(user)) // Send back updated user
       .catch((error) => {
         response.status(400).send(error.message);
       });
   },
   deleteAUser(request, response) {
     return User
-    .findById(request.params.id)
-    .then((user) => {
-      if (!user) {
-        return response.status(400).send({
-          message: 'User Not Found',
-        });
-      }
-      return user
-        .destroy();
-    }).then(() => response.status(200).send('User deleted successfully'))
-    .catch(error => response.status(400).send(error));
+      .findById(request.params.id)
+      .then((user) => {
+        if (!user) {
+          return response.status(400).send({
+            message: 'User Not Found',
+          });
+        }
+        return user
+          .destroy();
+      }).then(() => response.status(200).send('User deleted successfully'))
+      .catch(error => response.status(400).send(error));
   },
   findUserDocuments(request, response) {
     const limit = request.query.limit || '10';
     const offset = request.query.offset || '0';
     return Document
-    .findAndCountAll({
-      where: {
-        userId: request.params.id,
-      },
-      limit,
-      offset,
-      order: '"createdAt" DESC',
-    })
+      .findAndCountAll({
+        where: {
+          userId: request.params.id,
+        },
+        limit,
+        offset,
+        order: '"createdAt" DESC',
+      })
       .then((documents) => {
         if (!documents) {
           return response.status(404).send({
@@ -223,7 +232,7 @@ module.exports = {
         }
         return response.status(200).send(searchResult);
       })
-    .catch(error => response.status(400).send(error));
+      .catch(error => response.status(400).send(error));
   },
   signOut(request, response) {
     return response.status(200).send({ message: 'Successfully logged out.' });

@@ -1,0 +1,34 @@
+body{
+  background:
+  linear-gradient(
+      rgba(0,0,0,0.4),
+      rgba(0,0,0,0.4)
+    ),url('../images/wood.jpeg');
+}
+.main-nav{
+  background-color: #08B2E3;
+  padding:  0px 5px 0px 10px;
+}
+.index-page{
+  color: #fff;
+}
+
+.signin-button{
+  color: #C7AC5D;
+}
+.signup-form{
+  background-color: #EFE9F4;
+  padding: 15px !important;
+}
+.signup-button{
+  color: #000000;
+  background-color: #08B2E3;
+  padding: 10px;
+  border-radius: 7%;
+}
+.brand-logo{
+  // color: #57313E !important;
+}
+// .signup{
+//   color: black !important;
+// }

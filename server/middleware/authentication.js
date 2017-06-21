@@ -1,6 +1,5 @@
-// require dotenv from 'dotenv';
 const jwt = require('jsonwebtoken');
-// dotenv.config();
+
 
 module.exports = {
   verifyToken(request, response, next) {
@@ -9,6 +8,7 @@ module.exports = {
     const token = request.headers.authorization ||
       request.headers['x-access-token'];
     if (token) {
+      console.log(process.env.JWTSECRET, 'jwtSecret')
       jwt.verify(token, process.env.JWTSECRET, (error, decoded) => {
         if (error) {
           return response.status(401).send({
