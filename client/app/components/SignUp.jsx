@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { createUser, editUser } from '../actions/userActions';
 
@@ -24,13 +24,14 @@ class SignUp extends React.Component {
     const password = e.target.password.value;
     const confirm_password = e.target.confirm_password.value;
     this.props.createUser({ username, fullname, email, password, confirm_password });
+    browserHistory.push('/dashboard');
   }
   render() {
     return (
       <div className="container">
         <div className="row">
           <form className="signup-form col s8 push-s6" onSubmit={this.onSubmit} action="#">
-            <div>{this.props.user.error}</div>
+            <div className="error-message">{this.props.user.error}</div>
             <div className="row">
               <div className="input-field col s6">
                 <input name="username" id="username" type="text" className="validate" />
@@ -70,12 +71,11 @@ class SignUp extends React.Component {
     );
   }
 }
-// const mapStateToProps
-// const mapDispatchToProps
+
 // Maps state from store to props
 const mapStateToProps = (state) => {
   return {
-    // You can now say this.props.books
+    // You can now say this.props.user
     user: state.user
   };
 };

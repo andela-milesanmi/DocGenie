@@ -25,7 +25,7 @@ module.exports = {
         if (!documents) {
           return response.status(404).send({
             message: 'No documents found',
-         });
+          });
         }
         const pagination = limit && offset ? {
           totalCount: documents.count,
@@ -43,53 +43,53 @@ module.exports = {
   },
   findADocument(request, response) {
     return Document
-    .findById(request.params.id)
-    .then((document) => {
-      if (!document) {
-        return response.status(404).send({
-          message: 'Document Not Found',
-        });
-      }
-      return response.status(200).send(document);
-    })
-    .catch(error => response.status(400).send(error));
+      .findById(request.params.id)
+      .then((document) => {
+        if (!document) {
+          return response.status(404).send({
+            message: 'Document Not Found',
+          });
+        }
+        return response.status(200).send(document);
+      })
+      .catch(error => response.status(400).send(error));
   },
   updateADocument(request, response) {
     return Document
-    .findById(request.params.id)
-    .then((document) => {
-      if (!document) {
-        return response.status(404).send({
-          message: 'Document Not Found',
-        });
-      }
-      return document
-        .update({
-          userId: request.body.userId || document.userId,
-          title: request.body.title || document.title,
-          access: request.body.access || document.access,
-          content: request.body.content || document.content,
-        })
-        .then(() => response.status(200).send(document))
-        .catch((error) => { response.status(400).send(error); });
-    })
+      .findById(request.params.id)
+      .then((document) => {
+        if (!document) {
+          return response.status(404).send({
+            message: 'Document Not Found',
+          });
+        }
+        return document
+          .update({
+            userId: request.body.userId || document.userId,
+            title: request.body.title || document.title,
+            access: request.body.access || document.access,
+            content: request.body.content || document.content,
+          })
+          .then(() => response.status(200).send(document))
+          .catch((error) => { response.status(400).send(error); });
+      })
       .catch((error) => { response.status(400).send(error); });
   },
   deleteADocument(request, response) {
     return Document
-    .findById(request.params.id)
-    .then((document) => {
-      if (!document) {
-        return response.status(400).send({
-          message: 'Document Not Found',
-        });
-      }
-      return document
-        .destroy()
-        .then(() => response.status(200).send("Document deleted successfully"))
-        .catch(error => response.status(400).send(error));
-    })
-    .catch(error => response.status(400).send(error));
+      .findById(request.params.id)
+      .then((document) => {
+        if (!document) {
+          return response.status(400).send({
+            message: 'Document Not Found',
+          });
+        }
+        return document
+          .destroy()
+          .then(() => response.status(200).send('Document deleted successfully'))
+          .catch(error => response.status(400).send(error));
+      })
+      .catch(error => response.status(400).send(error));
   },
   searchForDocument(request, response) {
     return Document
@@ -117,6 +117,6 @@ module.exports = {
         }
         return response.status(200).send(searchResult);
       })
-    .catch(error => response.status(400).send(error));
+      .catch(error => response.status(400).send(error));
   }
 };

@@ -10,7 +10,9 @@ import Header from './Header.jsx';
 const App = props => (
   <div>
     <Header />
-    {props.children}
+    <div className="app-container">
+      {props.children}
+    </div>
   </div>
 );
 

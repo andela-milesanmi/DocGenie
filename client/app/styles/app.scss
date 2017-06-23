@@ -1,18 +1,25 @@
 body{
+  font-family: 'Lora', serif;
+}
+.app-container{
   background:
   linear-gradient(
-      rgba(0,0,0,0.4),
-      rgba(0,0,0,0.4)
-    ),url('../images/wood.jpeg');
+      rgba(0,0,0,0.7),
+      rgba(0,0,0,0.7)
+    ),url('../images/docgenie1.jpg');
+  opacity: 0.9;
+  margin: 0;
+  height: 100%;
+  padding: 2;
 }
 .main-nav{
   background-color: #08B2E3;
   padding:  0px 5px 0px 10px;
+  opacity: 1 !important;
 }
 .index-page{
   color: #fff;
 }
-
 .signin-button{
   color: #C7AC5D;
 }
@@ -25,6 +32,17 @@ body{
   background-color: #08B2E3;
   padding: 10px;
   border-radius: 7%;
+}
+.error-message{
+  color: red;
+  font-size: 15px;
+}
+.create-doc{
+  background-color: #EE6352;
+  margin: 2%;
+}
+.create-doc:hover{
+  background-color: #08B2E3;
 }
 .brand-logo{
   // color: #57313E !important;

@@ -4,7 +4,7 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import App from './components/App.jsx';
 import Home from './components/Home.jsx';
-import Document from './components/documents/Document.jsx';
+import AllDocuments from './components/documents/AllDocuments.jsx';
 import './styles/app.scss';
 
 import configureStore from './store/configureStore';
@@ -18,7 +18,7 @@ const Root = () => (
     <Router history={browserHistory}>
       <Route path="/" component={App}>
         <IndexRoute component={Home} />
-        <Route path="/documents" component={Document} />
+        <Route path="/dashboard" component={AllDocuments} />
       </Route>
     </Router>
   </Provider>

@@ -33,6 +33,7 @@ module.exports = {
   generateToken(user) {
     return jwt.sign({
       userId: user.id,
+      roleId: user.roleId,
     }, process.env.JWTSECRET, { expiresIn: '1 day' });
   },
 };
