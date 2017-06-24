@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { viewAllDocuments, changeCurrentDocument, deleteDocument } from '../../actions/documentActions';
 import CreateDocument from './CreateDocument.jsx';
 import Search from '../Search.jsx';
+import DocumentCard from './DocumentCard.jsx';
+
 /**
 * This is a pure function that receives properties as props parameter
 * and is the parent component in which all other child components
@@ -19,9 +21,6 @@ class AllDocuments extends React.Component {
   editDocument(document) {
     this.props.changeCurrentDocument(document);
   }
-  deleteDocument(document) {
-    this.props.deleteDocument(document);
-  }
   componentDidMount() {
     this.props.viewAllDocuments();
   }
@@ -29,7 +28,7 @@ class AllDocuments extends React.Component {
     // return JSX
     return (
       <div>
-        <a href="#the-form" className="btn-floating btn-large create-doc right" onClick={() => this.editDocument({})}>
+        <a href="#the-form" className="btn-floating btn-large create-doc right" onClick={() => this.editDocument()}>
           <i className="material-icons">create</i>
         </a>
         <div className="row">
@@ -40,18 +39,7 @@ class AllDocuments extends React.Component {
         <div className="col s12">
           <div className="row">
             {this.props.documents && this.props.documents.map((document, i) => (
-              <div index={i} className="col s4 m4 darken-1">
-                <div className="card">
-                  <div className="card-content white-text">
-                    <span style={{ color: '#000' }} className="card-title">{ document.title }</span>
-                    <p style={{ color: '#000' }}>{ document.content }</p>
-                  </div>
-                  <div className="card-action form-card-action">
-                    <a href="#the-form" onClick={() => this.editDocument(document)}>EDIT</a>
-                    <a href="#" onClick={() => this.deleteDocument(document)}>DELETE</a>
-                  </div>
-                </div>
-              </div>
+              <DocumentCard index={i} document={document}/>
             )
             )}
           </div>
