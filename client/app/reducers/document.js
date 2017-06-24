@@ -7,6 +7,7 @@ export const CREATE_DOCUMENT_ERROR = 'CREATE_DOCUMENT_ERROR';
 export const VIEW_DOCUMENTS_ERROR = 'VIEW_DOCUMENTS_ERROR';
 export const EDIT_DOCUMENT_ERROR = 'EDIT_DOCUMENT_ERROR';
 export const DELETE_DOCUMENT_ERROR = 'DELETE_DOCUMENT_ERROR';
+export const CHANGE_CURRENT_DOCUMENT = 'CHANGE_CURRENT_DOCUMENT';
 
 
 // export default (state = [], action) => {
@@ -29,8 +30,28 @@ export default (state = {}, action) => {
     const newDocuments = [...documents, ...action.documents];
     return { ...state, documents: newDocuments };
   }
-  case VIEW_DOCUMENTS_ERROR :
+  case VIEW_DOCUMENTS_ERROR : {
     return { ...state, error: action.error };
+  }
+  case CHANGE_CURRENT_DOCUMENT: {
+    return { ...state, currentDocument: action.document };
+  }
+  case CREATE_DOCUMENT: {
+    const { documents = [] } = state;
+    const newDocuments = [action.document, ...documents];
+    return { ...state, documents: newDocuments };
+  }
+  case CREATE_DOCUMENT_ERROR: {
+    return { ...state, error: action.error };
+  }
+  case EDIT_DOCUMENT: {
+    const { documents = [] } = state;
+    const filteredDocuments = documents.filter(doc => action.document.id !== doc.id);
+    return { ...state, documents: [action.document, ...filteredDocuments] };
+  }
+  case EDIT_DOCUMENT_ERROR: {
+    return { ...state, error: action.error };
+  }
   default:
     return state;
   }

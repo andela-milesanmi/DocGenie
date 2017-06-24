@@ -27,13 +27,13 @@ app.use('/api', authentication.verifyToken);
 
 require('./server/routes')(app);
 
-app.use(express.static(path.resolve(__dirname + '/client/public')));
+app.use(express.static(path.resolve(`${__dirname}/public`)));
 
 // Setup a default catch-all route that sends back a
 // welcome message in JSON format.
 
 app.get('*', function (request, response) {
-  response.sendFile(path.resolve(__dirname + '/client/index.html'));
+  response.sendFile(path.resolve(`${__dirname}/public/index.html`));
 });
 
 // const server = http.createServer(app);

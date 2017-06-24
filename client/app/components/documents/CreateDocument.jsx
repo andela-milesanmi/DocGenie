@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { viewAllDocuments } from '../../actions/documentActions';
+import { Modal, Button, Icon } from 'react-materialize';
+import { createDocument, editDocument } from '../../actions/documentActions';
 
 
 /**
@@ -11,46 +12,65 @@ import { viewAllDocuments } from '../../actions/documentActions';
 * @returns a react element.
 */
 
-class AllDocuments extends React.Component {
+class CreateDocument extends React.Component {
   constructor(props) {
   // Pass props back to parent
     super(props);
+    this.state = { ...this.props.currentDocument };
+    this.handleCreateDocument = this.handleCreateDocument.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
-  componentDidMount() {
-    this.props.viewAllDocuments();
+  onChange(e) {
+    this.setState({ [e.target.name]: e.target.value });
   }
+  componentWillReceiveProps(nextProps) {
+    this.setState({ ...nextProps.currentDocument });
+  }
+  handleCreateDocument(event) {
+    event.preventDefault();
+    const title = event.target.title.value;
+    const content = event.target.content.value;
+    const access = event.target.access.value;
+    console.log(event.target.title.value, event.target.content.value, event.target.access.value, 'create form data');
+    !this.props.currentDocument.id ? this.props.createDocument({ title, content, access }) :
+      this.props.editDocument({ title, content, access, id: this.props.currentDocument.id });
+  }
+
   render() {
+    // Title input tracker
     // return JSX
-    console.log(this.props.documents, 'documents');
     return (
       <div>
-        <div className="row">
-          <h3 className="col s8" style={{ color: '#fff' }}>All Documents</h3>
-          <a className="btn-floating btn-large waves-effect waves-light right create-doc"><i className="material-icons">add</i></a>
-        </div>
-        <div className="col s12">
+        <Modal
+          header={!this.props.currentDocument.title ? 'Create Document' : 'Edit Document'} id="the-form">
           <div className="row">
-            {this.props.documents && this.props.documents.map((document, i) => (
-              <div index={i} className="col s4 m4 darken-1">
-                <div className="card">
-                  <div className="card-content white-text">
-                    <span style={{ color: '#000' }} className="card-title">{ document.title }</span>
-                    <p style={{ color: '#000' }}>{ document.content }</p>
-                  </div>
-                  <div className="card-action">
-                    <a href="#">EDIT</a>
-                    <a href="#">DELETE</a>
-                  </div>
+            <form className="col s12 m12" onSubmit={this.handleCreateDocument} action="#">
+              <div className="row">
+                <div className="input-field col s12">
+                  <input name="title" id="title" type="text" className="validate" placeholder="Title" value={this.state.title} onChange={this.onChange}/>
+                  <label htmlFor="title" />
                 </div>
               </div>
-            )
-            )};
+              <div className="row">
+                <select name="access" className="browser-default" onChange={this.onChange}>
+                  <option value="" disabled selected={!this.state.access}>Select access</option>
+                  <option value="public" selected={this.state.access === 'public'}>Public</option>
+                  <option value="private" selected={this.state.access === 'private'}>Private</option>
+                  <option value="role" selected={this.state.access === 'role'}>Role</option>
+                </select>
+              </div>
+              <div className="row">
+                <div className="input-field col s12">
+                  <textarea name="content" id="content" className="materialize-textarea" placeholder="Body of document here..." value={this.state.content} onChange={this.onChange} />
+                  <label htmlFor="content" />
+                </div>
+              </div>
+              <button type="submit" className="btn btn-large create-doc right">
+                SAVE
+              </button>
+            </form>
           </div>
-        </div>
-        {/* <ul>
-            {/* Traverse books array  */}
-        {/* {this.props.documents && this.props.documents.map((document, i) => <li key={i}>{document.title}, {document.content}</li>)}*/}
-        {/* </ul>*/}
+        </Modal>
       </div>
     );
   }
@@ -59,7 +79,7 @@ class AllDocuments extends React.Component {
 const mapStateToProps = (state) => {
   return {
     // You can now say this.props.books
-    documents: state.documents.documents
+    currentDocument: state.documents.currentDocument || {}
   };
 };
 
@@ -67,9 +87,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
   // You can now say this.props.createDocument
-    viewAllDocuments: () => dispatch(viewAllDocuments())
+    createDocument: document => dispatch(createDocument(document)),
+    editDocument: document => dispatch(editDocument(document))
   };
 };
 
 // Use connect to put them together
-export default connect(mapStateToProps, mapDispatchToProps)(AllDocuments);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateDocument);
