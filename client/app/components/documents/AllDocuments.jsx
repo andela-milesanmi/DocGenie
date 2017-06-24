@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { viewAllDocuments, changeCurrentDocument } from '../../actions/documentActions';
+import { viewAllDocuments, changeCurrentDocument, deleteDocument } from '../../actions/documentActions';
 import CreateDocument from './CreateDocument.jsx';
-
+import Search from '../Search.jsx';
 /**
 * This is a pure function that receives properties as props parameter
 * and is the parent component in which all other child components
@@ -15,10 +15,12 @@ class AllDocuments extends React.Component {
   constructor(props) {
   // Pass props back to parent
     super(props);
-    // this.editDocument = this.editDocument.bind(this);
   }
   editDocument(document) {
     this.props.changeCurrentDocument(document);
+  }
+  deleteDocument(document) {
+    this.props.deleteDocument(document);
   }
   componentDidMount() {
     this.props.viewAllDocuments();
@@ -34,6 +36,7 @@ class AllDocuments extends React.Component {
           <h3 className="col s8" style={{ color: '#fff' }}>All Documents</h3>
           <CreateDocument />
         </div>
+        <Search />
         <div className="col s12">
           <div className="row">
             {this.props.documents && this.props.documents.map((document, i) => (
@@ -45,12 +48,12 @@ class AllDocuments extends React.Component {
                   </div>
                   <div className="card-action form-card-action">
                     <a href="#the-form" onClick={() => this.editDocument(document)}>EDIT</a>
-                    <a href="#">DELETE</a>
+                    <a href="#" onClick={() => this.deleteDocument(document)}>DELETE</a>
                   </div>
                 </div>
               </div>
             )
-            )};
+            )}
           </div>
         </div>
       </div>
@@ -70,7 +73,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
   // You can now say this.props.createDocument
     viewAllDocuments: () => dispatch(viewAllDocuments()),
-    changeCurrentDocument: document => dispatch(changeCurrentDocument(document))
+    changeCurrentDocument: document => dispatch(changeCurrentDocument(document)),
+    deleteDocument: document => dispatch(deleteDocument(document)),
   };
 };
 

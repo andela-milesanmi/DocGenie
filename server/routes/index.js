@@ -30,6 +30,6 @@ module.exports = (app) => {
   app.delete('/api/documents/:id', DocumentsController.deleteADocument);
 
   // search routes
-  app.get('/api/search/users/:searchKey', UsersController.searchForUser)
-  app.get('/api/search/documents/:searchKey', DocumentsController.searchForDocument)
+  app.get('/api/search/users/:searchKey', UsersController.searchForUser);
+  app.get('/api/search/documents/:searchKey', DocumentsController.searchForDocument);
 };

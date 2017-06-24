@@ -22,7 +22,6 @@ class SignIn extends React.Component {
     const email = event.target.email.value;
     const password = event.target.password.value;
     this.props.signInUser({ email, password });
-    browserHistory.push('/dashboard');
   }
   render() {
     return (
@@ -44,8 +43,8 @@ class SignIn extends React.Component {
               <button type="submit" className="signup-button">SUBMIT</button>
             </div>
             <div>
-              <p>{ this.props.isUser && 'Already have an account?'}
-                <a onClick={this.props.changeScreen}>{this.props.isUser ? 'Sign Up' : 'Sign In'}</a>
+              <p style={{ textAlign: 'center' }}>Don't have an account yet?
+                <a onClick={this.props.changeScreen}> Sign Up</a>
               </p>
             </div>
           </form>
