@@ -38,11 +38,17 @@ body{
   font-size: 15px;
 }
 .create-doc{
-  background-color: #EE6352;
+  background-color: #EE6352 !important;
   margin: 2%;
 }
 .create-doc:hover{
   background-color: #08B2E3;
+}
+.modal-close{
+  display: none !important;
+}
+.form-card-action a{
+  cursor: pointer;
 }
 .brand-logo{
   // color: #57313E !important;
