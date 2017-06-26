@@ -40,7 +40,7 @@ const Root = () => (
     <Router history={browserHistory}>
       <Route path="/" component={App} onEnter={requireAuth(store)}>
         <IndexRoute component={Home} />
-        <Route path="/dashboard" component={AllDocuments} />
+        <Route path="dashboard/documents(/:page)" component={AllDocuments} />
       </Route>
     </Router>
   </Provider>

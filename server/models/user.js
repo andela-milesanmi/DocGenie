@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 
 module.exports = (sequelize, DataTypes) => {
-  var User = sequelize.define('User', {
+  const User = sequelize.define('User', {
     username: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
           args: [2, 30],
           msg: 'Username length must be between 2 and 30 characters'
         }
-       }
+      }
     },
     fullname: {
       type: DataTypes.STRING,
@@ -56,7 +56,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     classMethods: {
-      associate: function(models) {
+      associate(models) {
         // associations can be defined here
         User.hasMany(models.Document, {
           foreignKey: 'userId',

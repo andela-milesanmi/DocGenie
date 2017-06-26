@@ -9,7 +9,7 @@
   "test": {
     "username": "memuna",
     "password": null,
-    "database": "docgenie-dev",
+    "database": "docgenie-test",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },

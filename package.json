@@ -4,10 +4,11 @@
   "description": "A document management system to help users organize documents",
   "main": "server.js",
   "scripts": {
-    "start": "webpack -p & nodemon server.js",
+    "start": "NODE_ENV=dev webpack -p & nodemon server.js",
     "start:dev": "nodemon server.js",
     "debug": "nodemon --inspect server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test:db && NODE_ENV=test mocha --compilers js:babel-core/register --colors ./server/tests/*/*.spec.js --timeout 10000",
+    "test:db": "NODE_ENV=test sequelize db:migrate:undo:all && NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:undo:all && NODE_ENV=test sequelize db:seed:all"
   },
   "repository": {
     "type": "git",
@@ -46,6 +47,7 @@
     "eslint-plugin-jsx-a11y": "^5.0.3",
     "eslint-plugin-react": "^6.10.0",
     "express": "^4.15.3",
+    "faker": "^4.1.0",
     "file-loader": "^0.11.2",
     "jsonwebtoken": "^7.4.1",
     "jwt-decode": "^2.2.0",

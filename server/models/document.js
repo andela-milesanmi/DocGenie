@@ -34,16 +34,16 @@ module.exports = (sequelize, DataTypes) => {
           args: 3,
           msg: 'Document content must be longer than 3 letters'
         }
-       },
+      },
     }
   }, {
     classMethods: {
-      associate: function (models) {
+      associate(models) {
         // associations can be defined here
         Document.belongsTo(models.User, {
           foreignKey: 'userId',
           onDelete: 'CASCADE',
-      });
+        });
       }
     }
   });
