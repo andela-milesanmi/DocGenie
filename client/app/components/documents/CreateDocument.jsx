@@ -22,6 +22,7 @@ class CreateDocument extends React.Component {
   }
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
+    console.log(this.state, "state in create document");
   }
   componentWillReceiveProps(nextProps) {
     // if(Object.keys(nextProps.currentDocument).length < 1) {
@@ -56,6 +57,7 @@ class CreateDocument extends React.Component {
           header={!this.props.currentDocument.title ? 'Create Document' : 'Edit Document'} id="the-form">
           <div className="row">
             <form className="col s12 m12" onSubmit={this.handleCreateDocument} action="#">
+              <div className="error-message">{this.props.currentDocument.error}</div>
               <div className="row">
                 <div className="input-field col s12">
                   <input name="title" id="title" type="text" className="validate" placeholder="Title" value={this.state.title ? this.state.title : null} onChange={this.onChange}/>

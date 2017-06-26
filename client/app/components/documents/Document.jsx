@@ -46,7 +46,7 @@ class Document extends React.Component {
 // Maps state from store to props
 const mapStateToProps = (state) => {
   return {
-    // You can now say this.props.books
+    // You can now say this.props.documents
     documents: state.documents
   };
 };

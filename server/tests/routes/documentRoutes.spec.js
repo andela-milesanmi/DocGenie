@@ -59,7 +59,7 @@ describe('Documents', () => {
     chai.request('http://localhost:5000')
       .post('/api/documents')
       .set('x-access-token', token)
-      .send({ userId: 1, title: 'Testing documents routes', access: 'public', content: 'yayyy we have one content' })
+      .send({ userId: 1, title: 'Testing documents routes again', access: 'public', content: 'yayyy we have one content again o' })
       .end((error, response) => {
         expect(response).to.have.status(201);
         expect(response).to.be.json;

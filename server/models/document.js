@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       validate: {
         len: {
-          args: 3,
-          msg: 'Document title must be greater than 3 letters'
+          args: [3, 24],
+          msg: 'Document title must be between 3 and 22 letters'
         }
       }
     },

@@ -45,7 +45,7 @@ class DocumentCard extends React.Component {
               {this.state.showMore && <a onClick={this.handleShowMore}> View Less </a> }</p>
           </div>
           <div className="card-action form-card-action">
-            <a href="#the-form" onClick={() => this.editDocument(this.props.document)}>EDIT</a>
+            <a href="#edit-form" onClick={() => this.editDocument(this.props.document)}>EDIT</a>
             <a href="#" onClick={() => this.deleteDocument(this.props.document)}>DELETE</a>
           </div>
         </div>

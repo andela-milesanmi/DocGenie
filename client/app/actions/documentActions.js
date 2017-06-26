@@ -4,16 +4,16 @@ import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT, CREATE_DOCUMENT_
   CHANGE_CURRENT_DOCUMENT, EDIT_DOCUMENT, EDIT_DOCUMENT_ERROR, DELETE_DOCUMENT,
   DELETE_DOCUMENT_ERROR, SEARCH_DOCUMENT, SEARCH_DOCUMENT_ERROR } from '../reducers/document';
 
-export function viewAllDocuments(){ // eslint-disable-line
+export function viewAllDocuments(page = ''){ // eslint-disable-line
   const token = localStorage.getItem('token');
   const config = {
     headers: { 'x-access-token': token }
   };
   return (dispatch) => {
-    axios.get('http://localhost:5000/api/documents', config)
+    axios.get(`http://localhost:5000/api/documents/?page=${page}`, config)
       .then((response) => {
         console.log(response, 'response');
-        dispatch({ type: VIEW_DOCUMENTS, documents: response.data.documents });
+        dispatch({ type: VIEW_DOCUMENTS, documents: response.data.documents, pagination: response.data.pagination });
       }).catch((error) => {
         console.log(error, 'what error are we having?');
         dispatch({ type: VIEW_DOCUMENTS_ERROR, error: error.response.data.message || error.response.data });

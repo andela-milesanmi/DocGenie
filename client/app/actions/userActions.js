@@ -11,7 +11,7 @@ export function createUser(user) {
         localStorage.setItem('token', response.data.token);
         console.log(response, 'response');
         dispatch({ type: CREATE_USER, user: response.data.user });
-        browserHistory.push('/dashboard');
+        browserHistory.push('/dashboard/documents');
       }).catch((error) => {
         console.log(error.response.data.message, 'message');
         dispatch({ type: CREATE_USER_ERROR, error: error.response.data.message || error.response.data });
@@ -26,7 +26,7 @@ export function signInUser(user) {
         localStorage.setItem('token', response.data.token);
         console.log(response, 'response');
         dispatch({ type: SIGNIN_USER, user: response.data.user });
-        browserHistory.push('/dashboard');
+        browserHistory.push('/dashboard/documents');
       }).catch((error) => {
         console.log(error, 'message');
         dispatch({ type: SIGNIN_USER_ERROR, error: error.response.data.message || error.response.data });

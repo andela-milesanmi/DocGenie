@@ -25,9 +25,9 @@ class Home extends React.Component {
   }
   renderSigninOrSignUp() {
     if (this.state.isSignInScreen) {
-      return (<SignIn changeScreen={this.changeScreen} isSignInScreen={this.state.isSignInScreen}/>);
+      return (<SignIn changeScreen={this.changeScreen} isSignInScreen={this.state.isSignInScreen} />);
     }
-    return (<SignUp isSignInScreen={this.state.isSignInScreen} changeScreen={this.changeScreen}/>);
+    return (<SignUp isSignInScreen={this.state.isSignInScreen} changeScreen={this.changeScreen} />);
   }
   render() {
     return (
