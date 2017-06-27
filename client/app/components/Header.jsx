@@ -45,7 +45,7 @@ class Header extends React.Component {
               @{user.username}
             </ul>
             <ul className="nav-dropdown-list">
-              <Link to={`/dashboard/profile/${user.id}`} style={{ color: '#000' }}>
+              <Link to="/dashboard/profile" style={{ color: '#000' }}>
                 Profile
               </Link>
             </ul>
@@ -71,7 +71,7 @@ class Header extends React.Component {
 const mapStateToProps = (state) => {
   return {
     // You can now say this.props.documents
-    user: state.user
+    user: state.user.currentProfile
   };
 };
 

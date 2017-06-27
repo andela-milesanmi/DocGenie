@@ -54,7 +54,7 @@ class CreateDocument extends React.Component {
     return (
       <div>
         <Modal
-          header={!this.props.currentDocument.title ? 'Create Document' : 'Edit Document'} id="the-form">
+          header={!this.props.currentDocument.title ? 'Create Document' : 'Edit Document'} id="create-form">
           <div className="row">
             <form className="col s12 m12" onSubmit={this.handleCreateDocument} action="#">
               <div className="error-message">{this.props.currentDocument.error}</div>

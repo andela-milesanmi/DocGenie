@@ -31,7 +31,7 @@ class AllDocuments extends React.Component {
     // return JSX
     return (
       <div>
-        <a href="#edit-form" className="btn-floating btn-large create-doc right" onClick={() => this.editDocument()}>
+        <a href="#create-form" className="btn-floating btn-large create-doc right" onClick={() => this.editDocument()}>
           <i className="material-icons">create</i>
         </a>
         <div className="row">

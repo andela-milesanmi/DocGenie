@@ -2,7 +2,7 @@ import axios from 'axios';
 import jwt from 'jwt-decode';
 import { browserHistory } from 'react-router';
 import { CREATE_USER, EDIT_USER, SIGNIN_USER, CREATE_USER_ERROR, SIGNIN_USER_ERROR,
-LOGOUT_USER } from '../reducers/user';
+  LOGOUT_USER } from '../reducers/user';
 
 export function createUser(user) {
   return function (dispatch) {
@@ -65,5 +65,14 @@ export function logoutUser() {
     // Unique identifier
     type: LOGOUT_USER,
     // Payload
+  };
+}
+export function changeCurrentUser(user) {
+  // // Return action
+  return {
+    // Unique identifier
+    type: CHANGE_CURRENT_PROFILE,
+    // Payload
+    user
   };
 }
