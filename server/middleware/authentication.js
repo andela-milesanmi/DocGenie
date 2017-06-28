@@ -15,6 +15,7 @@ module.exports = {
           });
         }
         request.decoded = decoded;
+        console.log(request.decoded, "request.decoded");
         next();
       });
     } else {

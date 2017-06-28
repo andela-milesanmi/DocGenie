@@ -6,6 +6,7 @@ import App from './components/App.jsx';
 import Home from './components/Home.jsx';
 import AllDocuments from './components/documents/AllDocuments.jsx';
 import Profile from './components/Profile.jsx';
+import AllUsers from './components/AllUsers.jsx';
 import { getUser } from './actions/userActions';
 import './styles/app.scss';
 
@@ -44,7 +45,7 @@ const Root = () => (
         <IndexRoute component={Home} />
         <Route path="dashboard/documents(/:page)" component={AllDocuments} />
         <Route path="dashboard/profile" component={Profile} />
-        <Route path="dashboard/users(/:page)" component={() => <div> Hello world </div>} />
+        <Route path="dashboard/users(/:page)" component={AllUsers} />
       </Route>
     </Router>
   </Provider>

@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { updateProfile } from '../../actions/userActions';
-
-// import bcrypt from 'bcrypt';
+import { updateProfile } from '../actions/userActions';
 
 class Profile extends React.Component {
   constructor(props) {
@@ -11,9 +9,11 @@ class Profile extends React.Component {
     this.state = {
       isEdit: false,
       isChecked: false,
-      user: { ...props.user }
+      user: { ...props.user },
+      errorMessage: ''
     };
     this.onChange = this.onChange.bind(this);
+    this.handleProfileUpdate = this.handleProfileUpdate.bind(this);
   }
   onChange(e) {
     const user = { ...this.state.user, [e.target.name]: e.target.value };
@@ -39,6 +39,7 @@ class Profile extends React.Component {
       <div className="col s8 offset-s2" style={{ backgroundColor: '#fff' }}>
         <h4>Edit Profile</h4>
         <form name="profile-edit" onSubmit={this.handleProfileUpdate} action="#">
+          <div style={{ color: 'red' }}>{this.state.errorMessage || this.props.error}</div>
           <p>Fullname: <input type="text" name="fullname" value={this.state.user.fullname} onChange={this.onChange}/></p>
           <p>Username: <input type="text" name="username" value={this.state.user.username} onChange={this.onChange}/></p>
           <p>Email: <input type="text" name="email" value={this.state.user.email} onChange={this.onChange}/></p>
@@ -69,15 +70,18 @@ class Profile extends React.Component {
 
   handleProfileUpdate(event) {
     event.preventDefault();
-    const fullname = event.target.fullname.value || '';
-    const username = event.target.username.value || '';
-    const email = event.target.email.value || '';
-    const oldPassword = event.target.password.value || '';
-    const newPassword = event.target.password.value || '';
-    const confirmPassword = event.target.password.value || '';
-    console.log(event.target.fullname.value, event.target.username.value, event.target.email.value,
-      event.target.email.value, 'update profile form data');
-    this.props.updateProfile({ fullname, username, email, password });
+    const { fullname: { value: fullname } = {}, username: { value: username } = {},
+      email: { value: email } = {}, oldPassword: { value: oldPassword } = {},
+      newPassword: { value: newPassword } = {}, confirmPassword: { value: confirmPassword } = {} } = event.target;
+    console.log(fullname, username, email,
+      oldPassword, newPassword, confirmPassword, 'update profile form data');
+    if (newPassword || confirmPassword || oldPassword) {
+      if (newPassword !== confirmPassword) {
+        this.setState({ errorMessage: 'Passwords do not match' });
+        return;
+      }
+    }
+    this.props.updateProfile({ fullname, username, email, oldPassword, newPassword, confirmPassword });
   }
 
   render() {
@@ -93,15 +97,16 @@ const mapStateToProps = (state) => {
   return {
     // You can now say this.props.documents
     user: state.user.currentProfile,
-    currentDocument: state.documents.currentDocument || {}
+    currentDocument: state.documents.currentDocument || {},
+    error: state.user.error
   };
 };
 
-Maps actions to props
+// Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
   // You can now say this.props.updateProfile
-    updateProfile: () => dispatch(updateProfile(newUser))
+    updateProfile: user => dispatch(updateProfile(user))
   };
 };
 

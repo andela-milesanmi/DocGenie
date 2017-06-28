@@ -7,7 +7,6 @@ import { searchForDocuments } from '../actions/documentActions';
 const Search = (props) => {
   const handleChange = (event) => {
     event.preventDefault();
-    console.log(event.target.value, 'searckey');
     const searchKey = event.target.value;
     if (searchKey) props.searchForDocuments(searchKey);
   };
@@ -15,7 +14,8 @@ const Search = (props) => {
     <div className="row search-docs">
       <div className="col s8 offset-s2">
         <input name="searchKey" id="searchKey" type="text"
-          className="validate" placeholder="Search for documents here..." onChange={handleChange} style={{ color: 'white' }}/>
+          className="validate" placeholder="Search for documents here..."
+          onChange={handleChange} style={{ color: 'white' }}/>
       </div>
     </div>
   );

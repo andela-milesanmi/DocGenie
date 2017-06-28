@@ -49,32 +49,32 @@ class CreateDocument extends React.Component {
   }
 
   render() {
-    // Title input tracker
-    // return JSX
+    const { user, currentDocument } = this.props;
+    const { title, access, content } = this.state;
     return (
       <div>
         <Modal
-          header={!this.props.currentDocument.title ? 'Create Document' : 'Edit Document'} id="create-form">
+          header={!currentDocument.title ? 'Create Document' : 'Edit Document'} id="create-form">
           <div className="row">
             <form className="col s12 m12" onSubmit={this.handleCreateDocument} action="#">
-              <div className="error-message">{this.props.currentDocument.error}</div>
+              <div className="error-message">{currentDocument.error}</div>
               <div className="row">
                 <div className="input-field col s12">
-                  <input name="title" id="title" type="text" className="validate" placeholder="Title" value={this.state.title ? this.state.title : null} onChange={this.onChange}/>
+                  <input name="title" id="title" type="text" className="validate" placeholder="Title" value={title} onChange={this.onChange}/>
                   <label htmlFor="title" />
                 </div>
               </div>
               <div className="row">
                 <select name="access" className="browser-default" onChange={this.onChange}>
-                  <option value="" disabled selected={this.state.access ? this.state.access : null}>Select access</option>
-                  <option value="public" selected={this.state.access === 'public'}>Public</option>
-                  <option value="private" selected={this.state.access === 'private'}>Private</option>
-                  <option value="role" selected={this.state.access === 'role'}>Role</option>
+                  <option value="" disabled>Select access</option>
+                  <option value="-1" selected={access}>Public</option>
+                  <option value="0" selected={access}>Private</option>
+                  <option value={user.roleId} selected={access}>Role</option>
                 </select>
               </div>
               <div className="row">
                 <div className="input-field col s12">
-                  <textarea name="content" id="content" className="materialize-textarea" placeholder="Body of document here..." value={this.state.content ? this.state.content : null} onChange={this.onChange} />
+                  <textarea name="content" id="content" className="materialize-textarea" placeholder="Body of document here..." value={this.state.content} onChange={this.onChange} />
                   <label htmlFor="content" />
                 </div>
               </div>
@@ -92,7 +92,8 @@ class CreateDocument extends React.Component {
 const mapStateToProps = (state) => {
   return {
     // You can now say this.props.books
-    currentDocument: state.documents.currentDocument || {}
+    currentDocument: state.documents.currentDocument || {},
+    user: state.user.currentProfile,
   };
 };
 

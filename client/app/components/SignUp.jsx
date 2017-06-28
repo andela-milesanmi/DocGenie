@@ -75,7 +75,7 @@ class SignUp extends React.Component {
 const mapStateToProps = (state) => {
   return {
     // You can now say this.props.user
-    user: state.user
+    user: state.user || {}
   };
 };
 export default connect(mapStateToProps, { createUser, editUser })(SignUp);

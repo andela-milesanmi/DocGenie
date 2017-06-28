@@ -53,13 +53,12 @@ class SignIn extends React.Component {
     );
   }
 }
-// const mapStateToProps
-// const mapDispatchToProps
+
 // Maps state from store to props
 const mapStateToProps = (state) => {
   return {
-    // You can now say this.props.books
-    user: state.user
+    // You can now say this.props.user
+    user: state.user || {}
   };
 };
 export default connect(mapStateToProps, { signInUser })(SignIn);
