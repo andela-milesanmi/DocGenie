@@ -66,9 +66,9 @@ class CreateDocument extends React.Component {
               </div>
               <div className="row">
                 <select name="access" className="browser-default" onChange={this.onChange}>
-                  <option value="" disabled>Select access</option>
-                  <option value="-1" selected={access}>Public</option>
-                  <option value="0" selected={access}>Private</option>
+                  <option value="" disabled selected>Select access</option>
+                  <option value="0" selected={access}>Public</option>
+                  <option value="-1" selected={access}>Private</option>
                   <option value={user.roleId} selected={access}>Role</option>
                 </select>
               </div>

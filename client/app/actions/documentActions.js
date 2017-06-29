@@ -19,7 +19,7 @@ export function viewAllDocuments(page = ''){ // eslint-disable-line
   };
 }
 export function createDocument(document) { // eslint-disable-line
-    const token = localStorage.getItem('token');
+  const token = localStorage.getItem('token');
   // document.userId = jwt(token).userId;
   axios.defaults.headers.common['x-access-token'] = token;
   return (dispatch) => {

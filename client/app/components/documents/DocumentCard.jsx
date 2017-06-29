@@ -39,10 +39,11 @@ class DocumentCard extends React.Component {
       <div className="col s4 m4 darken-1">
         <div className="card">
           <div className="card-content white-text">
-            <span style={{ color: '#000' }} className="card-title">{ document.title }</span>
-            <p style={{ color: '#000' }}>{!this.state.showMore ? `${document.content.slice(0, 32) }...` : document.content }
+            <span style={{ color: '#000' }} className="card-title">{ document.title } on {document.createdAt.slice(0, 10)}</span>
+            <p style={{ color: '#000' }}>{!this.state.showMore ? `${document.content.slice(0, 32)}...` : document.content }
+              by {document.user.username}
               {!this.state.showMore && <a href="#view-more" onClick={() => this.editDocument(document)}>View More</a> }
-              {this.state.showMore && <a onClick={this.handleShowMore}> View Less </a> }</p>
+            </p>
           </div>
           { currentUser.id === document.userId && <div className="card-action form-card-action">
             <a href="#create-form" onClick={() => this.editDocument(document)}>EDIT</a>

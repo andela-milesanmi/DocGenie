@@ -23,11 +23,11 @@ module.exports = {
     }
 
     // check if roleId is 1
-    if (request.body && Number(request.body.roleId) === 1) {
-      return response.status(400).json({
-        message: 'You are not allowed to create an admin user',
-      });
-    }
+    // if (request.body && Number(request.body.roleId) === 1) {
+    //   return response.status(400).json({
+    //     message: 'You are not allowed to create an admin user',
+    //   });
+    // }
 
     return User.findAll({
       where: {

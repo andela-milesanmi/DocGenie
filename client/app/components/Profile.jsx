@@ -31,6 +31,7 @@ class Profile extends React.Component {
           <p>Fullname: {this.state.user.fullname}</p>
           <p>Username: {this.state.user.username}</p>
           <p>Email: {this.state.user.email}</p>
+          {(this.state.user.roleId === 1) ? <p>Role: Admin</p> : ''}
           <button type="submit" onClick={() => this.toggle('isEdit')}>Edit Profile</button>
         </div>
       );

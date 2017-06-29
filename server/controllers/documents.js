@@ -21,16 +21,16 @@ module.exports = {
     return Document
       .findAndCountAll({
         include: [{ model: User,
-          as: 'user',
-          where: { $and: [
-            { roleId: {
-              gte: roleId
-            } }
-          ] } }],
+          as: 'user' }],
         where: {
           $or: [
             { userId },
-            { access: 'public' },
+            { access: {
+              $gte: roleId,
+              $ne: -1
+            }
+            },
+            { access: 0 }
           ]
         },
         limit,
@@ -111,19 +111,28 @@ module.exports = {
       .catch(error => response.status(400).send(error));
   },
   searchForDocument(request, response) {
+    const { roleId, userId } = request.decoded;
     return Document
       .findAll({
+        include: [{ model: User,
+          as: 'user' }],
         where: {
-          $or: [
+          $and: [
             {
-              title: {
-                $iLike: `%${request.params.searchKey}%`
-              }
+              $or: [
+                { title: { $iLike: `%${request.params.searchKey}%` } },
+                { content: { $iLike: `%${request.params.searchKey}%` } }
+              ]
             },
             {
-              content: {
-                $iLike: `%${request.params.searchKey}%`
-              }
+              $or: [
+                { userId },
+                { access: {
+                  $gte: roleId,
+                  $ne: -1 }
+                },
+                { access: 0 }
+              ],
             }
           ]
         },

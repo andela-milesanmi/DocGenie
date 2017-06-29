@@ -50,15 +50,7 @@ export function getUser() {
       });
   };
 }
-// export function editUser(user) {
-//   // Return action
-//   return {
-//     // Unique identifier
-//     type: EDIT_USER,
-//     // Payload
-//     user
-//   };
-// }
+
 export function logoutUser() {
   // Return action
   return {
@@ -67,15 +59,15 @@ export function logoutUser() {
     // Payload
   };
 }
-export function changeCurrentUser(user) {
-  // // Return action
-  return {
-    // Unique identifier
-    type: CHANGE_CURRENT_PROFILE,
-    // Payload
-    user
-  };
-}
+// export function changeCurrentUser(user) {
+//   // // Return action
+//   return {
+//     // Unique identifier
+//     type: CHANGE_CURRENT_PROFILE,
+//     // Payload
+//     user
+//   };
+// }
 export function updateProfile(user) {
   const token = localStorage.getItem('token');
   const userId = jwt(token).userId;
