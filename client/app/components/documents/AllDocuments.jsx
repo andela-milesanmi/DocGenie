@@ -115,11 +115,12 @@ const mapDispatchToProps = (dispatch) => {
 
 AllDocuments.propTypes = {
   documents: PropTypes.array.isRequired,
-  currentPage: Proptypes.number.isRequired,
-  pages: Proptypes.number.isRequired,
-  params: Proptypes.object.isRequired,
-  viewAllDocuments: Proptypes.func.isRequired,
-  user: Proptypes.object.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  pages: PropTypes.number.isRequired,
+  params: PropTypes.object.isRequired,
+  viewAllDocuments: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 };
+
 // Use connect to put them together
 export default connect(mapStateToProps, mapDispatchToProps)(AllDocuments);

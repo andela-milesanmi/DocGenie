@@ -1,7 +1,5 @@
-// const jwt = require('jsonwebtoken');
 const User = require('../models').User;
 const Document = require('../models').Document;
-// const secret = require('../config/config.json').secret;
 const authentication = require('../middleware/authentication');
 const bcrypt = require('bcrypt');
 
@@ -17,10 +15,9 @@ module.exports = {
       || !request.body.username) {
       return response.status(401).send({ message: 'Please fill all the fields' });
     }
-    if (request.body.password !== request.body.confirm_password) {
+    if (request.body.password !== request.body.confirmPassword) {
       return response.status(401).send({ message: 'Password does not match' });
     }
-    console.log(request.decoded, 'comments');
     if (request.decoded && (Number(request.body.roleId) === 1 && Number(request.decoded.roleId) !== 1)) {
       return response.status(400).json({
         message: 'You are not allowed to create an admin user',
@@ -61,7 +58,6 @@ module.exports = {
         token,
       });
     }).catch((error) => {
-      console.log(JSON.stringify(error.message), 'error');
       response.status(400).send(error.message);
     });
   },
@@ -102,8 +98,7 @@ module.exports = {
   listAllUsers(request, response) {
     const limit = request.query.limit || '6';
     const offset = request.query.offset || '0';
-    const token = request.headers.authorization || request.headers['x-access-token'];
-    console.log(token, 'this is token')
+    // const token = request.headers.authorization || request.headers['x-access-token'];
     return User
       .findAndCountAll({
         limit,

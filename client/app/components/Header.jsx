@@ -1,8 +1,8 @@
-import React, { PropTypes } from 'react';
-import { Link, IndexLink, browserHistory } from 'react-router';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Link, browserHistory } from 'react-router';
 import { Navbar, Dropdown, NavItem, Icon } from 'react-materialize';
 import { connect } from 'react-redux';
-import jwt from 'jwt-decode';
 import { logoutUser } from '../actions/userActions';
 
 
@@ -20,7 +20,8 @@ const Header = (props) => {
         }
       >
         <div className="nav-drop-div">
-          <ul className="nav-dropdown-list logout" style={{ marginLeft: '10%' }}>
+          <ul className="nav-dropdown-list logout"
+            style={{ marginLeft: '10%' }}>
               @{user.username}
           </ul>
           <ul className="nav-dropdown-list">
@@ -29,7 +30,9 @@ const Header = (props) => {
             </Link>
           </ul>
           {(user.roleId === 1) && <ul className="nav-dropdown-list">
-            <Link to="/dashboard/users" style={{ color: '#000' }}>Manage Users</Link>
+            <Link to="/dashboard/users" style={{ color: '#000' }}>
+              Manage Users
+            </Link>
           </ul>}
           <ul>
             <Link className="logout" to="#" onClick={() => {
@@ -60,6 +63,11 @@ const mapDispatchToProps = (dispatch) => {
   // You can now say this.props.logoutUser
     logoutUser: () => dispatch(logoutUser())
   };
+};
+
+Header.propTypes = {
+  logoutUser: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 // Use connect to put them together
