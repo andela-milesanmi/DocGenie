@@ -15,7 +15,7 @@ const Search = (props) => {
       <div className="col s8 offset-s2">
         <input name="searchKey" id="searchKey" type="text"
           className="validate" placeholder="Search for documents here..."
-          onChange={handleChange} style={{ color: 'white' }}/>
+          onChange={handleChange}/>
       </div>
     </div>
   );

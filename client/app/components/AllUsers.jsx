@@ -17,12 +17,12 @@ class AllUsers extends React.Component {
     return (
       <div className="col s12" style={{ color: '#000' }}>
         <div className="row" style={{ fontSize: '15px' }}>
-          {this.props.users && this.props.users.map((user, i) => (
-            <ul className="collection col s8 offset-s2" index={i} style={{ backgroundColor: '#blue' }}>
-              <li className="collection-item">{user.username}, {user.email}</li>
-            </ul>
-          )
-          )}
+          <ul className="collection col s8 offset-s2" style={{ backgroundColor: '#blue' }}>
+            {this.props.users && this.props.users.map((user, i) => (
+              <li index={i} className="collection-item">{user.username}, {user.email}</li>
+            )
+            )}
+          </ul>
         </div>
       </div>
     );

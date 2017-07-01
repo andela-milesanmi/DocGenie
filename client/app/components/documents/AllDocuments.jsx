@@ -1,6 +1,9 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import { browserHistory } from 'react-router';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { viewAllDocuments, changeCurrentDocument, deleteDocument } from '../../actions/documentActions';
+import { viewAllDocuments, changeCurrentDocument, deleteDocument,
+  showOwnDocuments } from '../../actions/documentActions';
 import CreateDocument from './CreateDocument.jsx';
 import Search from '../Search.jsx';
 import DocumentCard from './DocumentCard.jsx';
@@ -15,26 +18,50 @@ import DocumentCard from './DocumentCard.jsx';
 
 class AllDocuments extends React.Component {
   constructor(props) {
-  // Pass props back to parent
     super(props);
+    this.state = {
+      currentUrl: ''
+    };
+    this.showAllDocuments = this.showAllDocuments.bind(this);
+    this.showOwnDocuments = this.showOwnDocuments.bind(this);
   }
   editDocument(document) {
     this.props.changeCurrentDocument(document);
   }
   componentDidMount() {
-    console.log(this.props.params, 'whatever');
-    this.props.viewAllDocuments(this.props.params.page);
+    this.showAllDocuments();
+  }
+  showAllDocuments() {
+    const { page = '' } = this.props.params;
+    this.setState({ currentUrl: 'http://localhost:5000/api/documents/?page=' }, () => {
+      this.props.viewAllDocuments(this.state.currentUrl + page);
+    });
+  }
+  showOwnDocuments() {
+    const { params: { page = '' } } = this.props;
+    const { user } = this.props;
+    this.setState({ currentUrl: `http://localhost:5000/api/users/${user.id}/documents/?page=` }, () => {
+      this.props.viewAllDocuments(this.state.currentUrl + page);
+    });
+  }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.params.page !== nextProps.params.page) {
+      this.props.viewAllDocuments(this.state.currentUrl + nextProps.params.page);
+    }
   }
   render() {
-    console.log(this.props.pages, 'pages');
-    // return JSX
     return (
-      <div>
-        <a href="#create-form" className="btn-floating btn-large create-doc right" onClick={() => this.editDocument()}>
-          <i className="material-icons">create</i>
-        </a>
+      <div className="dashboard-container">
         <div className="row">
-          <h3 className="col s8" style={{ color: '#fff' }}>All Documents</h3>
+          <div className="col s8 offset-s3">
+            <div className="row">
+              <button className="col s3 btn btn-large create-doc" onClick={this.showAllDocuments}>All Documents</button>
+              <button className="col s3 btn btn-large create-doc" onClick={this.showOwnDocuments}>My Documents</button>
+              <a href="#create-form" className="col s3 btn btn-large create-doc" onClick={() => this.editDocument()}>
+               CREATE DOCUMENT
+              </a>
+            </div>
+          </div>
           <CreateDocument />
         </div>
         <Search />
@@ -47,11 +74,18 @@ class AllDocuments extends React.Component {
           </div>
           <div className="row paginate-docs">
             <ul className="pagination">
-              {this.props.currentPage > 1 && <li><a href={`/dashboard/documents/${this.props.currentPage - 1}`}><i className="material-icons">chevron_left</i></a></li> }
-              {Array(this.props.pages).fill(0).map((v, i) => {
-                return <li><a href={`/dashboard/documents/${i + 1}`}>{i + 1}</a></li>;
+              {this.props.currentPage > 1 && <li><a href="#"
+                onClick={() => {
+                  browserHistory.push(`/dashboard/documents/${this.props.currentPage - 1}`);
+                }}><i className="material-icons">chevron_left</i></a></li> }
+              {Array(this.props.pages).fill(0).map((value, i) => {
+                return (<li><a href="#" onClick={() => {
+                  browserHistory.push(`/dashboard/documents/${i + 1}`);
+                }}>{i + 1}</a></li>);
               })}
-              {this.props.currentPage < this.props.pages && <li className="waves-effect"><a href={`/dashboard/documents/${this.props.currentPage + 1}`}><i className="material-icons">chevron_right</i></a></li> }
+              {this.props.currentPage < this.props.pages && <li className="waves-effect"><a href="#" onClick={() => {
+                browserHistory.push(`/dashboard/documents/${this.props.currentPage + 1}`);
+              }}><i className="material-icons">chevron_right</i></a></li> }
             </ul>
           </div>
         </div>
@@ -62,22 +96,30 @@ class AllDocuments extends React.Component {
 // Maps state from store to props
 const mapStateToProps = (state) => {
   return {
-    // You can now say this.props.books
     documents: state.documents.documents,
     pages: state.documents.pages,
-    currentPage: state.documents.currentPage
+    currentPage: state.documents.currentPage,
+    user: state.user.currentProfile
   };
 };
 
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-  // You can now say this.props.createDocument
     viewAllDocuments: page => dispatch(viewAllDocuments(page)),
     changeCurrentDocument: document => dispatch(changeCurrentDocument(document)),
     deleteDocument: document => dispatch(deleteDocument(document)),
+    showOwnDocuments: (id, page) => dispatch(showOwnDocuments(id, page)),
   };
 };
 
+AllDocuments.propTypes = {
+  documents: PropTypes.array.isRequired,
+  currentPage: Proptypes.number.isRequired,
+  pages: Proptypes.number.isRequired,
+  params: Proptypes.object.isRequired,
+  viewAllDocuments: Proptypes.func.isRequired,
+  user: Proptypes.object.isRequired,
+};
 // Use connect to put them together
 export default connect(mapStateToProps, mapDispatchToProps)(AllDocuments);

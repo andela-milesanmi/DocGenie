@@ -24,6 +24,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // require jwt token for authenticated routes
 app.use('/api', authentication.verifyToken);
+app.use('/auth/api', authentication.verifyToken);
+
 
 require('./server/routes')(app);
 

@@ -25,8 +25,8 @@ module.exports = {
         unique: true,
       },
       access: {
-        type: Sequelize.STRING,
-        defaultValue: 'public',
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
         allowNull: false,
       },
       content: {

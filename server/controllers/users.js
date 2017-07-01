@@ -7,7 +7,6 @@ const bcrypt = require('bcrypt');
 
 module.exports = {
   createNewUser(request, response) {
-    console.log(request.body, 'this is a request');
     const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
     if (!emailRegex.test(request.body.email)) {
       return response.status(401).send({
@@ -21,9 +20,8 @@ module.exports = {
     if (request.body.password !== request.body.confirm_password) {
       return response.status(401).send({ message: 'Password does not match' });
     }
-
-    // check if roleId is 1
-    if (request.body && Number(request.body.roleId) === 1) {
+    console.log(request.decoded, 'comments');
+    if (request.decoded && (Number(request.body.roleId) === 1 && Number(request.decoded.roleId) !== 1)) {
       return response.status(400).json({
         message: 'You are not allowed to create an admin user',
       });
@@ -41,7 +39,6 @@ module.exports = {
         ]
       },
     }).then((existingUser) => {
-      console.log(existingUser, 'got to the existing user');
       if (existingUser.length > 0) {
         throw new Error({
           message: 'Username or email already exists'
@@ -103,8 +100,10 @@ module.exports = {
     });
   },
   listAllUsers(request, response) {
-    const limit = request.query.limit || '10';
+    const limit = request.query.limit || '6';
     const offset = request.query.offset || '0';
+    const token = request.headers.authorization || request.headers['x-access-token'];
+    console.log(token, 'this is token')
     return User
       .findAndCountAll({
         limit,
@@ -151,7 +150,7 @@ module.exports = {
         if (!user) {
           throw new Error('User Not Found');
         }
-        if (request.body.roleId && Number(user.roleId) !== 1) {
+        if (request.body.roleId && user.roleId !== 1) {
           throw new Error('You are not authorized to change a user\'s role');
         }
         if (request.body.oldPassword || request.body.newPassword || request.body.confirmPassword) {
@@ -188,10 +187,13 @@ module.exports = {
       .catch(error => response.status(400).send(error));
   },
   findUserDocuments(request, response) {
-    const limit = request.query.limit || '10';
-    const offset = request.query.offset || '0';
+    const limit = request.query.limit || '6';
+    const offset = request.query.page ? (Number(request.query.page - 1) * limit) : 0;
+    // const offset = request.query.offset || '0';
     return Document
       .findAndCountAll({
+        include: [{ model: User,
+          as: 'user' }],
         where: {
           userId: request.params.id,
         },

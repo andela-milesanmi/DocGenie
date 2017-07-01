@@ -37,9 +37,12 @@ export function signInUser(user) {
 export function getUser() {
   const token = localStorage.getItem('token');
   const userId = jwt(token).userId;
-  axios.defaults.headers.common['x-access-token'] = token;
+  // axios.defaults.headers.common['x-access-token'] = token;
+  const config = {
+    headers: { authorization: token }
+  };
   return function (dispatch) {
-    return axios.get(`http://localhost:5000/api/users/${userId}`)
+    return axios.get(`http://localhost:5000/api/users/${userId}`, config)
       .then((response) => {
         console.log(response, 'response');
         dispatch({ type: CREATE_USER, user: response.data });
@@ -50,15 +53,7 @@ export function getUser() {
       });
   };
 }
-// export function editUser(user) {
-//   // Return action
-//   return {
-//     // Unique identifier
-//     type: EDIT_USER,
-//     // Payload
-//     user
-//   };
-// }
+
 export function logoutUser() {
   // Return action
   return {
@@ -67,21 +62,25 @@ export function logoutUser() {
     // Payload
   };
 }
-export function changeCurrentUser(user) {
-  // // Return action
-  return {
-    // Unique identifier
-    type: CHANGE_CURRENT_PROFILE,
-    // Payload
-    user
-  };
-}
+// export function changeCurrentUser(user) {
+//   // // Return action
+//   return {
+//     // Unique identifier
+//     type: CHANGE_CURRENT_PROFILE,
+//     // Payload
+//     user
+//   };
+// }
 export function updateProfile(user) {
   const token = localStorage.getItem('token');
   const userId = jwt(token).userId;
-  axios.defaults.headers.common['x-access-token'] = token;
+  // axios.defaults.headers.common['x-access-token'] = token;
+  const config = {
+    headers: { authorization: token }
+  };
+
   return function (dispatch) {
-    return axios.put(`http://localhost:5000/api/users/${userId}`, user)
+    return axios.put(`http://localhost:5000/api/users/${userId}`, user, config)
       .then((response) => {
         console.log(response, 'response');
         dispatch({ type: CREATE_USER, user: response.data });
@@ -95,7 +94,7 @@ export function updateProfile(user) {
 export function viewAllUsers(page = ''){ // eslint-disable-line
   const token = localStorage.getItem('token');
   const config = {
-    headers: { 'x-access-token': token }
+    headers: { authorization: token }
   };
   return (dispatch) => {
     axios.get(`http://localhost:5000/api/users/?page=${page}`, config)
