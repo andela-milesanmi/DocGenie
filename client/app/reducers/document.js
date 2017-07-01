@@ -16,7 +16,7 @@ export default (state = {}, action) => {
   case VIEW_DOCUMENTS: {
     const { documents = [] } = state;
     const newDocuments = [...documents, ...action.documents];
-    return { ...state, documents: newDocuments };
+    return { ...state, documents: newDocuments, ...action.pagination };
   }
   case SEARCH_DOCUMENT: {
     return { ...state, documents: action.documents };

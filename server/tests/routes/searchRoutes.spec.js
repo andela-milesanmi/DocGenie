@@ -1,6 +1,5 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
-// var server = require('../server/app');
 
 chai.use(chaiHttp);
 

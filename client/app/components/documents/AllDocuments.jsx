@@ -22,13 +22,15 @@ class AllDocuments extends React.Component {
     this.props.changeCurrentDocument(document);
   }
   componentDidMount() {
-    this.props.viewAllDocuments();
+    console.log(this.props.params, 'whatever');
+    this.props.viewAllDocuments(this.props.params.page);
   }
   render() {
+    console.log(this.props.pages, 'pages');
     // return JSX
     return (
       <div>
-        <a href="#the-form" className="btn-floating btn-large create-doc right" onClick={() => this.editDocument()}>
+        <a href="#create-form" className="btn-floating btn-large create-doc right" onClick={() => this.editDocument()}>
           <i className="material-icons">create</i>
         </a>
         <div className="row">
@@ -37,11 +39,20 @@ class AllDocuments extends React.Component {
         </div>
         <Search />
         <div className="col s12">
-          <div className="row">
+          <div className="row" style={{ fontSize: '15px' }}>
             {this.props.documents && this.props.documents.map((document, i) => (
-              <DocumentCard index={i} document={document}/>
+              <DocumentCard index={i} document={document} />
             )
             )}
+          </div>
+          <div className="row paginate-docs">
+            <ul className="pagination">
+              {this.props.currentPage > 1 && <li><a href={`/dashboard/documents/${this.props.currentPage - 1}`}><i className="material-icons">chevron_left</i></a></li> }
+              {Array(this.props.pages).fill(0).map((v, i) => {
+                return <li><a href={`/dashboard/documents/${i + 1}`}>{i + 1}</a></li>;
+              })}
+              {this.props.currentPage < this.props.pages && <li className="waves-effect"><a href={`/dashboard/documents/${this.props.currentPage + 1}`}><i className="material-icons">chevron_right</i></a></li> }
+            </ul>
           </div>
         </div>
       </div>
@@ -52,7 +63,9 @@ class AllDocuments extends React.Component {
 const mapStateToProps = (state) => {
   return {
     // You can now say this.props.books
-    documents: state.documents.documents
+    documents: state.documents.documents,
+    pages: state.documents.pages,
+    currentPage: state.documents.currentPage
   };
 };
 
@@ -60,7 +73,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
   // You can now say this.props.createDocument
-    viewAllDocuments: () => dispatch(viewAllDocuments()),
+    viewAllDocuments: page => dispatch(viewAllDocuments(page)),
     changeCurrentDocument: document => dispatch(changeCurrentDocument(document)),
     deleteDocument: document => dispatch(deleteDocument(document)),
   };

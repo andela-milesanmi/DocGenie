@@ -34,26 +34,26 @@ class DocumentCard extends React.Component {
     this.setState({ showMore: !this.state.showMore });
   }
   render() {
-    // return JSX
+    const { document, currentUser, currentDocument } = this.props;
     return (
-      <div index={this.props.i} className="col s4 m4 darken-1">
+      <div className="col s4 m4 darken-1">
         <div className="card">
           <div className="card-content white-text">
-            <span style={{ color: '#000' }} className="card-title">{ this.props.document.title }</span>
-            <p style={{ color: '#000' }}>{!this.state.showMore ? this.props.document.content.slice(0, 32) + '...' : this.props.document.content }
-              {!this.state.showMore && <a href="#view-more" onClick={() => this.editDocument(this.props.document)}>View More</a> }
+            <span style={{ color: '#000' }} className="card-title">{ document.title }</span>
+            <p style={{ color: '#000' }}>{!this.state.showMore ? `${document.content.slice(0, 32) }...` : document.content }
+              {!this.state.showMore && <a href="#view-more" onClick={() => this.editDocument(document)}>View More</a> }
               {this.state.showMore && <a onClick={this.handleShowMore}> View Less </a> }</p>
           </div>
-          <div className="card-action form-card-action">
-            <a href="#the-form" onClick={() => this.editDocument(this.props.document)}>EDIT</a>
-            <a href="#" onClick={() => this.deleteDocument(this.props.document)}>DELETE</a>
-          </div>
+          { currentUser.id === document.userId && <div className="card-action form-card-action">
+            <a href="#create-form" onClick={() => this.editDocument(document)}>EDIT</a>
+            <a href="#" onClick={() => this.deleteDocument(document)}>DELETE</a>
+          </div> }
         </div>
         <Modal
-          header={this.props.currentDocument.title} id="view-more">
+          header={currentDocument.title} id="view-more">
           <div className="row">
             <p>
-              {this.props.currentDocument.content}
+              {currentDocument.content}
             </p>
           </div>
         </Modal>
@@ -66,7 +66,9 @@ const mapStateToProps = (state) => {
   return {
     // You can now say this.props.books
     currentDocument: state.documents.currentDocument || {},
-    documents: state.documents.documents
+    documents: state.documents.documents,
+    currentUser: state.user.currentProfile,
+
   };
 };
 

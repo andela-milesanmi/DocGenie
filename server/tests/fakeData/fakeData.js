@@ -48,8 +48,6 @@ export default {
     content: faker.lorem.paragraph(),
     access: 'private',
     userId: 1,
-    username: 'seyi',
-    userRoleId: 1,
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -63,7 +61,7 @@ export default {
     updatedAt: new Date()
   },
   editorTwo: {
-    fullName: faker.name.fullname(),
+    fullname: faker.name.findName(),
     email: faker.internet.email(),
     password: bcrypt.hashSync('muna2muna2', bcrypt.genSaltSync(8)),
     roleId: 2,
@@ -72,7 +70,7 @@ export default {
   },
   invalidUserDetails: {
     username: faker.internet.userName(),
-    fullName: faker.name.findName(),
+    fullname: faker.name.findName(),
     email: 'munamuna@gmail.com',
     password: faker.internet.password(),
     roleId: 2

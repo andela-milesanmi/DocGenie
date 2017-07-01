@@ -1,10 +1,12 @@
 const Document = require('../models').Document;
+const User = require('../models').User;
+const jwt = require('jwt-decode');
 
 module.exports = {
   createADocument(request, response) {
     return Document
       .create({
-        userId: request.body.userId,
+        userId: request.decoded.userId,
         title: request.body.title,
         access: request.body.access,
         content: request.body.content
@@ -15,9 +17,22 @@ module.exports = {
   listAllDocuments(request, response) {
     const limit = request.query.limit || '6';
     const offset = request.query.page ? (Number(request.query.page - 1) * limit) : 0;
-    // const offset = request.query.offset || '0';
+    const { roleId, userId } = request.decoded;
     return Document
       .findAndCountAll({
+        include: [{ model: User,
+          as: 'user',
+          where: { $and: [
+            { roleId: {
+              gte: roleId
+            } }
+          ] } }],
+        where: {
+          $or: [
+            { userId },
+            { access: 'public' },
+          ]
+        },
         limit,
         offset,
         order: '"createdAt" DESC',
@@ -40,7 +55,10 @@ module.exports = {
           pagination,
         });
       })
-      .catch(error => response.status(400).send(error));
+      .catch((error) => {
+        console.log(error, 'this is an error');
+        response.status(400).send(error);
+      });
   },
   findADocument(request, response) {
     return Document

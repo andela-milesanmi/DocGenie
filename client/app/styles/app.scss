@@ -53,6 +53,34 @@ body{
 .search-docs{
   margin-top: 0px !important;
 }
+.paginate-docs, .paginate-docs li a{
+  text-align: center !important;
+  color: #ffffff !important;
+}
+.slideout-profile{
+  background-color: #ffffff !important;
+}
+.nav-logo{
+  background-color: #08B2E3;
+}
+.nav-dropdown-content{
+  min-width: 12%;
+  margin-top: 5%;
+  background-color: #eee !important;
+  color: #000000 !important;
+}
+.nav-dropdown-list{
+  color: #000 !important;
+}
+.nav-drop-div button{
+  margin-left: 10%;
+  border-color: #fff;
+  color: #EE6352;
+  background-color: #fff;
+}
+.logout{
+  color: #EE6352;
+}
 .brand-logo{
   // color: #57313E !important;
 }

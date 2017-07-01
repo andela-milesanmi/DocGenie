@@ -10,19 +10,18 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       validate: {
         len: {
-          args: 3,
-          msg: 'Document title must be greater than 3 letters'
+          args: [3, 24],
+          msg: 'Document title must be between 3 and 24 letters'
         }
       }
     },
     access: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 'public',
+      defaultValue: 0,
       validate: {
-        isIn: {
-          args: [['private', 'public', 'role']],
-          msg: 'Access must be either private, public or role'
+        isInt: {
+          msg: 'Invalid access value'
         }
       },
     },
@@ -43,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
         Document.belongsTo(models.User, {
           foreignKey: 'userId',
           onDelete: 'CASCADE',
+          as: 'user'
         });
       }
     }

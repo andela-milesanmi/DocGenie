@@ -3,7 +3,7 @@ const User = require('../models').User;
 const Document = require('../models').Document;
 // const secret = require('../config/config.json').secret;
 const authentication = require('../middleware/authentication');
-// const brcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 
 module.exports = {
   createNewUser(request, response) {
@@ -154,6 +154,18 @@ module.exports = {
         if (request.body.roleId && Number(user.roleId) !== 1) {
           throw new Error('You are not authorized to change a user\'s role');
         }
+        if (request.body.oldPassword || request.body.newPassword || request.body.confirmPassword) {
+          if ((bcrypt.compareSync(request.body.oldPassword, user.password))) {
+            throw new Error('Old password is incorrect');
+          }
+        }
+        if (request.body.newPassword && (request.body.newPassword !== request.body.confirmPassword)) {
+          return response.status(401).send({ message: 'Passwords do not match' });
+        }
+        // if (request.body.password !== request.body.confirm_password) {
+        //   return response.status(401).send({ message: 'Password does not match' });
+        // }
+
         return user
           .update(request.body);
       }).then(user => response.status(200).send(user)) // Send back updated user
