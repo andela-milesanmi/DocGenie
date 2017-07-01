@@ -13,8 +13,9 @@ module.exports = {
       .catch(error => response.status(400).send(error));
   },
   listAllDocuments(request, response) {
-    const limit = request.query.limit || '10';
-    const offset = request.query.offset || '0';
+    const limit = request.query.limit || '6';
+    const offset = request.query.page ? (Number(request.query.page - 1) * limit) : 0;
+    // const offset = request.query.offset || '0';
     return Document
       .findAndCountAll({
         limit,
@@ -27,7 +28,7 @@ module.exports = {
             message: 'No documents found',
           });
         }
-        const pagination = limit && offset ? {
+        const pagination = limit ? {
           totalCount: documents.count,
           pages: Math.ceil(documents.count / limit),
           currentPage: Math.floor(offset / limit) + 1,

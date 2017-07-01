@@ -24,7 +24,6 @@ class SignUp extends React.Component {
     const password = e.target.password.value;
     const confirm_password = e.target.confirm_password.value;
     this.props.createUser({ username, fullname, email, password, confirm_password });
-    browserHistory.push('/dashboard');
   }
   render() {
     return (
@@ -35,7 +34,7 @@ class SignUp extends React.Component {
             <div className="row">
               <div className="input-field col s6">
                 <input name="username" id="username" type="text" className="validate" />
-                <label htmlFor="username">UserName</label>
+                <label htmlFor="username">Username</label>
               </div>
               <div className="input-field col s6">
                 <input name="fullname" id="fullname" type="text" className="validate" />
@@ -61,8 +60,8 @@ class SignUp extends React.Component {
             </div>
 
             <div>
-              <p>{ this.props.isUser && 'Already have an account?'}
-                <a onClick={this.props.changeScreen}>{this.props.isUser ? 'Sign Up' : 'Sign In'}</a>
+              <p style={{ textAlign: 'center' }}>Already have an account?
+                <a onClick={this.props.changeScreen}>Sign In</a>
               </p>
             </div>
           </form>

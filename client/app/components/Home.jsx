@@ -16,18 +16,18 @@ class Home extends React.Component {
   constructor() {
     super();
     this.state = {
-      isUser: false,
+      isSignInScreen: true,
     };
     this.changeScreen = this.changeScreen.bind(this);
   }
   changeScreen() {
-    this.setState({ isUser: !this.state.isUser });
+    this.setState({ isSignInScreen: !this.state.isSignInScreen });
   }
   renderSigninOrSignUp() {
-    if (!this.state.isUser) {
-      return (<SignUp changeScreen={this.changeScreen} isUser={this.state.isUser}/>);
+    if (this.state.isSignInScreen) {
+      return (<SignIn changeScreen={this.changeScreen} isSignInScreen={this.state.isSignInScreen}/>);
     }
-    return (<SignIn isUser={this.state.isUser} changeScreen={this.changeScreen}/>);
+    return (<SignUp isSignInScreen={this.state.isSignInScreen} changeScreen={this.changeScreen}/>);
   }
   render() {
     return (

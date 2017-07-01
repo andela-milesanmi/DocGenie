@@ -24,7 +24,18 @@ class CreateDocument extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   }
   componentWillReceiveProps(nextProps) {
-    this.setState({ ...nextProps.currentDocument });
+    // if(Object.keys(nextProps.currentDocument).length < 1) {
+    //   console.log(nextProps.currentDocument, 'currentDocuent');
+    //   const setValueToUndefined = Object.keys(this.state).reduce((acc, key) => {
+    //    acc[key] = null;
+    //    return acc;
+    //   }, {});
+    //   console.log(setValueToUndefined, 'keys')
+    //   return this.setState(setValueToUndefined, () => {
+    //     console.log(this.state, 'state');
+    //   });
+    // }
+    return this.setState({ ...nextProps.currentDocument });
   }
   handleCreateDocument(event) {
     event.preventDefault();
@@ -47,13 +58,13 @@ class CreateDocument extends React.Component {
             <form className="col s12 m12" onSubmit={this.handleCreateDocument} action="#">
               <div className="row">
                 <div className="input-field col s12">
-                  <input name="title" id="title" type="text" className="validate" placeholder="Title" value={this.state.title} onChange={this.onChange}/>
+                  <input name="title" id="title" type="text" className="validate" placeholder="Title" value={this.state.title ? this.state.title : null} onChange={this.onChange}/>
                   <label htmlFor="title" />
                 </div>
               </div>
               <div className="row">
                 <select name="access" className="browser-default" onChange={this.onChange}>
-                  <option value="" disabled selected={!this.state.access}>Select access</option>
+                  <option value="" disabled selected={this.state.access ? this.state.access : null}>Select access</option>
                   <option value="public" selected={this.state.access === 'public'}>Public</option>
                   <option value="private" selected={this.state.access === 'private'}>Private</option>
                   <option value="role" selected={this.state.access === 'role'}>Role</option>
@@ -61,7 +72,7 @@ class CreateDocument extends React.Component {
               </div>
               <div className="row">
                 <div className="input-field col s12">
-                  <textarea name="content" id="content" className="materialize-textarea" placeholder="Body of document here..." value={this.state.content} onChange={this.onChange} />
+                  <textarea name="content" id="content" className="materialize-textarea" placeholder="Body of document here..." value={this.state.content ? this.state.content : null} onChange={this.onChange} />
                   <label htmlFor="content" />
                 </div>
               </div>
