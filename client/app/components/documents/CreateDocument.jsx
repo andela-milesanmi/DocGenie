@@ -44,7 +44,7 @@ class CreateDocument extends React.Component {
     const content = event.target.content.value;
     const access = event.target.access.value;
     console.log(event.target.title.value, event.target.content.value, event.target.access.value, 'create form data');
-    !this.props.currentDocument.id ? this.props.createDocument({ title, content, access }) :
+    !this.props.currentDocument.id ? this.props.createDocument({ title, content, access, user: this.props.user }) :
       this.props.editDocument({ title, content, access, id: this.props.currentDocument.id });
   }
 
@@ -88,10 +88,10 @@ class CreateDocument extends React.Component {
     );
   }
 }
+
 // Maps state from store to props
 const mapStateToProps = (state) => {
   return {
-    // You can now say this.props.books
     currentDocument: state.documents.currentDocument || {},
     user: state.user.currentProfile,
   };
@@ -100,7 +100,6 @@ const mapStateToProps = (state) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-  // You can now say this.props.createDocument
     createDocument: document => dispatch(createDocument(document)),
     editDocument: document => dispatch(editDocument(document))
   };

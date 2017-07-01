@@ -8,15 +8,15 @@ module.exports = {
       work, " The dark nerdy-looking young man
       beside me said and the entire room chuckled.`,
       userId: 1,
-      access: 'public',
+      access: 0,
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
-      title: 'The Awakeninggg',
+      title: 'Esther\'s doc',
       content: `Esther was excited, super excited to be travelling to
       see her paternal grandmother in Ijebu-Ode for the Sallah break.`,
       userId: 2,
-      access: 'private',
+      access: -1,
       createdAt: new Date(),
       updatedAt: new Date()
     }], {});

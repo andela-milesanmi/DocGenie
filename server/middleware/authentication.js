@@ -3,8 +3,6 @@ const jwt = require('jsonwebtoken');
 
 module.exports = {
   verifyToken(request, response, next) {
-    if (request.url.startsWith('/auth')) return next();
-
     const token = request.headers.authorization ||
       request.headers['x-access-token'];
     if (token) {
@@ -15,11 +13,11 @@ module.exports = {
           });
         }
         request.decoded = decoded;
-        console.log(request.decoded, "request.decoded");
         next();
       });
     } else {
-      return response.status(401).send({
+      if (request.originalUrl.startsWith('/auth')) return next();
+      return response.status(403).send({
         message: 'Token required for access',
       });
     }
@@ -36,4 +34,22 @@ module.exports = {
       roleId: user.roleId,
     }, process.env.JWTSECRET, { expiresIn: '1 day' });
   },
+
+  /**
+  *
+  * Verifies admin access
+  * @param {any} request
+  * @param {any} response
+  * @param {any} next
+  * @returns {object} response message
+  */
+  verifyAdminAccess(request, response, next) {
+    if (request.decoded.roleId === 1) {
+      next();
+    } else {
+      return response.status(401).send({
+        message: 'Sorry, You\'re not authorized to perform this action',
+      });
+    }
+  }
 };

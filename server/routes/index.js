@@ -1,6 +1,7 @@
 const rolesController = require('../controllers').roles;
 const UsersController = require('../controllers').users;
 const DocumentsController = require('../controllers').documents;
+const authentication = require('../middleware/authentication');
 
 module.exports = (app) => {
   app.get('/api', (request, response) => response.status(200).send({
@@ -8,13 +9,13 @@ module.exports = (app) => {
   }));
 
   // roles routes
-  app.post('/api/roles', rolesController.createNewRole);
-  app.get('/api/roles', rolesController.listAllRoles);
-  app.delete('/api/roles/:id', rolesController.destroyARole);
+  app.post('/auth/api/roles', authentication.verifyAdminAccess, rolesController.createNewRole);
+  app.get('/api/roles', authentication.verifyAdminAccess, rolesController.listAllRoles);
+  app.delete('/api/roles/:id', authentication.verifyAdminAccess, rolesController.destroyARole);
 
   // user routes
   app.post('/auth/api/users', UsersController.createNewUser);
-  app.get('/api/users', UsersController.listAllUsers);
+  app.get('/api/users', authentication.verifyAdminAccess, UsersController.listAllUsers);
   app.get('/api/users/:id', UsersController.findAUser);
   app.get('/api/users/:id/documents', UsersController.findUserDocuments);
   app.put('/api/users/:id', UsersController.updateAUser);
