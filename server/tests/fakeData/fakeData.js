@@ -8,7 +8,6 @@ export default {
     email: faker.internet.email(),
     password: 'admintester',
     confirmPassword: 'admintester',
-    // roleId: 1,
   },
   secondUser: {
     username: faker.internet.userName(),
@@ -24,7 +23,6 @@ export default {
     fullname: faker.name.findName(),
     email: faker.internet.email(),
     password: faker.internet.password(),
-    // roleId: 2,
     createdAt: new Date(),
     updatedAt: new Date()
   },

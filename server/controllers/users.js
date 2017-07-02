@@ -181,7 +181,7 @@ module.exports = {
   findUserDocuments(request, response) {
     const limit = request.query.limit || '6';
     const offset = request.query.page ? (Number(request.query.page - 1) * limit) : 0;
-    // const offset = request.query.offset || '0';
+
     return Document
       .findAndCountAll({
         include: [{ model: User,
@@ -243,35 +243,4 @@ module.exports = {
   signOut(request, response) {
     return response.status(200).send({ message: 'Successfully logged out.' });
   },
-  // signUp(request, response) {
-  //   const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-  //   if (!emailRegex.test(request.body.email)) {
-  //     return response.status(401).send({
-  //       message: 'Email is not rightly formatted',
-  //     });
-  //   }
-  //   if (!request.body.name || !request.body.email || !request.body.password) {
-  //     return response.status(401).send({ message: 'Incomplete user details' });
-  //   }
-
-  //   return User.findOne({
-  //     where: {
-  //       email: request.body.email
-  //     },
-  //   })
-  //     .then((user) => {
-  //       if (!user) {
-  //         return User
-  //           .create({
-  //             username: request.body.username,
-  //             fullname: request.body.fullname,
-  //             roleId: request.body.roleId,
-  //             email: request.body.email,
-  //             password: request.body.password,
-  //           })
-  //           .then(user => response.status(201).send(user))
-  //           .catch(error => response.status(400).send(error));
-  //       }
-  //     });
-  // },
 };

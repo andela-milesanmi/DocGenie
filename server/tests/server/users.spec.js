@@ -115,12 +115,25 @@ describe('Users', () => {
   });
   it('should be able to search for a particular user', (done) => {
     chai.request(serverUrl)
-      .get('/api/users/2/documents')
+      .get('/api/search/users/admin01')
       .set('authorization', userToken)
       .end((error, response) => {
         expect(response).to.have.status(200);
-        expect(response.body.documents).to.be.an('array');
-        expect(response.body).to.be.an('object').that.has.all.keys('documents', 'pagination');
+        expect(response.body).to.be.an('array');
+        expect(response.body[0]).to.have.property('roleId');
+        expect(response.body[0]).to.have.property('fullname');
+        expect(response.body[0]).to.have.property('email');
+        expect(response.body[0]).to.have.property('username');
+        done();
+      });
+  });
+  it('should validate that a regular user can delete their own account', (done) => {
+    chai.request(serverUrl)
+      .delete('/api/users/2')
+      .set('authorization', userToken)
+      .end((error, response) => {
+        expect(response).to.have.status(200);
+        expect(response.text).to.eql('User deleted successfully');
         done();
       });
   });

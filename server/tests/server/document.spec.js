@@ -3,7 +3,6 @@ import chaiHttp from 'chai-http';
 import models from '../../models';
 import fakeData from '../fakeData/fakeData';
 
-
 chai.use(chaiHttp);
 const serverUrl = 'http://localhost:3333';
 
@@ -192,7 +191,6 @@ let adminToken, userToken;
       .set('authorization', adminToken)
       .end((error, response) => {
         expect(response).to.have.status(200);
-        // expect(response.body).to.be.an('object');
         expect(response.text).to.eql('Document deleted successfully');
         done();
       });
@@ -209,7 +207,7 @@ let adminToken, userToken;
         done();
       });
   });
-  // *****
+  // ***** Regular user ****
   it('should list ALL documents for regular user if token is valid', (done) => {
     chai.request(serverUrl)
       .get('/api/documents')
@@ -297,39 +295,39 @@ let adminToken, userToken;
   });
 });
 
-xdescribe('Documents', () => {
-  before((done) => {
-    chai.request(serverUrl)
-      .post('/auth/api/users/login')
-      .set('Accept', 'application/json')
-      .send({ email: 'memuna.haruna@andela.com', password: 'memuna' })
-      .end((error, response) => {
-        expect(response.body.user.id).to.equal(1);
-        expect(response.body.user.roleId).to.equal(1);
-        expect(response.body.user.username).to.equal('memuna');
-        expect(response.body.user.email).to.equal('memuna.haruna@andela.com');
-        expect(response).to.have.status(200);
-        // Save the token to use it later to access the application
-        adminToken = response.body.token;
-        done();
-      });
-  });
+// xdescribe('Documents', () => {
+//   before((done) => {
+//     chai.request(serverUrl)
+//       .post('/auth/api/users/login')
+//       .set('Accept', 'application/json')
+//       .send({ email: 'memuna.haruna@andela.com', password: 'memuna' })
+//       .end((error, response) => {
+//         expect(response.body.user.id).to.equal(1);
+//         expect(response.body.user.roleId).to.equal(1);
+//         expect(response.body.user.username).to.equal('memuna');
+//         expect(response.body.user.email).to.equal('memuna.haruna@andela.com');
+//         expect(response).to.have.status(200);
+//         // Save the token to use it later to access the application
+//         adminToken = response.body.token;
+//         done();
+//       });
+//   });
 
-  it('fails, as expected', (done) => { // <= Pass in done callback
-    chai.request(serverUrl)
-      .get('/')
-      .end((error, response) => {
-        expect(response.body).to.eql({});
-        done(); // <= Call done to signal callback end
-      });
-  });
+//   it('fails, as expected', (done) => { // <= Pass in done callback
+//     chai.request(serverUrl)
+//       .get('/')
+//       .end((error, response) => {
+//         expect(response.body).to.eql({});
+//         done(); // <= Call done to signal callback end
+//       });
+//   });
 
-  it('succeeds silently!', (done) => { // <= No done callback
-    chai.request(serverUrl)
-      .get('/')
-      .end((error, response) => {
-        expect(response).to.have.status(200); // <= Test completes before this runs
-        done();
-      });
-  });
-});
+//   it('succeeds silently!', (done) => { // <= No done callback
+//     chai.request(serverUrl)
+//       .get('/')
+//       .end((error, response) => {
+//         expect(response).to.have.status(200); // <= Test completes before this runs
+//         done();
+//       });
+//   });
+// });
