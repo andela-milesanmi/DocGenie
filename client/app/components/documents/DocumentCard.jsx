@@ -1,16 +1,10 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Modal, Button, Icon } from 'react-materialize';
-import { changeCurrentDocument, deleteDocument } from '../../actions/documentActions';
-// import CreateDocument from './CreateDocument.jsx';
-import Search from '../Search.jsx';
-/**
-* This is a pure function that receives properties as props parameter
-* and is the parent component in which all other child components
-* are displayed as "props.children".
-* @param {object} props
-* @returns a react element.
-*/
+import { Modal } from 'react-materialize';
+import { changeCurrentDocument, deleteDocument }
+  from '../../actions/documentActions';
+
 
 class DocumentCard extends React.Component {
   constructor(props) {
@@ -21,9 +15,7 @@ class DocumentCard extends React.Component {
     };
     this.handleShowMore = this.handleShowMore.bind(this);
   }
-  // changeDocumentView() {
-  //   this.props.changeCurrentDocument()
-  // }
+
   editDocument(document) {
     this.props.changeCurrentDocument(document);
   }
@@ -81,5 +73,15 @@ const mapDispatchToProps = (dispatch) => {
     deleteDocument: document => dispatch(deleteDocument(document)),
   };
 };
+
+DocumentCard.propTypes = {
+  currentDocument: PropTypes.object.isRequired,
+  documents: PropTypes.object.isRequired,
+  document: PropTypes.object.isRequired,
+  deleteDocument: PropTypes.func.isRequired,
+  changeCurrentDocument: PropTypes.func.isRequired,
+  currentUser: PropTypes.object.isRequired,
+};
+
 // Use connect to put them together
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentCard);

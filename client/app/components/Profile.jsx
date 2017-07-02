@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { updateProfile } from '../actions/userActions';
 
@@ -32,7 +33,9 @@ class Profile extends React.Component {
           <p>Username: {this.state.user.username}</p>
           <p>Email: {this.state.user.email}</p>
           {(this.state.user.roleId === 1) ? <p>Role: Admin</p> : ''}
-          <button type="submit" onClick={() => this.toggle('isEdit')}>Edit Profile</button>
+          <button type="submit" onClick={() => this.toggle('isEdit')}>
+            Edit Profile
+          </button>
         </div>
       );
     }
@@ -74,8 +77,6 @@ class Profile extends React.Component {
     const { fullname: { value: fullname } = {}, username: { value: username } = {},
       email: { value: email } = {}, oldPassword: { value: oldPassword } = {},
       newPassword: { value: newPassword } = {}, confirmPassword: { value: confirmPassword } = {} } = event.target;
-    console.log(fullname, username, email,
-      oldPassword, newPassword, confirmPassword, 'update profile form data');
     if (newPassword || confirmPassword || oldPassword) {
       if (newPassword !== confirmPassword) {
         this.setState({ errorMessage: 'Passwords do not match' });
@@ -109,6 +110,12 @@ const mapDispatchToProps = (dispatch) => {
   // You can now say this.props.updateProfile
     updateProfile: user => dispatch(updateProfile(user))
   };
+};
+
+Profile.propTypes = {
+  updateProfile: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  error: PropTypes.string.isRequired
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

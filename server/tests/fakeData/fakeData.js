@@ -1,20 +1,20 @@
 import faker from 'faker';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt-nodejs';
 
 export default {
   firstUser: {
-    username: 'admin',
+    username: 'admin01',
     fullname: 'admin tester',
     email: faker.internet.email(),
     password: 'admintester',
-    roleId: 1,
+    confirmPassword: 'admintester',
   },
   secondUser: {
     username: faker.internet.userName(),
     fullname: faker.name.findName(),
     email: faker.internet.email(),
-    password: faker.internet.password(),
-    roleId: 2,
+    password: 'regulartester',
+    confirmPassword: 'regulartester',
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -23,40 +23,72 @@ export default {
     fullname: faker.name.findName(),
     email: faker.internet.email(),
     password: faker.internet.password(),
-    roleId: 2,
     createdAt: new Date(),
     updatedAt: new Date()
   },
   privateDocument: {
     title: 'private document',
     content: 'private document created',
-    access: -1,
-    createdAt: new Date(),
-    updatedAt: new Date()
+    access: -1
   },
   roleDocument: {
+    title: 'role document',
+    content: 'role document created',
+    access: 1,
+    userId: 1
+  },
+  publicDocument: {
     title: 'public document',
     content: 'public document created',
     access: 0,
-    createdAt: new Date(),
-    updatedAt: new Date()
+    userId: 2,
   },
-  publicDocument: {
-    title: faker.lorem.words(),
-    content: faker.lorem.paragraph(),
+  userPublicDocument: {
+    title: 'user public document',
+    content: 'user public document created',
     access: 0,
-    userId: 3,
-    createdAt: new Date(),
-    updatedAt: new Date()
+    userId: 2,
+  },
+  userPrivateDocument: {
+    title: 'user private document',
+    content: 'user private document created',
+    access: -1,
+    userId: 2,
   },
   sampleDocument: {
-    title: faker.lorem.words(),
+    title: 'sample document',
     content: faker.lorem.paragraph(),
     access: -1,
     userId: 1,
     createdAt: new Date(),
     updatedAt: new Date()
   },
+  invalidDocument: {
+    title: faker.lorem.words(),
+    access: -1,
+    userId: 1,
+  },
+  bulkDocuments: [{
+    title: faker.lorem.words(),
+    content: faker.lorem.text(),
+    access: 0,
+    userId: 2,
+  }, {
+    title: faker.commerce.productName(),
+    content: faker.commerce.product(),
+    access: 0,
+    userId: 1,
+  }, {
+    title: faker.lorem.words(),
+    content: faker.lorem.paragraphs(),
+    access: 0,
+    userId: 2,
+  }, {
+    title: faker.lorem.word(),
+    content: faker.lorem.sentences(),
+    access: 0,
+    userId: 1,
+  }],
   editorOne: {
     username: 'janey',
     fullname: 'jane doe',
@@ -92,10 +124,10 @@ export default {
     createdAt: new Date(),
     updatedAt: new Date(),
   },
-  admin: {
+  adminRole: {
     title: 'admin',
   },
-  user: {
+  userRole: {
     title: 'user',
   }
 };

@@ -7,8 +7,9 @@
     "start": "NODE_ENV=dev webpack -p & nodemon server.js",
     "start:dev": "nodemon server.js",
     "debug": "nodemon --inspect server.js",
-    "test": "npm run test:db && NODE_ENV=test mocha --compilers js:babel-core/register --colors ./server/tests/*/*.spec.js --timeout 10000",
-    "test:db": "NODE_ENV=test sequelize db:migrate:undo:all && NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:undo:all && NODE_ENV=test sequelize db:seed:all"
+    "test-server": "NODE_ENV=test PORT=3333 nodemon server.js",
+    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --compilers js:babel-core/register --colors ./server/tests/*/*.spec.js --require ./server/tests/init.js",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -37,7 +38,7 @@
     "babel-preset-react-hmre": "^1.1.1",
     "babel-preset-stage-0": "^6.22.0",
     "babel-register": "^6.24.1",
-    "bcrypt": "^1.0.2",
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.2",
     "css-loader": "^0.28.4",
     "dotenv": "^4.0.0",
@@ -82,6 +83,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "chai": "^4.0.2",
     "chai-http": "^3.0.0",
+    "coveralls": "^2.13.1",
     "eslint": "^4.0.0",
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-import": "^2.3.0",
@@ -89,6 +91,6 @@
     "faker": "^4.1.0",
     "mocha": "^3.4.2",
     "nodemon": "^1.11.0",
-    "nyc": "^11.0.2"
+    "nyc": "^11.0.3"
   }
 }

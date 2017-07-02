@@ -1,6 +1,5 @@
-import React, { PropTypes } from 'react';
-import { Link, IndexLink, browserHistory } from 'react-router';
-import { Navbar, Dropdown, NavItem, Icon } from 'react-materialize';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { viewAllUsers } from '../actions/userActions';
 
@@ -44,6 +43,13 @@ const mapDispatchToProps = (dispatch) => {
   // You can now say this.props.logoutUser
     viewAllUsers: page => dispatch(viewAllUsers(page)),
   };
+};
+
+AllUsers.propTypes = {
+  viewAllUsers: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  users: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
 };
 
 // Use connect to put them together

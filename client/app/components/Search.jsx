@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react';
-import { Link, IndexLink, browserHistory } from 'react-router';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { searchForDocuments } from '../actions/documentActions';
 
@@ -27,6 +27,10 @@ const mapDispatchToProps = (dispatch) => {
   // You can now say this.props.createDocument
     searchForDocuments: searchKey => dispatch(searchForDocuments(searchKey)),
   };
+};
+
+Search.propTypes = {
+  searchForDocuments: PropTypes.func.isRequired,
 };
 
 export default connect(null, mapDispatchToProps)(Search);

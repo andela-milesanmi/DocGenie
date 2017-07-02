@@ -1,9 +1,7 @@
-// const jwt = require('jsonwebtoken');
 const User = require('../models').User;
 const Document = require('../models').Document;
-// const secret = require('../config/config.json').secret;
 const authentication = require('../middleware/authentication');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 
 module.exports = {
   createNewUser(request, response) {
@@ -17,10 +15,9 @@ module.exports = {
       || !request.body.username) {
       return response.status(401).send({ message: 'Please fill all the fields' });
     }
-    if (request.body.password !== request.body.confirm_password) {
+    if (request.body.password !== request.body.confirmPassword) {
       return response.status(401).send({ message: 'Password does not match' });
     }
-    console.log(request.decoded, 'comments');
     if (request.decoded && (Number(request.body.roleId) === 1 && Number(request.decoded.roleId) !== 1)) {
       return response.status(400).json({
         message: 'You are not allowed to create an admin user',
@@ -61,7 +58,6 @@ module.exports = {
         token,
       });
     }).catch((error) => {
-      console.log(JSON.stringify(error.message), 'error');
       response.status(400).send(error.message);
     });
   },
@@ -78,7 +74,7 @@ module.exports = {
     }).then((user) => {
       if (!user) {
         return response.status(400).send({
-          message: 'User does not exist',
+          message: 'Not an existing user',
         });
       } else if (!user.validatePassword(request.body.password, user)) {
         return response.status(400).send({
@@ -102,8 +98,6 @@ module.exports = {
   listAllUsers(request, response) {
     const limit = request.query.limit || '6';
     const offset = request.query.offset || '0';
-    const token = request.headers.authorization || request.headers['x-access-token'];
-    console.log(token, 'this is token')
     return User
       .findAndCountAll({
         limit,
@@ -143,14 +137,13 @@ module.exports = {
       .catch(error => response.status(400).send(error));
   },
   updateAUser(request, response) {
-    // check if roleId is 1
     return User
       .findById(request.params.id)
       .then((user) => {
         if (!user) {
           throw new Error('User Not Found');
         }
-        if (request.body.roleId && user.roleId !== 1) {
+        if (request.body.roleId && (request.body.roleId !== user.roleId && request.decoded.roleId !== 1)) {
           throw new Error('You are not authorized to change a user\'s role');
         }
         if (request.body.oldPassword || request.body.newPassword || request.body.confirmPassword) {
@@ -161,9 +154,6 @@ module.exports = {
         if (request.body.newPassword && (request.body.newPassword !== request.body.confirmPassword)) {
           return response.status(401).send({ message: 'Passwords do not match' });
         }
-        // if (request.body.password !== request.body.confirm_password) {
-        //   return response.status(401).send({ message: 'Password does not match' });
-        // }
 
         return user
           .update(request.body);
@@ -189,7 +179,7 @@ module.exports = {
   findUserDocuments(request, response) {
     const limit = request.query.limit || '6';
     const offset = request.query.page ? (Number(request.query.page - 1) * limit) : 0;
-    // const offset = request.query.offset || '0';
+
     return Document
       .findAndCountAll({
         include: [{ model: User,
@@ -249,37 +239,6 @@ module.exports = {
       .catch(error => response.status(400).send(error));
   },
   signOut(request, response) {
-    return response.status(200).send({ message: 'Successfully logged out.' });
+    return response.status(200).send({ message: 'Successfully logged out' });
   },
-  // signUp(request, response) {
-  //   const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-  //   if (!emailRegex.test(request.body.email)) {
-  //     return response.status(401).send({
-  //       message: 'Email is not rightly formatted',
-  //     });
-  //   }
-  //   if (!request.body.name || !request.body.email || !request.body.password) {
-  //     return response.status(401).send({ message: 'Incomplete user details' });
-  //   }
-
-  //   return User.findOne({
-  //     where: {
-  //       email: request.body.email
-  //     },
-  //   })
-  //     .then((user) => {
-  //       if (!user) {
-  //         return User
-  //           .create({
-  //             username: request.body.username,
-  //             fullname: request.body.fullname,
-  //             roleId: request.body.roleId,
-  //             email: request.body.email,
-  //             password: request.body.password,
-  //           })
-  //           .then(user => response.status(201).send(user))
-  //           .catch(error => response.status(400).send(error));
-  //       }
-  //     });
-  // },
 };

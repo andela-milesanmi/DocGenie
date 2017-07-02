@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link, browserHistory } from 'react-router';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createUser, editUser } from '../actions/userActions';
+import { createUser } from '../actions/userActions';
 
 /**
 * This is a pure function that receives properties as props parameter
@@ -22,8 +22,8 @@ class SignUp extends React.Component {
     const email = e.target.email.value;
     const username = e.target.username.value;
     const password = e.target.password.value;
-    const confirm_password = e.target.confirm_password.value;
-    this.props.createUser({ username, fullname, email, password, confirm_password });
+    const confirmPassword = e.target.confirmPassword.value;
+    this.props.createUser({ username, fullname, email, password, confirmPassword });
   }
   render() {
     return (
@@ -51,7 +51,7 @@ class SignUp extends React.Component {
                 <label htmlFor="password">Password</label>
               </div>
               <div className="input-field col s6">
-                <input name="confirm_password" id="confirm_password" type="password" className="validate" />
+                <input name="confirmPassword" id="confirmPassword" type="password" className="validate" />
                 <label htmlFor="email">Confirm password</label>
               </div>
             </div>
@@ -78,4 +78,12 @@ const mapStateToProps = (state) => {
     user: state.user || {}
   };
 };
-export default connect(mapStateToProps, { createUser, editUser })(SignUp);
+
+SignUp.propTypes = {
+  changeScreen: PropTypes.func.isRequired,
+  createUser: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+  error: PropTypes.string.isRequired
+};
+
+export default connect(mapStateToProps, { createUser })(SignUp);

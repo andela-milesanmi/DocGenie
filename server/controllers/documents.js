@@ -1,6 +1,6 @@
 const Document = require('../models').Document;
 const User = require('../models').User;
-const jwt = require('jwt-decode');
+// const jwt = require('jwt-decode');
 
 module.exports = {
   createADocument(request, response) {
@@ -12,7 +12,9 @@ module.exports = {
         content: request.body.content
       })
       .then(document => response.status(201).send(document))
-      .catch(error => response.status(400).send(error));
+      .catch((error) => {
+        response.status(400).send(error);
+      });
   },
   listAllDocuments(request, response) {
     const limit = request.query.limit || '6';
@@ -56,7 +58,6 @@ module.exports = {
         });
       })
       .catch((error) => {
-        console.log(error, 'this is an error');
         response.status(400).send(error);
       });
   },
@@ -105,8 +106,12 @@ module.exports = {
         }
         return document
           .destroy()
-          .then(() => response.status(200).send('Document deleted successfully'))
-          .catch(error => response.status(400).send(error));
+          .then(() => {
+            response.status(200).send('Document deleted successfully')
+          })
+          .catch((error) => {
+            response.status(400).send(error);
+          });
       })
       .catch(error => response.status(400).send(error));
   },

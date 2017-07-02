@@ -15,7 +15,6 @@ module.exports = {
       },
       fullname: {
         type: Sequelize.STRING,
-        unique: true,
         allowNull: false,
       },
       roleId: {

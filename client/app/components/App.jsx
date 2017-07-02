@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Header from './Header.jsx';
 /**
 * This is a pure function that receives properties as props parameter
@@ -16,7 +17,7 @@ const App = props => (
   </div>
 );
 
-App.PropTypes = {
+App.propTypes = {
   children: PropTypes.object.isRequired
 };
 
