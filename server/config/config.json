@@ -1,23 +1,11 @@
 {
   "development": {
-    "username": "memuna",
-    "password": null,
-    "database": "docgenie-dev",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
+    "use_env_variable": "DEV_DBURL"
   },
   "test": {
-    "username": "memuna",
-    "password": null,
-    "database": "docgenie-test",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
+    "use_env_variable": "TEST_DBURL"
   },
   "production": {
-    "username": "memuna",
-    "password": null,
-    "database": "docgenie-dev",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
+    "use_env_variable": "DBURL"
   }
 }

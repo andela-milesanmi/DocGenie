@@ -8,8 +8,8 @@
     "start:dev": "nodemon server.js",
     "debug": "nodemon --inspect server.js",
     "test-server": "NODE_ENV=test PORT=3333 nodemon server.js",
-    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --compilers js:babel-core/register --colors ./server/tests/*/*.spec.js",
-    "test:db": "NODE_ENV=test sequelize db:migrate:undo:all && NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:undo:all && NODE_ENV=test sequelize db:seed:all"
+    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --compilers js:babel-core/register --colors ./server/tests/*/*.spec.js --require ./server/tests/init.js",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -83,6 +83,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "chai": "^4.0.2",
     "chai-http": "^3.0.0",
+    "coveralls": "^2.13.1",
     "eslint": "^4.0.0",
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-import": "^2.3.0",
