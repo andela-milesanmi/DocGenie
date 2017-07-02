@@ -2,13 +2,14 @@ import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import models from '../../models';
 import fakeData from '../fakeData/fakeData';
+import server from '../../../server';
 
 chai.use(chaiHttp);
-const serverUrl = 'http://localhost:3333';
+// const server = 'http://localhost:3333';
 
 const promisify = (data) => {
   return new Promise((resolve, reject) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .post('/auth/api/users')
       .set('Content-Type', 'application/json')
       .send(data)
@@ -50,7 +51,7 @@ describe('Roles', () => {
   });
 
   it('should validate that a regular user cannot create a new role', (done) => { // <= No done callback
-    chai.request(serverUrl)
+    chai.request(server)
       .get('/api/roles')
       .set('authorization', userToken)
       .end((error, response) => {
@@ -60,7 +61,7 @@ describe('Roles', () => {
   });
 
   it('should validate that a regular user cannot delete a role', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .delete('/api/roles/1')
       .set('authorization', userToken)
       .end((error, response) => {
@@ -69,7 +70,7 @@ describe('Roles', () => {
       });
   });
   it('should validate that a role that already exists cannot be re-created', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .post('/api/roles/')
       .set('authorization', userToken)
       .send({ title: 'admin' })

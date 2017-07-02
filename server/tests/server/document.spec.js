@@ -2,14 +2,15 @@ import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import models from '../../models';
 import fakeData from '../fakeData/fakeData';
+import server from '../../../server';
 
 
 chai.use(chaiHttp);
-const serverUrl = 'http://localhost:3333';
+// const server = 'http://localhost:3333';
 
 const promisify = (data) => {
   return new Promise((resolve, reject) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .post('/auth/api/users')
       .set('Content-Type', 'application/json')
       .send(data)
@@ -51,7 +52,7 @@ let adminToken, userToken;
 
   it('should sign in a valid user successfully', (done) => { // <= Pass in done callback
     const { email, password, username } = fakeData.firstUser;
-    chai.request(serverUrl)
+    chai.request(server)
       .post('/auth/api/users/login')
       .set('Accept', 'application/json')
       .send({ email, password })
@@ -66,7 +67,7 @@ let adminToken, userToken;
       });
   });
   it('should fail for an authenticated route', (done) => { // <= No done callback
-    chai.request(serverUrl)
+    chai.request(server)
       .get('/api/documents')
       .end((error, response) => {
         expect(response).to.have.status(403); // <= Test completes before this runs
@@ -74,7 +75,7 @@ let adminToken, userToken;
       });
   });
   it('should list ALL documents for admin user if token is valid', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .get('/api/documents')
       .set('authorization', adminToken)
       .end((error, response) => {
@@ -85,7 +86,7 @@ let adminToken, userToken;
       });
   });
   it('should add a public document to database for admin if admin token is valid', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .post('/api/documents')
       .set('authorization', adminToken)
       .send(fakeData.publicDocument)
@@ -101,7 +102,7 @@ let adminToken, userToken;
       });
   });
   it('should fail to create a new document if content is empty', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .post('/api/documents')
       .set('authorization', adminToken)
       .send(fakeData.invalidDocument)
@@ -114,7 +115,7 @@ let adminToken, userToken;
       });
   });
   it('should add a private document to database for admin if admin token is valid', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .post('/api/documents')
       .set('authorization', adminToken)
       .send(fakeData.privateDocument)
@@ -130,7 +131,7 @@ let adminToken, userToken;
       });
   });
   it('should validate that a new document created in database has a published date', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .post('/api/documents')
       .set('authorization', adminToken)
       .send(fakeData.sampleDocument)
@@ -142,7 +143,7 @@ let adminToken, userToken;
       });
   });
   it('should add a role-access document to database for admin if admin token is valid', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .post('/api/documents')
       .set('authorization', adminToken)
       .send(fakeData.roleDocument)
@@ -158,7 +159,7 @@ let adminToken, userToken;
       });
   });
   it('should allow admin to update their own document successfully', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .put('/api/documents/2')
       .set('authorization', adminToken)
       .send({ content: 'sample document updated' })
@@ -174,7 +175,7 @@ let adminToken, userToken;
       });
   });
   it('should return an error if admin tries to retrieve a non-existing document', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .get('/api/documents/10')
       .set('authorization', adminToken)
       .end((error, response) => {
@@ -187,7 +188,7 @@ let adminToken, userToken;
       });
   });
   it('should delete a document and return a message', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .delete('/api/documents/2')
       .set('authorization', adminToken)
       .end((error, response) => {
@@ -197,7 +198,7 @@ let adminToken, userToken;
       });
   });
   it('should retrieve documents on /api/search/documents GET if token is valid', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .get('/api/search/documents/public')
       .set('authorization', userToken)
       .end((error, response) => {
@@ -210,7 +211,7 @@ let adminToken, userToken;
   });
   // ***** Regular user ****
   it('should list ALL documents for regular user if token is valid', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .get('/api/documents')
       .set('authorization', userToken)
       .end((error, response) => {
@@ -221,7 +222,7 @@ let adminToken, userToken;
       });
   });
   it('should add a public document to database for regular user if token is valid', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .post('/api/documents')
       .set('authorization', userToken)
       .send(fakeData.userPublicDocument)
@@ -237,7 +238,7 @@ let adminToken, userToken;
       });
   });
   it('should fail to create a new document if content is empty', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .post('/api/documents')
       .set('authorization', userToken)
       .send(fakeData.invalidDocument)
@@ -250,7 +251,7 @@ let adminToken, userToken;
       });
   });
   it('should add a private document to database for a regular user if token is valid', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .post('/api/documents')
       .set('authorization', userToken)
       .send(fakeData.userPrivateDocument)
@@ -266,7 +267,7 @@ let adminToken, userToken;
       });
   });
   it('should allow a regular user to update their own document successfully', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .put('/api/documents/1')
       .set('authorization', userToken)
       .send({ content: 'pulic user document updated' })
@@ -282,7 +283,7 @@ let adminToken, userToken;
       });
   });
   it('should return an error if a regular tries to retrieve a non-existing document', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .get('/api/documents/16')
       .set('authorization', userToken)
       .end((error, response) => {
@@ -298,7 +299,7 @@ let adminToken, userToken;
 
 // xdescribe('Documents', () => {
 //   before((done) => {
-//     chai.request(serverUrl)
+//     chai.request(server)
 //       .post('/auth/api/users/login')
 //       .set('Accept', 'application/json')
 //       .send({ email: 'memuna.haruna@andela.com', password: 'memuna' })
@@ -315,7 +316,7 @@ let adminToken, userToken;
 //   });
 
 //   it('fails, as expected', (done) => { // <= Pass in done callback
-//     chai.request(serverUrl)
+//     chai.request(server)
 //       .get('/')
 //       .end((error, response) => {
 //         expect(response.body).to.eql({});
@@ -324,7 +325,7 @@ let adminToken, userToken;
 //   });
 
 //   it('succeeds silently!', (done) => { // <= No done callback
-//     chai.request(serverUrl)
+//     chai.request(server)
 //       .get('/')
 //       .end((error, response) => {
 //         expect(response).to.have.status(200); // <= Test completes before this runs

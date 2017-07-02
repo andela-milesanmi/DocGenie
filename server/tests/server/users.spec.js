@@ -2,14 +2,15 @@ import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import models from '../../models';
 import fakeData from '../fakeData/fakeData';
+import server from '../../../server';
 
 
 chai.use(chaiHttp);
-const serverUrl = 'http://localhost:3333';
+// const server = 'http://localhost:3333';
 
 const promisify = (data) => {
   return new Promise((resolve, reject) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .post('/auth/api/users')
       .set('Content-Type', 'application/json')
       .send(data)
@@ -52,7 +53,7 @@ describe('Users', () => {
 
   it('should be able to sign in successfully if they are existing users', (done) => { // <= Pass in done callback
     const { email, password, username } = fakeData.firstUser;
-    chai.request(serverUrl)
+    chai.request(server)
       .post('/auth/api/users/login')
       .set('Accept', 'application/json')
       .send({ email, password })
@@ -67,7 +68,7 @@ describe('Users', () => {
   });
   it('should not be able to login if they do NOT already have accounts', (done) => { // <= Pass in done callback
     const { email, password } = fakeData.thirdUser;
-    chai.request(serverUrl)
+    chai.request(server)
       .post('/auth/api/users/login')
       .set('Accept', 'application/json')
       .send({ email, password })
@@ -78,7 +79,7 @@ describe('Users', () => {
       });
   });
   it('should validate that a user cannot access an authenticated route without a token', (done) => { // <= No done callback
-    chai.request(serverUrl)
+    chai.request(server)
       .get('/api/users')
       .end((error, response) => {
         expect(response).to.have.status(403); // <= Test completes before this runs
@@ -87,7 +88,7 @@ describe('Users', () => {
   });
 
   it('should validate that a regular user can update their account details ', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .put('/api/users/1')
       .set('authorization', userToken)
       .send({ fullname: 'Mikhail Stanislaski', email: 'mikhail.s@gmail.com' })
@@ -103,7 +104,7 @@ describe('Users', () => {
       });
   });
   it('should be able to fetch all their own documents', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .get('/api/users/2/documents')
       .set('authorization', userToken)
       .end((error, response) => {
@@ -114,7 +115,7 @@ describe('Users', () => {
       });
   });
   it('should be able to search for a particular user', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .get('/api/search/users/admin01')
       .set('authorization', userToken)
       .end((error, response) => {
@@ -128,7 +129,7 @@ describe('Users', () => {
       });
   });
   it('should validate that a regular user can delete their own account', (done) => {
-    chai.request(serverUrl)
+    chai.request(server)
       .delete('/api/users/2')
       .set('authorization', userToken)
       .end((error, response) => {
