@@ -98,7 +98,6 @@ module.exports = {
   listAllUsers(request, response) {
     const limit = request.query.limit || '6';
     const offset = request.query.offset || '0';
-    // const token = request.headers.authorization || request.headers['x-access-token'];
     return User
       .findAndCountAll({
         limit,
@@ -138,7 +137,6 @@ module.exports = {
       .catch(error => response.status(400).send(error));
   },
   updateAUser(request, response) {
-    // check if roleId is 1
     return User
       .findById(request.params.id)
       .then((user) => {
@@ -241,6 +239,6 @@ module.exports = {
       .catch(error => response.status(400).send(error));
   },
   signOut(request, response) {
-    return response.status(200).send({ message: 'Successfully logged out.' });
+    return response.status(200).send({ message: 'Successfully logged out' });
   },
 };
