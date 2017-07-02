@@ -74,7 +74,7 @@ module.exports = {
     }).then((user) => {
       if (!user) {
         return response.status(400).send({
-          message: 'User does not exist',
+          message: 'Not an existing user',
         });
       } else if (!user.validatePassword(request.body.password, user)) {
         return response.status(400).send({
@@ -145,7 +145,7 @@ module.exports = {
         if (!user) {
           throw new Error('User Not Found');
         }
-        if (request.body.roleId && user.roleId !== 1) {
+        if (request.body.roleId && (request.body.roleId !== user.roleId && request.decoded.roleId !== 1)) {
           throw new Error('You are not authorized to change a user\'s role');
         }
         if (request.body.oldPassword || request.body.newPassword || request.body.confirmPassword) {
@@ -156,9 +156,6 @@ module.exports = {
         if (request.body.newPassword && (request.body.newPassword !== request.body.confirmPassword)) {
           return response.status(401).send({ message: 'Passwords do not match' });
         }
-        // if (request.body.password !== request.body.confirm_password) {
-        //   return response.status(401).send({ message: 'Password does not match' });
-        // }
 
         return user
           .update(request.body);

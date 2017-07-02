@@ -2,6 +2,11 @@ const Role = require('../models').Role;
 
 module.exports = {
   createNewRole(request, response) {
+    if (request.decoded && Number(request.decoded.roleId) !== 1) {
+      return response.status(400).json({
+        message: 'You are not allowed to create a new role',
+      });
+    }
     return Role
       .create({
         title: request.body.title,

@@ -9,7 +9,7 @@ module.exports = (app) => {
   }));
 
   // roles routes
-  app.post('/auth/api/roles', authentication.verifyAdminAccess, rolesController.createNewRole);
+  app.post('/auth/api/roles', rolesController.createNewRole);
   app.get('/api/roles', authentication.verifyAdminAccess, rolesController.listAllRoles);
   app.delete('/api/roles/:id', authentication.verifyAdminAccess, rolesController.destroyARole);
 
