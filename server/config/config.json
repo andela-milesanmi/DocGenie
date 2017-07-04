@@ -6,6 +6,6 @@
     "use_env_variable": "TEST_DBURL"
   },
   "production": {
-    "use_env_variable": "DBURL"
+    "use_env_variable": "DATABASE_URL"
   }
 }

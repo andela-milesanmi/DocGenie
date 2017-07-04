@@ -15,6 +15,7 @@ import configureStore from './store/configureStore';
 const store = configureStore();
 
 window.clientStore = store;
+window.jQuery = window.$ = jQuery;
 
 const requireAuth = store => (nextState, replace, callback) => {
   const token = localStorage.getItem('token');

@@ -19,6 +19,10 @@ Object.keys(document.defaultView).forEach((property) => {
 
 global.HTMLElement = window.HTMLElement;
 
+global.$ = () => ({
+  modal: () => null
+});
+
 const noop = () => null;
 
 require.extensions['.css'] = noop;

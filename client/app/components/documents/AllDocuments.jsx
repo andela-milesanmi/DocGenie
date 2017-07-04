@@ -8,15 +8,8 @@ import CreateDocument from './CreateDocument.jsx';
 import Search from '../Search.jsx';
 import DocumentCard from './DocumentCard.jsx';
 
-/**
-* This is a pure function that receives properties as props parameter
-* and is the parent component in which all other child components
-* are displayed as "props.children".
-* @param {object} props
-* @returns a react element.
-*/
 
-class AllDocuments extends React.Component {
+export class AllDocuments extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,6 +19,7 @@ class AllDocuments extends React.Component {
     this.showOwnDocuments = this.showOwnDocuments.bind(this);
   }
   editDocument(document) {
+    console.log('did we ever get here?')
     this.props.changeCurrentDocument(document);
   }
   componentDidMount() {
@@ -33,14 +27,17 @@ class AllDocuments extends React.Component {
   }
   showAllDocuments() {
     const { page = '' } = this.props.params;
-    this.setState({ currentUrl: 'http://localhost:5000/api/documents/?page=' }, () => {
-      this.props.viewAllDocuments(this.state.currentUrl + page);
-    });
+    this.setState({ currentUrl: 'http://localhost:5000/api/documents/?page=' },
+      () => {
+        this.props.viewAllDocuments(this.state.currentUrl + page);
+      });
   }
   showOwnDocuments() {
     const { params: { page = '' } } = this.props;
     const { user } = this.props;
-    this.setState({ currentUrl: `http://localhost:5000/api/users/${user.id}/documents/?page=` }, () => {
+    this.setState({
+      currentUrl: `http://localhost:5000/api/users/${user.id}/documents/?page=` },
+    () => {
       this.props.viewAllDocuments(this.state.currentUrl + page);
     });
   }
@@ -55,9 +52,12 @@ class AllDocuments extends React.Component {
         <div className="row">
           <div className="col s8 offset-s3">
             <div className="row">
-              <button className="col s3 btn btn-large create-doc" onClick={this.showAllDocuments}>All Documents</button>
-              <button className="col s3 btn btn-large create-doc" onClick={this.showOwnDocuments}>My Documents</button>
-              <a href="#create-form" className="col s3 btn btn-large create-doc" onClick={() => this.editDocument()}>
+              <button className="col s3 btn btn-large create-doc"
+                onClick={this.showAllDocuments}>All Documents</button>
+              <button className="col s3 btn btn-large create-doc"
+                onClick={this.showOwnDocuments}>My Documents</button>
+              <a href="#create-form" className="col s3 btn btn-large create-doc"
+                onClick={() => this.editDocument()}>
                CREATE DOCUMENT
               </a>
             </div>
@@ -67,9 +67,10 @@ class AllDocuments extends React.Component {
         <Search />
         <div className="col s12">
           <div className="row" style={{ fontSize: '15px' }}>
-            {this.props.documents && this.props.documents.map((document, i) => (
+            {this.props.documents && this.props.documents.map((document, i) =>
+              (
               <DocumentCard index={i} document={document} />
-            )
+              )
             )}
           </div>
           <div className="row paginate-docs">
@@ -83,9 +84,10 @@ class AllDocuments extends React.Component {
                   browserHistory.push(`/dashboard/documents/${i + 1}`);
                 }}>{i + 1}</a></li>);
               })}
-              {this.props.currentPage < this.props.pages && <li className="waves-effect"><a href="#" onClick={() => {
-                browserHistory.push(`/dashboard/documents/${this.props.currentPage + 1}`);
-              }}><i className="material-icons">chevron_right</i></a></li> }
+              {this.props.currentPage < this.props.pages &&
+               <li className="waves-effect"><a href="#" onClick={() => {
+                 browserHistory.push(`/dashboard/documents/${this.props.currentPage + 1}`);
+               }}><i className="material-icons">chevron_right</i></a></li> }
             </ul>
           </div>
         </div>
@@ -119,6 +121,7 @@ AllDocuments.propTypes = {
   pages: PropTypes.number.isRequired,
   params: PropTypes.object.isRequired,
   viewAllDocuments: PropTypes.func.isRequired,
+  changeCurrentDocument: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
 };
 
