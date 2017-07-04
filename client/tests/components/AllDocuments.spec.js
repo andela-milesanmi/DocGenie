@@ -41,7 +41,7 @@ describe('<AllDocuments />', () => {
     expect(component.props().pages).to.equal(4);
     expect(component.props().currentPage).to.equal(1);
   });
-  it('should have the required states', () => {
+  xit('should have the required states', () => {
     expect(component.state().currentUrl).to.equal('');
   });
   it('should call the neccessary methods on mount', () => {
