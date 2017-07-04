@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack -p",
     "start:dev": "NODE_ENV=development webpack -p & nodemon server.js",
-    "start": "sequelize db:migrate && node server.js",
+    "start": "./node_modules/bin/sequelize db:migrate && node server.js",
     "debug": "nodemon --inspect server.js",
     "test": "NODE_ENV=test PORT=3333 nyc --reporter=html --reporter=text mocha -r mock-local-storage --compilers js:babel-core/register --colors ./server/tests/*/*.spec.js ./client/tests/*/*.spec.js --require ./server/tests/init.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
@@ -74,6 +74,7 @@
     "redux-thunk": "2.0.1",
     "sass-loader": "^6.0.3",
     "sequelize": "^3.30.4",
+    "sequelize-cli": "^2.7.0",
     "style-loader": "^0.18.2",
     "toastr": "^2.1.2",
     "url-loader": "0.5.7",
