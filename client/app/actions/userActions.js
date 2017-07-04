@@ -6,7 +6,7 @@ import { CREATE_USER, SIGNIN_USER, CREATE_USER_ERROR, SIGNIN_USER_ERROR,
 
 export const createUser = (user) => {
   return (dispatch) => {
-    return axios.post('http://localhost:5000/auth/api/users', user)
+    return axios.post('/auth/api/users', user)
       .then((response) => {
         localStorage.setItem('token', response.data.token);
         console.log(response, 'response');
@@ -22,7 +22,7 @@ export const createUser = (user) => {
 };
 export const signInUser = (user) => {
   return (dispatch) => {
-    return axios.post('http://localhost:5000/auth/api/users/login', user)
+    return axios.post('/auth/api/users/login', user)
       .then((response) => {
         localStorage.setItem('token', response.data.token);
         console.log(response, 'response');
@@ -32,7 +32,7 @@ export const signInUser = (user) => {
         console.log(error, 'message');
         dispatch({ type: SIGNIN_USER_ERROR,
           error: error.response.data.message || error.response.data });
-        console.log(error, 'error');
+        return Promise.reject(error);
       });
   };
 };
@@ -44,7 +44,7 @@ export const getUser = () => {
     headers: { authorization: token }
   };
   return (dispatch) => {
-    return axios.get(`http://localhost:5000/api/users/${userId}`, config)
+    return axios.get(`/api/users/${userId}`, config)
       .then((response) => {
         console.log(response, 'response');
         dispatch({ type: CREATE_USER, user: response.data });
@@ -52,7 +52,7 @@ export const getUser = () => {
         console.log(error, 'message');
         dispatch({ type: CREATE_USER_ERROR,
           error: error.response.data.message || error.response.data });
-        console.log(error, 'error');
+        return Promise.reject(error);
       });
   };
 };
@@ -83,7 +83,7 @@ export const updateProfile = (user) => {
   };
 
   return (dispatch) => {
-    return axios.put(`http://localhost:5000/api/users/${userId}`, user, config)
+    return axios.put(`/api/users/${userId}`, user, config)
       .then((response) => {
         console.log(response, 'response');
         dispatch({ type: CREATE_USER, user: response.data });
@@ -101,7 +101,7 @@ export const viewAllUsers = (page = '') => { // eslint-disable-line
     headers: { authorization: token }
   };
   return (dispatch) => {
-    axios.get(`http://localhost:5000/api/users/?page=${page}`, config)
+    axios.get(`/api/users/?page=${page}`, config)
       .then((response) => {
         dispatch({ type: VIEW_USERS,
           users: response.data.users,

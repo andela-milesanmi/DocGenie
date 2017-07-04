@@ -30,7 +30,7 @@ export const createDocument = (document) => {
     headers: { authorization: token }
   };
   return (dispatch) => {
-    axios.post('http://localhost:5000/api/documents', document, config)
+    axios.post('/api/documents', document, config)
       .then((response) => {
         toastr.success('Document Created successfully');
         dispatch({ type: CREATE_DOCUMENT,
@@ -59,7 +59,7 @@ export const editDocument = (document) => {
     headers: { authorization: token }
   };
   return (dispatch) => {
-    axios.put(`http://localhost:5000/api/documents/${document.id}`,
+    axios.put(`/api/documents/${document.id}`,
       document, config)
       .then((response) => {
         dispatch({ type: EDIT_DOCUMENT, document: response.data });
@@ -76,7 +76,7 @@ export const deleteDocument = (document) => {
     headers: { authorization: token }
   };
   return (dispatch) => {
-    axios.delete(`http://localhost:5000/api/documents/${document.id}`,
+    axios.delete(`/api/documents/${document.id}`,
       document, config)
       .then((response) => {
         dispatch({ type: DELETE_DOCUMENT, document });
@@ -93,7 +93,7 @@ export const searchForDocuments = (searchKey) => {
     headers: { authorization: token }
   };
   return (dispatch) => {
-    axios.get(`http://localhost:5000/api/search/documents/${searchKey}`, config)
+    axios.get(`/api/search/documents/${searchKey}`, config)
       .then((response) => {
         console.log(response, 'response in SEARCH_DOCUMENT');
         dispatch({ type: SEARCH_DOCUMENT, documents: response.data || [] });

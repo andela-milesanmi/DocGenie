@@ -28,6 +28,7 @@ const requireAuth = store => (nextState, replace, callback) => {
       if (!nextState.location.pathname.includes('dashboard')) replace('/dashboard/documents');
       return callback();
     }).catch(() => {
+      localStorage.removeItem('token');
       replace('/');
       return callback();
     });

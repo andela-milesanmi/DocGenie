@@ -27,7 +27,7 @@ export class AllDocuments extends React.Component {
   }
   showAllDocuments() {
     const { page = '' } = this.props.params;
-    this.setState({ currentUrl: 'http://localhost:5000/api/documents/?page=' },
+    this.setState({ currentUrl: '/api/documents/?page=' },
       () => {
         this.props.viewAllDocuments(this.state.currentUrl + page);
       });
@@ -36,7 +36,7 @@ export class AllDocuments extends React.Component {
     const { params: { page = '' } } = this.props;
     const { user } = this.props;
     this.setState({
-      currentUrl: `http://localhost:5000/api/users/${user.id}/documents/?page=` },
+      currentUrl: `/api/users/${user.id}/documents/?page=` },
     () => {
       this.props.viewAllDocuments(this.state.currentUrl + page);
     });
