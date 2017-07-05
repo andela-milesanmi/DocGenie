@@ -22,4 +22,4 @@ deploy:
   app: docgenie
   on:
     repo: andela-mharuna/DocGenie
-    branch: chore/148198025/setup-front-end-testing
+    branch: staging

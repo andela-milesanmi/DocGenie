@@ -9,10 +9,10 @@ import { AllDocuments } from '../../app/components/documents/AllDocuments.jsx';
 import fakeData from '../../../server/tests/fakeData/fakeData';
 
 
-describe('<AllDocuments />', () => {
+describe('AllDocuments component', () => {
   const mockStore = configureStore([thunk]);
   let component;
-  const store = mockStore({ documents: {}, user: { currentProfile: { id: 20 } } });
+  const store = mockStore({ documents: {}, user: { currentProfile: { id: 10 } } });
   const props = {
     documents: [],
     currentPage: 1,
@@ -22,7 +22,7 @@ describe('<AllDocuments />', () => {
     },
     viewAllDocuments: sinon.spy(),
     changeCurrentDocument: sinon.spy(),
-    user: {},
+    user: { id: 3 },
   };
   beforeEach(() => {
     component = mount(<AllDocuments {...props}/>, {
@@ -41,8 +41,8 @@ describe('<AllDocuments />', () => {
     expect(component.props().pages).to.equal(4);
     expect(component.props().currentPage).to.equal(1);
   });
-  xit('should have the required states', () => {
-    expect(component.state().currentUrl).to.equal('');
+  it('should have the required states', () => {
+    expect(component.state().currentUrl).to.equal('/api/documents/?page=');
   });
   it('should call the neccessary methods on mount', () => {
     const componentDidMountSpy = sinon.spy(AllDocuments.prototype, 'componentDidMount');
@@ -62,8 +62,9 @@ describe('<AllDocuments />', () => {
     component.find('.create-doc').last().simulate('click');
     expect(props.changeCurrentDocument.callCount).to.equal(1);
   });
-  it('should call all documents', () => {
-
+  it('should fetch all a user\'s own documents on button-click', () => {
+    component.find('#ownDocuments').simulate('click');
+    expect(component.props().currentUrl).to.equal(`/api/users/${props.user.id}/documents/?page=`);
   });
 });
 /* it('allows props to be set', () => {

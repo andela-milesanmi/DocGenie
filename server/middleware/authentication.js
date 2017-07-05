@@ -5,6 +5,7 @@ module.exports = {
   verifyToken(request, response, next) {
     const token = request.headers.authorization ||
       request.headers['x-access-token'];
+    console.log(token, 'token')
     if (token) {
       jwt.verify(token, process.env.JWTSECRET, (error, decoded) => {
         if (error) {

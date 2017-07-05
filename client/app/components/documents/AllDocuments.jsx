@@ -19,7 +19,6 @@ export class AllDocuments extends React.Component {
     this.showOwnDocuments = this.showOwnDocuments.bind(this);
   }
   editDocument(document) {
-    console.log('did we ever get here?')
     this.props.changeCurrentDocument(document);
   }
   componentDidMount() {
@@ -54,7 +53,7 @@ export class AllDocuments extends React.Component {
             <div className="row">
               <button className="col s3 btn btn-large create-doc"
                 onClick={this.showAllDocuments}>All Documents</button>
-              <button className="col s3 btn btn-large create-doc"
+              <button id="ownDocuments" className="col s3 btn btn-large create-doc"
                 onClick={this.showOwnDocuments}>My Documents</button>
               <a href="#create-form" className="col s3 btn btn-large create-doc"
                 onClick={() => this.editDocument()}>

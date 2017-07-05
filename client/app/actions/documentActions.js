@@ -54,7 +54,6 @@ export const changeCurrentDocument = (document) => {
 };
 export const editDocument = (document) => {
   const token = localStorage.getItem('token');
-  document.userId = jwt(token).userId;
   const config = {
     headers: { authorization: token }
   };
@@ -62,8 +61,9 @@ export const editDocument = (document) => {
     axios.put(`/api/documents/${document.id}`,
       document, config)
       .then((response) => {
-        dispatch({ type: EDIT_DOCUMENT, document: response.data });
+        dispatch({ type: EDIT_DOCUMENT, document: { ...document, ...response.data } });
       }).catch((error) => {
+        console.log(error, 'whatever');
         dispatch({ type: EDIT_DOCUMENT_ERROR,
           error: error.response.data.message || error.response.data });
       });
@@ -71,13 +71,11 @@ export const editDocument = (document) => {
 };
 export const deleteDocument = (document) => {
   const token = localStorage.getItem('token');
-  document.userId = jwt(token).userId;
   const config = {
     headers: { authorization: token }
   };
   return (dispatch) => {
-    axios.delete(`/api/documents/${document.id}`,
-      document, config)
+    axios.delete(`/api/documents/${document.id}`, config)
       .then((response) => {
         dispatch({ type: DELETE_DOCUMENT, document });
       }).catch((error) => {
