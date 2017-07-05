@@ -64,7 +64,8 @@ describe('AllDocuments component', () => {
   });
   it('should fetch all a user\'s own documents on button-click', () => {
     component.find('#ownDocuments').simulate('click');
-    expect(component.props().currentUrl).to.equal(`/api/users/${props.user.id}/documents/?page=`);
+    expect(component.state().currentUrl).to.equal(`/api/users/${props.user.id}/documents/?page=`);
+    expect(props.viewAllDocuments.callCount).to.equal(2);
   });
 });
 /* it('allows props to be set', () => {
