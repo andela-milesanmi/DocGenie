@@ -17,6 +17,7 @@ class DocumentCard extends React.Component {
   }
 
   editDocument(document) {
+    console.log(document, 'documents')
     this.props.changeCurrentDocument(document);
   }
   deleteDocument(document) {

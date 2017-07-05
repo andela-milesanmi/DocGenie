@@ -4,11 +4,11 @@
   "description": "A document management system to help users organize documents",
   "main": "server.js",
   "scripts": {
-    "start": "NODE_ENV=dev webpack -p & nodemon server.js",
-    "start:dev": "nodemon server.js",
+    "build": "webpack -p",
+    "start:dev": "NODE_ENV=development webpack -p & nodemon server.js",
+    "start": "./node_modules/.bin/sequelize db:migrate && node server.js",
     "debug": "nodemon --inspect server.js",
-    "test-server": "NODE_ENV=test PORT=3333 nodemon server.js",
-    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --compilers js:babel-core/register --colors ./server/tests/*/*.spec.js --require ./server/tests/init.js",
+    "test": "NODE_ENV=test PORT=3333 nyc --reporter=html --reporter=text mocha -r mock-local-storage --compilers js:babel-core/register --colors ./server/tests/*/*.spec.js ./client/tests/*/*.spec.js --require ./server/tests/init.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
@@ -42,6 +42,7 @@
     "body-parser": "^1.17.2",
     "css-loader": "^0.28.4",
     "dotenv": "^4.0.0",
+    "enzyme": "^2.9.1",
     "eslint": "^4.0.0",
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-import": "^2.3.0",
@@ -50,6 +51,8 @@
     "express": "^4.15.3",
     "faker": "^4.1.0",
     "file-loader": "^0.11.2",
+    "jquery": "^3.2.1",
+    "jsdom": "^11.0.0",
     "jsonwebtoken": "^7.4.1",
     "jwt-decode": "^2.2.0",
     "morgan": "^1.8.2",
@@ -58,7 +61,7 @@
     "pg-hstore": "^2.3.2",
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
-    "react-addons-test-utils": "^15.5.1",
+    "react-addons-test-utils": "^15.6.0",
     "react-dom": "^15.4.2",
     "react-materialize": "^0.18.4",
     "react-redux": "4.4.5",
@@ -71,6 +74,7 @@
     "redux-thunk": "2.0.1",
     "sass-loader": "^6.0.3",
     "sequelize": "^3.30.4",
+    "sequelize-cli": "^2.7.0",
     "style-loader": "^0.18.2",
     "toastr": "^2.1.2",
     "url-loader": "0.5.7",
@@ -90,7 +94,11 @@
     "eslint-plugin-jsx-a11y": "^5.0.3",
     "faker": "^4.1.0",
     "mocha": "^3.4.2",
+    "mock-local-storage": "^1.0.2",
     "nodemon": "^1.11.0",
-    "nyc": "^11.0.3"
+    "nyc": "^11.0.3",
+    "react-test-renderer": "^15.6.1",
+    "redux-mock-store": "^1.2.3",
+    "sinon": "^2.3.6"
   }
 }

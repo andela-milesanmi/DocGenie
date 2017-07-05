@@ -44,7 +44,7 @@ class CreateDocument extends React.Component {
     const content = event.target.content.value;
     const access = event.target.access.value;
     !this.props.currentDocument.id ? this.props.createDocument({ title, content, access, user: this.props.user }) :
-      this.props.editDocument({ title, content, access, id: this.props.currentDocument.id });
+      this.props.editDocument({ title, content, access, id: this.props.currentDocument.id, user: this.props.user });
   }
 
   render() {

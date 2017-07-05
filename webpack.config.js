@@ -5,7 +5,7 @@ const BUILD_DIR = path.resolve(__dirname, 'public');
 const APP_DIR = path.resolve(__dirname, 'client/app');
 
 module.exports = {
-  watch: true,
+  watch: process.env.NODE_ENV === 'development',
   devtool: 'eval',
   entry: `${APP_DIR}/index.jsx`,
   output: {

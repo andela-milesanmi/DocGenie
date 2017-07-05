@@ -15,6 +15,7 @@ import configureStore from './store/configureStore';
 const store = configureStore();
 
 window.clientStore = store;
+window.jQuery = window.$ = jQuery;
 
 const requireAuth = store => (nextState, replace, callback) => {
   const token = localStorage.getItem('token');
@@ -27,6 +28,7 @@ const requireAuth = store => (nextState, replace, callback) => {
       if (!nextState.location.pathname.includes('dashboard')) replace('/dashboard/documents');
       return callback();
     }).catch(() => {
+      localStorage.removeItem('token');
       replace('/');
       return callback();
     });

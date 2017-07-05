@@ -107,7 +107,7 @@ module.exports = {
         return document
           .destroy()
           .then(() => {
-            response.status(200).send('Document deleted successfully')
+            response.status(200).send('Document deleted successfully');
           })
           .catch((error) => {
             response.status(400).send(error);
