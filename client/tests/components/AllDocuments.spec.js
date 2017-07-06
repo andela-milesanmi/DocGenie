@@ -5,6 +5,7 @@ import { shallow, mount } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import CreateDocument from '../../app/components/documents/CreateDocument.jsx';
+import DocumentCard from '../../app/components/documents/DocumentCard.jsx';
 import { AllDocuments } from '../../app/components/documents/AllDocuments.jsx';
 import fakeData from '../../../server/tests/fakeData/fakeData';
 
@@ -14,7 +15,7 @@ describe('AllDocuments component', () => {
   let component;
   const store = mockStore({ documents: {}, user: { currentProfile: { id: 10 } } });
   const props = {
-    documents: [],
+    documents: [{ id: 2, title: 'A document', content: 'lorem ipsum', userId: 3, createdAt: '12-06-2017', user: { username: 'toodoo' } }],
     currentPage: 1,
     pages: 4,
     params: {
@@ -57,6 +58,7 @@ describe('AllDocuments component', () => {
   it('should find the neccessary dom elements ', () => {
     expect(component.find(CreateDocument).length).to.equal(1);
     expect(component.find('.dashboard-container').length).to.equal(1);
+    expect(component.find(DocumentCard).length).to.equal(props.documents.length);
   });
   it('should call editDocument props on call', () => {
     component.find('.create-doc').last().simulate('click');
@@ -67,33 +69,16 @@ describe('AllDocuments component', () => {
     expect(component.state().currentUrl).to.equal(`/api/users/${props.user.id}/documents/?page=`);
     expect(props.viewAllDocuments.callCount).to.equal(2);
   });
+  it('should fetch all/general documents on button-click', () => {
+    component.find('#allDocuments').simulate('click');
+    expect(component.state().currentUrl).to.equal('/api/documents/?page=');
+    expect(props.viewAllDocuments.callCount).to.equal(2);
+  });
+  it('should receive next props in componentWillReceiveProps', () => {
+    const componentWillReceivePropsSpy = sinon.spy(AllDocuments.prototype, 'componentWillReceiveProps');
+    component.setProps({ params: { page: '5' } });
+    expect(props.viewAllDocuments.calledWith(`${component.state().currentUrl}5`)).to.equal(true);
+    expect(props.viewAllDocuments.callCount).to.equal(2);
+    expect(componentWillReceivePropsSpy.callCount).to.equal(1);
+  });
 });
-/* it('allows props to be set', () => {
-    const wrapper = shallow(
-      <AllDocuments dispatch={dispatch} store={mockStore({ runtime: {} })}
-        documents={{ id: 1, userId: 2, title: 'test doc', content: 'test content' }}
-        currentPage={Number(1)} pages={Number(1)} params="" viewAllDocuments={viewAllDocuments}
-        user={fakeData.secondUser}
-      />
-    );
-    expect(wrapper.props().documents.title).to.equal('test doc');
-    wrapper.setProps({ documents: { title: 'foo' } });
-    expect(wrapper.props().documents.title).to.equal('foo');
-  });
-
-  it('simulates click events', () => {
-    const showAllDocuments = sinon.spy();
-    const wrapper = mount((
-      <AllDocuments showAllDocuments={showAllDocuments} />, { context: { store: mockStore() } }
-    ));
-    wrapper.find('button').simulate('click');
-    expect(showAllDocuments).to.have.property('callCount', 1);
-  });
-
-  it('calls componentDidMount', () => {
-    sinon.spy(AllDocuments.prototype, 'componentDidMount');
-    const wrapper = mount(<AllDocuments />, { context: { store: mockStore() } });
-    expect(AllDocuments.prototype.componentDidMount).to.have.property('callCount', 1);
-    AllDocuments.prototype.componentDidMount.restore();
-  });*/
-// });
