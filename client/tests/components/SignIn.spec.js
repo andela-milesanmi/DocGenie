@@ -1,7 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 import { SignIn } from '../../app/components/SignIn.jsx';
 
 describe('SignIn Component', () => {

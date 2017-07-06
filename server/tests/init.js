@@ -20,7 +20,9 @@ Object.keys(document.defaultView).forEach((property) => {
 global.HTMLElement = window.HTMLElement;
 
 global.$ = () => ({
-  modal: () => null
+  modal: () => null,
+  dropdown: () => null,
+  sideNav: () => null,
 });
 
 const noop = () => null;

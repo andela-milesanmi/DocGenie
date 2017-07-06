@@ -13,7 +13,7 @@ import { createDocument, editDocument } from '../../actions/documentActions';
 * @returns a react element.
 */
 
-class CreateDocument extends React.Component {
+export class CreateDocument extends React.Component {
   constructor(props) {
   // Pass props back to parent
     super(props);
@@ -51,7 +51,6 @@ class CreateDocument extends React.Component {
     const { user, currentDocument } = this.props;
     const { title, access } = this.state;
     return (
-      <div>
         <Modal
           header={!currentDocument.title ? 'Create Document' : 'Edit Document'} id="create-form">
           <div className="row">
@@ -83,7 +82,6 @@ class CreateDocument extends React.Component {
             </form>
           </div>
         </Modal>
-      </div>
     );
   }
 }

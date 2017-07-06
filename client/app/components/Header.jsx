@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { logoutUser } from '../actions/userActions';
 
 
-const Header = (props) => {
+export const Header = (props) => {
   const { user } = props;
   return (
     <Navbar id="nav" brand="DocGenie" className="nav-logo" right>
@@ -35,7 +35,7 @@ const Header = (props) => {
             </Link>
           </ul>}
           <ul>
-            <Link className="logout" to="#" onClick={() => {
+            <Link className="logout" id="logoutLink" to="#" onClick={() => {
               props.logoutUser();
               localStorage.removeItem('token');
               browserHistory.replace('/');

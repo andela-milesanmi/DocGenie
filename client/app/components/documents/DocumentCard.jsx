@@ -6,7 +6,7 @@ import { changeCurrentDocument, deleteDocument }
   from '../../actions/documentActions';
 
 
-class DocumentCard extends React.Component {
+export class DocumentCard extends React.Component {
   constructor(props) {
   // Pass props back to parent
     super(props);
@@ -17,7 +17,7 @@ class DocumentCard extends React.Component {
   }
 
   editDocument(document) {
-    console.log(document, 'documents')
+    console.log(document, 'documents');
     this.props.changeCurrentDocument(document);
   }
   deleteDocument(document) {
@@ -35,12 +35,12 @@ class DocumentCard extends React.Component {
             <span style={{ color: '#000' }} className="card-title">{ document.title } on {document.createdAt.slice(0, 10)}</span>
             <p style={{ color: '#000' }}>{!this.state.showMore ? `${document.content.slice(0, 32)}...` : document.content }
               by {document.user.username}
-              {!this.state.showMore && <a href="#view-more" onClick={() => this.editDocument(document)}>View More</a> }
+              {!this.state.showMore && <a id="viewMore" href="#view-more" onClick={() => this.editDocument(document)}>View More</a> }
             </p>
           </div>
           { currentUser.id === document.userId && <div className="card-action form-card-action">
-            <a href="#create-form" onClick={() => this.editDocument(document)}>EDIT</a>
-            <a href="#" onClick={() => this.deleteDocument(document)}>DELETE</a>
+            <a id="edit" href="#create-form" onClick={() => this.editDocument(document)}>EDIT</a>
+            <a id="delete" href="#" onClick={() => this.deleteDocument(document)}>DELETE</a>
           </div> }
         </div>
         <Modal
@@ -77,7 +77,7 @@ const mapDispatchToProps = (dispatch) => {
 
 DocumentCard.propTypes = {
   currentDocument: PropTypes.object.isRequired,
-  documents: PropTypes.object.isRequired,
+  documents: PropTypes.array.isRequired,
   document: PropTypes.object.isRequired,
   deleteDocument: PropTypes.func.isRequired,
   changeCurrentDocument: PropTypes.func.isRequired,

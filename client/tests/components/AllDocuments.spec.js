@@ -24,6 +24,7 @@ describe('AllDocuments component', () => {
     viewAllDocuments: sinon.spy(),
     changeCurrentDocument: sinon.spy(),
     user: { id: 3 },
+    mappedDocument: { id: 3, title: 'A doc', content: 'lorem ipsum jbachvzbjhvcbxxc', userId: 3, createdAt: '12-06-2017', user: { username: 'toodoo' } },
   };
   beforeEach(() => {
     component = mount(<AllDocuments {...props}/>, {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { updateProfile } from '../actions/userActions';
 
-class Profile extends React.Component {
+export class Profile extends React.Component {
   constructor(props) {
     super(props);
 
@@ -58,13 +58,13 @@ class Profile extends React.Component {
               </label>
             </div>
           </p>
-          <p>{this.state.isChecked && (
+          {this.state.isChecked && (
             <div>
               <p>Old Password: <input type="password" name="oldPassword" onChange={this.onChange}/></p>
               <p>New Password: <input type="password" name="newPassword" onChange={this.onChange}/></p>
               <p>Confirm Password: <input type="password" name="confirmPassword" onChange={this.onChange} /></p>
             </div>
-          )}</p>
+          )}
           <button type="submit">Save</button>
           <button type="submit" onClick={() => this.toggle('isEdit')}>Cancel</button>
         </form>
