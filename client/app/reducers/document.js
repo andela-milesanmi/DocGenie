@@ -7,7 +7,6 @@ export default (state = {}, action) => {
   switch (action.type) {
   case VIEW_DOCUMENTS: {
     const newDocuments = action.documents;
-    console.log(newDocuments, 'newDocuments in view_documents in reducer');
     return { ...state, documents: newDocuments, ...action.pagination };
   }
   case SEARCH_DOCUMENT: {

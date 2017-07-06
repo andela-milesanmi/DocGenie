@@ -22,7 +22,6 @@ describe('DocumentCard component', () => {
     props.deleteDocument.reset();
     props.changeCurrentDocument.reset();
   });
-  //console.log(component.props(), 'component.props');
   it('should have all the set props', () => {
     expect(component.props().documents[0].content).to.equal('lorem ipsum');
     expect(component.props().currentUser.id).to.equal(22);

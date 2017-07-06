@@ -51,37 +51,37 @@ export class CreateDocument extends React.Component {
     const { user, currentDocument } = this.props;
     const { title, access } = this.state;
     return (
-        <Modal
-          header={!currentDocument.title ? 'Create Document' : 'Edit Document'} id="create-form">
-          <div className="row">
-            <form className="col s12 m12" onSubmit={this.handleCreateDocument} action="#">
-              <div className="error-message">{currentDocument.error}</div>
-              <div className="row">
-                <div className="input-field col s12">
-                  <input name="title" id="title" type="text" className="validate" placeholder="Title" value={title} onChange={this.onChange}/>
-                  <label htmlFor="title" />
-                </div>
+      <Modal
+        header={!currentDocument.title ? 'Create Document' : 'Edit Document'} id="create-form">
+        <div className="row">
+          <form className="col s12 m12" onSubmit={this.handleCreateDocument} action="#">
+            <div className="error-message">{currentDocument.error}</div>
+            <div className="row">
+              <div className="input-field col s12">
+                <input name="title" id="title" type="text" className="validate" placeholder="Title" value={title} onChange={this.onChange}/>
+                <label htmlFor="title" />
               </div>
-              <div className="row">
-                <select name="access" className="browser-default" onChange={this.onChange}>
-                  <option value="" disabled selected>Select access</option>
-                  <option value="0" selected={access}>Public</option>
-                  <option value="-1" selected={access}>Private</option>
-                  <option value={user.roleId} selected={access}>Role</option>
-                </select>
+            </div>
+            <div className="row">
+              <select name="access" className="browser-default" onChange={this.onChange}>
+                <option value="" disabled selected>Select access</option>
+                <option value="0" selected={access}>Public</option>
+                <option value="-1" selected={access}>Private</option>
+                <option value={user.roleId} selected={access}>Role</option>
+              </select>
+            </div>
+            <div className="row">
+              <div className="input-field col s12">
+                <textarea name="content" id="content" className="materialize-textarea" placeholder="Body of document here..." value={this.state.content} onChange={this.onChange} />
+                <label htmlFor="content" />
               </div>
-              <div className="row">
-                <div className="input-field col s12">
-                  <textarea name="content" id="content" className="materialize-textarea" placeholder="Body of document here..." value={this.state.content} onChange={this.onChange} />
-                  <label htmlFor="content" />
-                </div>
-              </div>
-              <button type="submit" className="btn btn-large create-doc right">
+            </div>
+            <button type="submit" className="btn btn-large create-doc right">
                 SAVE
-              </button>
-            </form>
-          </div>
-        </Modal>
+            </button>
+          </form>
+        </div>
+      </Modal>
     );
   }
 }

@@ -4,21 +4,20 @@ import thunk from 'redux-thunk';
 import axios from 'axios';
 import sinon from 'sinon';
 import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
-  CREATE_DOCUMENT_ERROR, CHANGE_CURRENT_DOCUMENT, EDIT_DOCUMENT,
-  EDIT_DOCUMENT_ERROR, DELETE_DOCUMENT, DELETE_DOCUMENT_ERROR,
-  SEARCH_DOCUMENT, SEARCH_DOCUMENT_ERROR } from '../../app/actionTypes';
+  CHANGE_CURRENT_DOCUMENT, DELETE_DOCUMENT,
+  SEARCH_DOCUMENT } from '../../app/actionTypes';
 
-import { viewAllDocuments, changeCurrentDocument, deleteDocument,
-  showOwnDocuments } from '../../app/actions/documentActions';
+import { viewAllDocuments, changeCurrentDocument, deleteDocument, createDocument,
+  searchForDocuments } from '../../app/actions/documentActions';
 
 const mockStore = configureMockStore([thunk]);
 
 
 describe('Document Action', () => {
-  let store, axiosStub;
+  let store, axiosGetStub, axiosPostStub, axiosPutStub, axiosDeleteStub;
   const response = { data: {
-    documents: ['i am an aboki'],
-    pagination: 'what if we dont care'
+    documents: ['I am one document'],
+    pagination: 'pagination object'
   } };
   const error = {
     response: {
@@ -27,14 +26,26 @@ describe('Document Action', () => {
   };
   beforeEach(() => {
     store = mockStore({ documents: [] });
-    axiosStub = sinon.stub(axios, 'get', (url) => {
-      return url === 'good-url' ? Promise.resolve(response) : Promise.reject(error);
+    axiosGetStub = sinon.stub(axios, 'get', (url) => {
+      return url.indexOf('good-url') > -1 ? Promise.resolve(response) : Promise.reject(error);
+    });
+    axiosPostStub = sinon.stub(axios, 'post', (url) => {
+      return url.indexOf('api') > -1 ? Promise.resolve(response) : Promise.reject(error);
+    });
+    axiosPutStub = sinon.stub(axios, 'put', (url) => {
+      return url.indexOf('api') > -1 ? Promise.resolve(response) : Promise.reject(error);
+    });
+    axiosDeleteStub = sinon.stub(axios, 'delete', (url) => {
+      return url.indexOf('api') > -1 ? Promise.resolve(response) : Promise.reject(error);
     });
   });
   afterEach(() => {
-    axiosStub.restore();
+    axiosGetStub.restore();
+    axiosPostStub.restore();
+    axiosPutStub.restore();
+    axiosDeleteStub.restore();
   });
-  it('should dispatch approirte actions on viewAllDocuments', () => {
+  it('should dispatch appropriate actions on viewAllDocuments', () => {
     return store.dispatch(viewAllDocuments('good-url')).then(() => {
       expect(store.getActions()).to.deep.equal([{
         type: VIEW_DOCUMENTS,
@@ -43,174 +54,44 @@ describe('Document Action', () => {
       }]);
     });
   });
-  it('should fail and didspatch error on failed requests viewAllDocuments', () => {
+  it('should fail and dispatch error on failed request viewAllDocuments request', () => {
     return store.dispatch(viewAllDocuments('error-url')).then(() => {
       expect(store.getActions()).to.deep.equal([{
         type: VIEW_DOCUMENTS_ERROR,
         error: error.response.data }]);
     });
   });
-  // it('should dispatch VIEW_DOCUMENTS action type', () => {
-  //   console.log(viewAllDocuments, 'view all documents test');
-  //   expect(viewAllDocuments())
-  //     .to
-  //     .deep
-  //     .equal({ type: VIEW_DOCUMENTS });
-  // });
-
-  xit('test documentCreateSuccessful', () => {
-    expect(documentCreateSuccessful({ user: 1 }))
-      .to
-      .deep
-      .equal({
-        type: ActionTypes.CREATE_DOCUMENT_SUCCESSFUL,
-        response: {
-          user: 1,
-        },
-      });
+  it('should dispatch appropriate actions on createDocument', () => {
+    const document = { id: 23, userId: 45, title: 'A good life', content: 'A good life by Marion Bennet' };
+    return store.dispatch(createDocument(document)).then(() => {
+      expect(store.getActions()).to.deep.equal([{ type: CREATE_DOCUMENT,
+        document: { ...document, ...response.data } }]);
+    });
   });
-
-  xit('test documentCreateError', () => {
-    expect(documentCreateError({ error: 1 }))
-      .to
-      .deep
-      .equal({
-        type: ActionTypes.CREATE_DOCUMENT_SUCCESSFUL,
-        error: {
-          error: 1,
-        },
-      });
+  it('should dispatch appropriate actions on changeCurrentDocument', () => {
+    const document = { id: 23, userId: 45, title: 'A good life', content: 'A good life by Marion Bennet' };
+    expect(changeCurrentDocument(document)).to.deep.equal({
+      type: CHANGE_CURRENT_DOCUMENT,
+      document
+    });
   });
-});
-
-xdescribe('User Action Unit Test:', () => {
-  it('test fetchDocumentRequest', () => {
-    expect(fetchDocumentRequest())
-      .to
-      .deep
-      .equal({ type: ActionTypes.FETCH_DOCUMENT_REQUEST });
+  it('should dispatch appropriate actions on editDocument', () => {
+    const document = { id: 23, userId: 45, title: 'A good life', content: 'A good life by Marion Bennet' };
+    return store.dispatch(createDocument(document)).then(() => {
+      expect(store.getActions()).to.deep.equal([{ type: CREATE_DOCUMENT,
+        document: { ...document, ...response.data } }]);
+    });
   });
-
-  it('test fetchDocumentSuccessful', () => {
-    expect(fetchDocumentSuccessful({ user: 1 }))
-      .to
-      .deep
-      .equal({
-        type: ActionTypes.FETCH_DOCUMENT_SUCCESSFUL,
-        response: {
-          user: 1,
-        },
-      });
+  it('should dispatch appropriate actions on deleteDocument', () => {
+    const document = { id: 23, userId: 45, title: 'A good life', content: 'A good life by Marion Bennet' };
+    return store.dispatch(deleteDocument(document)).then(() => {
+      expect(store.getActions()).to.deep.equal([{ type: DELETE_DOCUMENT, document }]);
+    });
   });
-
-  it('test fetchDocumentError', () => {
-    expect(fetchDocumentError({ error: 1 }))
-      .to
-      .deep
-      .equal({
-        type: ActionTypes.FETCH_DOCUMENT_FAIL,
-        error: {
-          error: 1,
-        },
-      });
-  });
-});
-
-xdescribe('User Action Unit Test:', () => {
-  it('test updateDocumentRequest', () => {
-    expect(updateDocumentRequest())
-      .to
-      .deep
-      .equal({ type: ActionTypes.UPDATE_DOCUMENT_REQUEST });
-  });
-
-  it('test updateDocumentSuccessful', () => {
-    expect(updateDocumentSuccessful({ user: 1 }))
-      .to
-      .deep
-      .equal({
-        type: ActionTypes.UPDATE_DOCUMENT_SUCCESSFUL,
-        response: {
-          user: 1,
-        },
-      });
-  });
-
-  it('test updateDocumentError', () => {
-    expect(updateDocumentError({ error: 1 }))
-      .to
-      .deep
-      .equal({
-        type: ActionTypes.UPDATE_DOCUMENT_FAIL,
-        error: {
-          error: 1,
-        },
-      });
-  });
-});
-
-xdescribe('User Action Unit Test:', () => {
-  it('test deleteDocumentRequest', () => {
-    expect(deleteDocumentRequest())
-      .to
-      .deep
-      .equal({ type: ActionTypes.DELETE_DOCUMENT_REQUEST });
-  });
-
-  it('test deleteDocumentSuccessful', () => {
-    expect(deleteDocumentSuccessful({ user: 1 }))
-      .to
-      .deep
-      .equal({
-        type: ActionTypes.DELETE_DOCUMENT_SUCCESSFUL,
-        response: {
-          user: 1,
-        },
-      });
-  });
-
-  it('test deleteDocumentError', () => {
-    expect(deleteDocumentError({ error: 1 }))
-      .to
-      .deep
-      .equal({
-        type: ActionTypes.DELETE_DOCUMENT_FAIL,
-        error: {
-          error: 1,
-        },
-      });
-  });
-});
-
-xdescribe('User Action Unit Test:', () => {
-  it('test searchDocumentRequest', () => {
-    expect(searchDocumentRequest())
-      .to
-      .deep
-      .equal({ type: ActionTypes.SEARCH_DOCUMENT_REQUEST });
-  });
-
-  it('test searchDocumentSuccessful', () => {
-    expect(searchDocumentSuccessful({ user: 1 }))
-      .to
-      .deep
-      .equal({
-        type: ActionTypes.SEARCH_DOCUMENT_SUCCESSFUL,
-        response: {
-          user: 1,
-        },
-      });
-  });
-
-  it('test searchDocumentError', () => {
-    expect(searchDocumentError({ error: 1 }))
-      .to
-      .deep
-      .equal({
-        type: ActionTypes.SEARCH_DOCUMENT_FAIL,
-        error: {
-          error: 1,
-        },
-      });
+  it('should dispatch appropriate actions on searchForDocuments', () => {
+    const searchKey = 'the';
+    return store.dispatch(searchForDocuments(`good-url/${searchKey}`)).then(() => {
+      expect(store.getActions()).to.deep.equal([{ type: SEARCH_DOCUMENT, documents: response.data || [] }]);
+    });
   });
 });
