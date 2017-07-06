@@ -51,7 +51,7 @@ export class AllDocuments extends React.Component {
         <div className="row">
           <div className="col s8 offset-s3">
             <div className="row">
-              <button className="col s3 btn btn-large create-doc"
+              <button className="col s3 btn btn-large create-doc" id="allDocuments"
                 onClick={this.showAllDocuments}>All Documents</button>
               <button id="ownDocuments" className="col s3 btn btn-large create-doc"
                 onClick={this.showOwnDocuments}>My Documents</button>

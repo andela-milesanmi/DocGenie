@@ -1,5 +1,4 @@
 import axios from 'axios';
-import jwt from 'jwt-decode';
 import toastr from 'toastr';
 import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
   CREATE_DOCUMENT_ERROR, CHANGE_CURRENT_DOCUMENT, EDIT_DOCUMENT,
@@ -14,7 +13,6 @@ export const viewAllDocuments = (url) => {
   return (dispatch) => {
     return axios.get(url, config)
       .then((response) => {
-        console.log(response, 'response.data in viewAllDocuments action');
         dispatch({ type: VIEW_DOCUMENTS,
           documents: response.data.documents,
           pagination: response.data.pagination });
@@ -30,7 +28,7 @@ export const createDocument = (document) => {
     headers: { authorization: token }
   };
   return (dispatch) => {
-    axios.post('/api/documents', document, config)
+    return axios.post('/api/documents', document, config)
       .then((response) => {
         toastr.success('Document Created successfully');
         dispatch({ type: CREATE_DOCUMENT,
@@ -58,12 +56,11 @@ export const editDocument = (document) => {
     headers: { authorization: token }
   };
   return (dispatch) => {
-    axios.put(`/api/documents/${document.id}`,
+    return axios.put(`/api/documents/${document.id}`,
       document, config)
       .then((response) => {
         dispatch({ type: EDIT_DOCUMENT, document: { ...document, ...response.data } });
       }).catch((error) => {
-        console.log(error, 'whatever');
         dispatch({ type: EDIT_DOCUMENT_ERROR,
           error: error.response.data.message || error.response.data });
       });
@@ -75,7 +72,7 @@ export const deleteDocument = (document) => {
     headers: { authorization: token }
   };
   return (dispatch) => {
-    axios.delete(`/api/documents/${document.id}`, config)
+    return axios.delete(`/api/documents/${document.id}`, config)
       .then((response) => {
         dispatch({ type: DELETE_DOCUMENT, document });
       }).catch((error) => {
@@ -91,12 +88,10 @@ export const searchForDocuments = (searchKey) => {
     headers: { authorization: token }
   };
   return (dispatch) => {
-    axios.get(`/api/search/documents/${searchKey}`, config)
+    return axios.get(`/api/search/documents/${searchKey}`, config)
       .then((response) => {
-        console.log(response, 'response in SEARCH_DOCUMENT');
         dispatch({ type: SEARCH_DOCUMENT, documents: response.data || [] });
       }).catch((error) => {
-        console.log(error, 'what error are we having IN CREATE_DOCUMENT?');
         dispatch({ type: SEARCH_DOCUMENT_ERROR,
           error: error.response.data.message || error.response.data });
       });

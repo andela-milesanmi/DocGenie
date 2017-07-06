@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { signInUser } from '../actions/userActions';
 
 
-class SignIn extends React.Component {
+export class SignIn extends React.Component {
   constructor(props) {
     super(props);
     this.onSubmit = this.onSubmit.bind(this);

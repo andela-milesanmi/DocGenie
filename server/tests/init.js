@@ -20,8 +20,21 @@ Object.keys(document.defaultView).forEach((property) => {
 global.HTMLElement = window.HTMLElement;
 
 global.$ = () => ({
-  modal: () => null
+  modal: () => null,
+  dropdown: () => null,
+  sideNav: () => null,
 });
+global.localStorage = {
+  getItem() {
+    return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGVJZCI6MSwiaWF0IjoxNDk4Nzc5ODY1LCJleHAiOjE0OTg4NjYyNjV9.kAL9MtQNzhCwifkegup-DAeQllXi7bMoXvdMYHEQLrc';
+  },
+  setItem() {
+    return null;
+  },
+  removeItem() {
+    return null;
+  }
+};
 
 const noop = () => null;
 

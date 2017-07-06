@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { viewAllUsers } from '../actions/userActions';
 
-class AllUsers extends React.Component {
+export class AllUsers extends React.Component {
   constructor(props) {
     super(props);
   }

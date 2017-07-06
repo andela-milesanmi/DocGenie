@@ -10,7 +10,7 @@ import { createUser } from '../actions/userActions';
 * @param {object} props
 * @returns a react element.
 */
-class SignUp extends React.Component {
+export class SignUp extends React.Component {
   constructor() {
     super();
     this.onSubmit = this.onSubmit.bind(this);

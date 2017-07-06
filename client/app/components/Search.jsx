@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { searchForDocuments } from '../actions/documentActions';
 
 
-const Search = (props) => {
+export const Search = (props) => {
   const handleChange = (event) => {
     event.preventDefault();
     const searchKey = event.target.value;

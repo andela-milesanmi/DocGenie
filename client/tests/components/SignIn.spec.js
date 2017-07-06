@@ -1,41 +1,35 @@
 import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
+import { SignIn } from '../../app/components/SignIn.jsx';
 
-// const MyComponent = () => {
-//   return <div> Hello world </div>
-// }
-// describe('<MyComponent />', () => {
-//   it('renders three <Foo /> components', () => {
-//     const wrapper = mount(<MyComponent />);
-//     expect(wrapper.find('div')).to.have.length(1);
-//   });
-// });
-
-import SignIn from '../../app/components/SignIn.jsx';
-
-xdescribe('SignIn Component', () => {
-  it('allows props to be set', () => {
-    const wrapper = mount(<SignIn bar="baz" />);
-    expect(wrapper.props().bar).to.equal('baz');
-    wrapper.setProps({ bar: 'foo' });
-    expect(wrapper.props().bar).to.equal('foo');
+describe('SignIn Component', () => {
+  let component;
+  const props = {
+    signInUser: sinon.spy(),
+    changeScreen: sinon.spy(),
+    user: { id: 5 },
+    error: ''
+  };
+  beforeEach(() => {
+    component = mount(<SignIn {...props}/>);
+  });
+  afterEach(() => {
+    props.signInUser.reset();
+    props.changeScreen.reset();
   });
 
+  it('should have all the set props', () => {
+    expect(component.props().user.id).to.equal(5);
+  });
+  it('should find the neccessary dom elements ', () => {
+    expect(component.find('.container').length).to.equal(1);
+    expect(component.find('input').length).to.equal(2);
+  });
   it('simulates click events', () => {
-    const onSubmit = sinon.spy();
-    const wrapper = mount((
-      <SignIn onSubmit={onSubmit} />
-    ));
-    wrapper.find('button').simulate('click');
-    expect(onSubmit).to.have.property('callCount', 1);
+    component.find('form').simulate('submit', { target: { email: { value: 'test@yahoo.com' },
+      password: { value: 'testing' } } });
+    expect(props.signInUser).to.have.property('callCount', 1);
   });
-
-  // it('calls componentDidMount', () => {
-  //   sinon.spy(SignIn.prototype, 'componentDidMount');
-  //   const wrapper = mount(<Foo />);
-  //   expect(Foo.prototype.componentDidMount).to.have.property('callCount', 1);
-  //   Foo.prototype.componentDidMount.restore();
-  // });
 });
