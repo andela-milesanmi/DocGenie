@@ -31,6 +31,14 @@ export default {
     content: 'private document created',
     access: -1
   },
+  testUser: {
+    id: 23,
+    username: 'test01',
+    fullname: 'test user',
+    email: faker.internet.email(),
+    password: 'tester',
+    confirmPassword: 'tester'
+  },
   roleDocument: {
     title: 'role document',
     content: 'role document created',
@@ -38,6 +46,13 @@ export default {
     userId: 1
   },
   publicDocument: {
+    title: 'public document',
+    content: 'public document created',
+    access: 0,
+    userId: 2,
+  },
+  testPublicDocument: {
+    id: 21,
     title: 'public document',
     content: 'public document created',
     access: 0,

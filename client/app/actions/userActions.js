@@ -8,12 +8,10 @@ export const createUser = (user) => {
   return (dispatch) => {
     return axios.post('/auth/api/users', user)
       .then((response) => {
-        console.log(response, 'whatever');
         localStorage.setItem('token', response.data.token);
         dispatch({ type: CREATE_USER, user: response.data.user });
         browserHistory.push('/dashboard/documents');
       }).catch((error) => {
-        console.log('got here?', error)
         dispatch({ type: CREATE_USER_ERROR,
           error: error.response.data.message || error.response.data });
         return Promise.reject(error);

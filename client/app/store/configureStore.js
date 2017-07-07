@@ -3,7 +3,6 @@ import thunk from 'redux-thunk';
 import rootReducer from '../reducers';
 
 /* eslint-disable no-underscore-dangle */
-// const middleware = [thunk];
 const composeEnhancers =
   typeof window === 'object' &&
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?

@@ -5,15 +5,10 @@ import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
 
 export default (state = {}, action) => {
   switch (action.type) {
-  case VIEW_DOCUMENTS: {
+  case VIEW_DOCUMENTS:
+  case SEARCH_DOCUMENT: {
     const newDocuments = action.documents;
     return { ...state, documents: newDocuments, ...action.pagination };
-  }
-  case SEARCH_DOCUMENT: {
-    return { ...state, documents: action.documents };
-  }
-  case VIEW_DOCUMENTS_ERROR : {
-    return { ...state, error: action.error };
   }
   case CHANGE_CURRENT_DOCUMENT: {
     return { ...state, currentDocument: action.document };
@@ -32,6 +27,7 @@ export default (state = {}, action) => {
   case EDIT_DOCUMENT_ERROR:
   case DELETE_DOCUMENT_ERROR:
   case SEARCH_DOCUMENT_ERROR:
+  case VIEW_DOCUMENTS_ERROR:
   case CREATE_DOCUMENT_ERROR: {
     return { ...state, error: action.error };
   }
