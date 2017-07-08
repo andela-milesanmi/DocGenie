@@ -15,9 +15,7 @@ export class DocumentCard extends React.Component {
     };
     this.handleShowMore = this.handleShowMore.bind(this);
   }
-
   editDocument(document) {
-    console.log(document, 'documents');
     this.props.changeCurrentDocument(document);
   }
   deleteDocument(document) {
@@ -29,21 +27,42 @@ export class DocumentCard extends React.Component {
   render() {
     const { document, currentUser, currentDocument } = this.props;
     return (
-      <div className="col s4 m4 darken-1">
-        <div className="card">
-          <div className="card-content white-text">
-            <span style={{ color: '#000' }} className="card-title">{ document.title } on {document.createdAt.slice(0, 10)}</span>
-            <p style={{ color: '#000' }}>{!this.state.showMore ? `${document.content.slice(0, 32)}...` : document.content }
-              by {document.user.username}
-              {!this.state.showMore && <a id="viewMore" href="#view-more" onClick={() => this.editDocument(document)}>View More</a> }
-            </p>
+      <div className="col s4 darken-1">
+        <div className="card document-card">
+          <div className="card-content">
+            <span className="card-title">
+              { document.title }
+            </span>
+            {/*<p>
+              Content: {!this.state.showMore ?
+                `${document.content.slice(0, 32)}...` : document.content }
+            </p>*/}
+            <p>Author: {document.user.fullname}</p>
+            <p>Date: {document.createdAt.slice(0, 10)}</p>
           </div>
-          { currentUser.id === document.userId && <div className="card-action form-card-action">
-            <a id="edit" href="#create-form" onClick={() => this.editDocument(document)}>EDIT</a>
-            <a id="delete" href="#" onClick={() => this.deleteDocument(document)}>DELETE</a>
-          </div> }
+          <div className="card-action form-card-action">
+            { currentUser.id === document.userId &&
+              <span>
+                <a id="edit" href="#create-form"
+                  onClick={() => this.editDocument(document)}>EDIT
+                </a>
+                <a id="delete" href="#"
+                  onClick={() => this.deleteDocument(document)}>DELETE
+                </a>
+              </span>
+            }
+            {!this.state.showMore &&
+              <a id="viewMore" href="#view-more"
+                onClick={() => this.editDocument(document)}>View More
+              </a> }
+          </div>
         </div>
         <Modal
+          modalOptions={{
+            complete: () => {
+              this.props.changeCurrentDocument();
+            }
+          }}
           header={currentDocument.title} id="view-more">
           <div className="row">
             <p>

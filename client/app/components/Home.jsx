@@ -24,11 +24,15 @@ class Home extends React.Component {
   }
   render() {
     return (
-      <div className="index-page container" style={{ textAlign: 'center' }}>
-        <h4>Welcome to DocGenie</h4>
-        <p>Docgenie allows you to manage your documents, easily!</p>
-        <div>
-          {this.renderSigninOrSignUp()}
+      <div className="index-page container">
+        <div className="row">
+          <div className="col s6 homeText">
+            <h4>Welcome to DocGenie</h4>
+            <p>Docgenie allows you to manage your documents, easily!</p>
+          </div>
+          <div className="col s6 pull-s1 signInOrSignUp">
+            {this.renderSigninOrSignUp()}
+          </div>
         </div>
       </div>
     );
