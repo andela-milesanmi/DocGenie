@@ -5,19 +5,11 @@ import { Modal } from 'react-materialize';
 import { createDocument, editDocument } from '../../actions/documentActions';
 
 
-/**
-* This is a pure function that receives properties as props parameter
-* and is the parent component in which all other child components
-* are displayed as "props.children".
-* @param {object} props
-* @returns a react element.
-*/
-
 export class CreateDocument extends React.Component {
   constructor(props) {
   // Pass props back to parent
     super(props);
-    this.state = { ...this.props.currentDocument };
+    this.state = { ...props.currentDocument };
     this.handleCreateDocument = this.handleCreateDocument.bind(this);
     this.onChange = this.onChange.bind(this);
   }
@@ -25,17 +17,9 @@ export class CreateDocument extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   }
   componentWillReceiveProps(nextProps) {
-    // if(Object.keys(nextProps.currentDocument).length < 1) {
-    //   console.log(nextProps.currentDocument, 'currentDocuent');
-    //   const setValueToUndefined = Object.keys(this.state).reduce((acc, key) => {
-    //    acc[key] = null;
-    //    return acc;
-    //   }, {});
-    //   console.log(setValueToUndefined, 'keys')
-    //   return this.setState(setValueToUndefined, () => {
-    //     console.log(this.state, 'state');
-    //   });
-    // }
+    if (Object.keys(nextProps.currentDocument).length === 0) {
+      return this.setState({ title: '', content: '', access: '' });
+    }
     return this.setState({ ...nextProps.currentDocument });
   }
   handleCreateDocument(event) {
@@ -43,18 +27,20 @@ export class CreateDocument extends React.Component {
     const title = event.target.title.value;
     const content = event.target.content.value;
     const access = event.target.access.value;
-    !this.props.currentDocument.id ? this.props.createDocument({ title, content, access, user: this.props.user }) :
-      this.props.editDocument({ title, content, access, id: this.props.currentDocument.id, user: this.props.user });
+    const action = !this.props.currentDocument.id ? 'createDocument' : 'editDocument';
+    this.props[action]({ title, content, access, user: this.props.user, id: this.props.currentDocument.id, }).then(() => {
+      this.setState({ title: '', content: '', access: '' });
+    });
   }
 
   render() {
     const { user, currentDocument } = this.props;
-    const { title, access } = this.state;
+    const { title } = this.state;
     return (
       <Modal
-        header={!currentDocument.title ? 'Create Document' : 'Edit Document'} id="create-form">
+        header={!currentDocument.title ? 'Create Document' : `Edit: ${currentDocument.title}`} id="create-form">
         <div className="row">
-          <form className="col s12 m12" onSubmit={this.handleCreateDocument} action="#">
+          <form className="col s12 m12" onSubmit={this.handleCreateDocument} action="#" id="created-new-document">
             <div className="error-message">{currentDocument.error}</div>
             <div className="row">
               <div className="input-field col s12">
@@ -65,9 +51,9 @@ export class CreateDocument extends React.Component {
             <div className="row">
               <select name="access" className="browser-default" onChange={this.onChange}>
                 <option value="" disabled selected>Select access</option>
-                <option value="0" selected={access}>Public</option>
-                <option value="-1" selected={access}>Private</option>
-                <option value={user.roleId} selected={access}>Role</option>
+                <option value="0">Public</option>
+                <option value="-1">Private</option>
+                <option value={user.roleId}>Role</option>
               </select>
             </div>
             <div className="row">
@@ -77,7 +63,7 @@ export class CreateDocument extends React.Component {
               </div>
             </div>
             <button type="submit" className="btn btn-large create-doc right">
-                SAVE
+              SAVE
             </button>
           </form>
         </div>

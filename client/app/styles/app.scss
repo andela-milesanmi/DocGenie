@@ -8,7 +8,7 @@ body{
   linear-gradient(
       rgba(0,0,0,0.7),
       rgba(0,0,0,0.7)
-    ),url('../images/docgenie1.jpg');
+    ),url('../images/docgenie-new9.jpg');
   opacity: 0.9;
   // margin: 0;
   min-height: 100%;
@@ -48,9 +48,9 @@ body{
 .create-doc:hover{
   background-color: #08B2E3;
 }
-// .modal-close{
-//   display: none !important;
-// }
+.modal-close{
+  display: none !important;
+}
 .form-card-action a{
   cursor: pointer;
 }
@@ -85,12 +85,13 @@ body{
 .logout{
   color: #EE6352;
 }
-.dashboard-container {
-  // background: none;
+.homeText{
+  color: #fff;
+  vertical-align: middle;
 }
-.brand-logo{
-  // color: #57313E !important;
+.homeText, .signInOrSignUp {
+  margin-top: 150px;
 }
-// .signup{
-//   color: black !important;
-// }
+.document-card{
+  text-align: center;
+}

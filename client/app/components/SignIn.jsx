@@ -20,7 +20,7 @@ export class SignIn extends React.Component {
     return (
       <div className="container">
         <div className="row">
-          <form className="signup-form col s6 push-s6"
+          <form className="signup-form"
             onSubmit={this.onSubmit} action="#">
             <div className="error-message">{this.props.user.error}</div>
             <div className="row">

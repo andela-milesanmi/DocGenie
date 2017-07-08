@@ -1,5 +1,6 @@
 import axios from 'axios';
 import toastr from 'toastr';
+import { Modal } from 'react-materialize';
 import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
   CREATE_DOCUMENT_ERROR, CHANGE_CURRENT_DOCUMENT, EDIT_DOCUMENT,
   EDIT_DOCUMENT_ERROR, DELETE_DOCUMENT, DELETE_DOCUMENT_ERROR,
@@ -30,14 +31,15 @@ export const createDocument = (document) => {
   return (dispatch) => {
     return axios.post('/api/documents', document, config)
       .then((response) => {
-        toastr.success('Document Created successfully');
+        toastr.success('Document created!');
         dispatch({ type: CREATE_DOCUMENT,
           document: { ...document, ...response.data } });
+        $('#create-form').modal('close');
       }).catch((error) => {
         const errorMessage = error.response.data.message || error.response.data;
-        toastr.error(errorMessage);
         dispatch({ type: CREATE_DOCUMENT_ERROR,
           errorMessage });
+        return Promise.reject(toastr.error(errorMessage));
       });
   };
 };
@@ -59,10 +61,14 @@ export const editDocument = (document) => {
     return axios.put(`/api/documents/${document.id}`,
       document, config)
       .then((response) => {
+        toastr.success('Document edited!');
         dispatch({ type: EDIT_DOCUMENT, document: { ...document, ...response.data } });
+        $('#create-form').modal('close');
       }).catch((error) => {
+        const errorMessage = error.response.data.message || error.response.data;
         dispatch({ type: EDIT_DOCUMENT_ERROR,
-          error: error.response.data.message || error.response.data });
+          errorMessage });
+        return Promise.reject(toastr.error(errorMessage));
       });
   };
 };
