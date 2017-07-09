@@ -15,6 +15,7 @@ describe('Documents reducer', () => {
     ).to.eql(
       {
         documents: fakeData.bulkDocuments,
+        error: ''
       }
     );
   });
@@ -26,6 +27,7 @@ describe('Documents reducer', () => {
       })
     ).to.eql({
       documents: [fakeData.publicDocument],
+      error: ''
     });
   });
   it('should handle CREATE_DOCUMENT_ERROR', () => {
@@ -47,6 +49,7 @@ describe('Documents reducer', () => {
       })
     ).to.eql({
       currentDocument: fakeData.publicDocument,
+      error: ''
     });
   });
   it('should handle EDIT_DOCUMENT', () => {
@@ -57,6 +60,7 @@ describe('Documents reducer', () => {
       })
     ).to.eql({
       documents: [fakeData.publicDocument],
+      error: ''
     });
   });
   it('should handle SEARCH_DOCUMENT', () => {
@@ -67,6 +71,7 @@ describe('Documents reducer', () => {
       })
     ).to.eql({
       documents: fakeData.publicDocument,
+      error: ''
     });
   });
 
@@ -78,6 +83,7 @@ describe('Documents reducer', () => {
       })
     ).to.eql({
       documents: [{ a: 1, b: 2 }],
+      error: ''
     });
   });
 });
