@@ -4,6 +4,13 @@ import { connect } from 'react-redux';
 import { createUser } from '../actions/userActions';
 
 
+/**
+ *
+ *
+ * @export
+ * @class SignUp
+ * @extends {React.Component}
+ */
 export class SignUp extends React.Component {
   constructor() {
     super();
