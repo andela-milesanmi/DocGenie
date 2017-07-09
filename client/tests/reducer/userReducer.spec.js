@@ -58,7 +58,8 @@ describe('User reducer', () => {
         users: [fakeData.testUser]
       })
     ).to.eql({
-      users: [fakeData.testUser]
+      users: [fakeData.testUser],
+      error: ''
     });
   });
 });
