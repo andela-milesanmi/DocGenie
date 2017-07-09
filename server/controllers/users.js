@@ -97,11 +97,11 @@ module.exports = {
     const { userId } = request.decoded;
     return User
       .findAndCountAll({
-        where: {
-          id: {
-            $ne: userId
-          }
-        },
+        // where: {
+        //   id: {
+        //     $ne: userId
+        //   }
+        // },
         limit,
         offset,
         order: '"createdAt" DESC',

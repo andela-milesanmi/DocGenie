@@ -75,7 +75,7 @@ describe('Roles', () => {
       .set('authorization', userToken)
       .send({ title: 'admin' })
       .end((error, response) => {
-        expect(response).to.have.status(404);
+        expect(response).to.have.status(400);
         done();
       });
   });

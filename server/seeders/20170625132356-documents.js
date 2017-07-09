@@ -19,6 +19,13 @@ module.exports = {
       access: -1,
       createdAt: new Date(),
       updatedAt: new Date()
+    }, {
+      title: 'Seyi\'s doc',
+      content: 'I\'m super excited about today!',
+      userId: 2,
+      access: 2,
+      createdAt: new Date(),
+      updatedAt: new Date()
     }], {});
   },
 

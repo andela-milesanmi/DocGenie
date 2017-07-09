@@ -5,8 +5,9 @@
   "main": "server.js",
   "scripts": {
     "build": "webpack -p",
-    "start:dev": "NODE_ENV=development webpack -p & nodemon server.js",
-    "start": "./node_modules/.bin/sequelize db:migrate && node server.js",
+    "seed-migrate": "node runMigrations.js",
+    "start:dev": "npm run seed-migrate && NODE_ENV=development webpack -p & nodemon server.js",
+    "start": "NODE_ENV=production npm run seed-migrate && node server.js",
     "debug": "nodemon --inspect server.js",
     "test": "NODE_ENV=test PORT=3333 nyc --reporter=html --reporter=text mocha -r mock-local-storage --compilers js:babel-core/register --colors ./server/tests/*/*.spec.js ./client/tests/*/*.spec.js --require ./server/tests/init.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
