@@ -11,7 +11,7 @@ const app = express();
 const http = require('http');
 
 const port = parseInt(process.env.PORT, 10) || 5000;
-console.log(process.env.NODE_ENV, 'eafafea')
+
 const authentication = require('./server/middleware/authentication');
 
 app.set('port', port);

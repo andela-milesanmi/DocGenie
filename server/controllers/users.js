@@ -18,12 +18,12 @@ module.exports = {
     if (request.body.password !== request.body.confirmPassword) {
       return response.status(401).send({ message: 'Password does not match' });
     }
-    if (request.decoded && (Number(request.body.roleId) === 1 && Number(request.decoded.roleId) !== 1)) {
+    if (request.decoded && (Number(request.body.roleId) === 1
+    && Number(request.decoded.roleId) !== 1)) {
       return response.status(400).json({
         message: 'You are not allowed to create an admin user',
       });
     }
-
     return User.findAll({
       where: {
         $or: [
@@ -37,9 +37,7 @@ module.exports = {
       },
     }).then((existingUser) => {
       if (existingUser.length > 0) {
-        throw new Error({
-          message: 'Username or email already exists'
-        });
+        throw new Error('Username or email already exists');
       }
       return User
         .create({
@@ -58,7 +56,8 @@ module.exports = {
         token,
       });
     }).catch((error) => {
-      response.status(400).send(error.message);
+      const errorMessage = error.message || error;
+      response.status(400).send(errorMessage);
     });
   },
   signIn(request, response) {
@@ -73,13 +72,9 @@ module.exports = {
       }
     }).then((user) => {
       if (!user) {
-        return response.status(400).send({
-          message: 'Not an existing user',
-        });
+        throw new Error('Not an existing user');
       } else if (!user.validatePassword(request.body.password, user)) {
-        return response.status(400).send({
-          message: 'Invalid password',
-        });
+        throw new Error('Invalid password');
       }
       // if user is found and password is right,
       // create a token
@@ -97,44 +92,53 @@ module.exports = {
   },
   listAllUsers(request, response) {
     const limit = request.query.limit || '6';
-    const offset = request.query.offset || '0';
+    // const offset = request.query.offset || '0';
+    const offset = request.query.page ? (Number(request.query.page - 1) * limit) : 0;
+    const { userId } = request.decoded;
     return User
       .findAndCountAll({
+        where: {
+          id: {
+            $ne: userId
+          }
+        },
         limit,
         offset,
         order: '"createdAt" DESC',
       })
       .then((users) => {
         if (!users) {
-          return response.status(404).send({
-            message: 'No user found',
-          });
+          throw new Error('No user found');
         }
-        const pagination = limit && offset ? {
+        const pagination = {
           totalCount: users.count,
           pages: Math.ceil(users.count / limit),
           currentPage: Math.floor(offset / limit) + 1,
           pageSize: users.rows.length,
-        } : null;
+        };
         return response.status(200).send({
           users: users.rows,
           pagination,
         });
       })
-      .catch(error => response.status(400).send(error));
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        response.status(400).send(errorMessage);
+      });
   },
   findAUser(request, response) {
     return User
       .findById(request.params.id)
       .then((user) => {
         if (!user) {
-          return response.status(404).send({
-            message: 'User Not Found',
-          });
+          throw new Error('User Not Found');
         }
         return response.status(200).send(user);
       })
-      .catch(error => response.status(400).send(error));
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        response.status(400).send(errorMessage);
+      });
   },
   updateAUser(request, response) {
     return User
@@ -143,6 +147,12 @@ module.exports = {
         if (!user) {
           throw new Error('User Not Found');
         }
+        // checking if a user can change their own role
+        if (request.body.roleId && (Number(request.decoded.userId) === Number(user.id)
+        && (Number(request.body.roleId) < Number(user.roleId) || Number(request.body.roleId) > Number(user.roleId)))) {
+          throw new Error('You are not authorized to change your own role');
+        }
+
         if (request.body.roleId && (request.body.roleId !== user.roleId && request.decoded.roleId !== 1)) {
           throw new Error('You are not authorized to change a user\'s role');
         }
@@ -150,11 +160,13 @@ module.exports = {
           if ((bcrypt.compareSync(request.body.oldPassword, user.password))) {
             throw new Error('Old password is incorrect');
           }
+          if (request.body.newPassword && (request.body.newPassword !== request.body.confirmPassword)) {
+            throw new Error('Passwords do not match');
+          }
+          if (oldPassword === newPassword) {
+            throw new Error('Please change your password');
+          }
         }
-        if (request.body.newPassword && (request.body.newPassword !== request.body.confirmPassword)) {
-          return response.status(401).send({ message: 'Passwords do not match' });
-        }
-
         return user
           .update(request.body);
       }).then(user => response.status(200).send(user)) // Send back updated user
@@ -163,18 +175,24 @@ module.exports = {
       });
   },
   deleteAUser(request, response) {
+    const { userId, roleId } = request.decoded;
     return User
       .findById(request.params.id)
       .then((user) => {
         if (!user) {
-          return response.status(400).send({
-            message: 'User Not Found',
-          });
+          throw new Error('User not found');
+        }
+        // checking if a non-admin is trying to delete another user's account
+        if (userId !== user.id && Number(roleId) !== 1) {
+          throw new Error('You\'re not authorized to delete another user');
         }
         return user
           .destroy();
       }).then(() => response.status(200).send('User deleted successfully'))
-      .catch(error => response.status(400).send(error));
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        response.status(400).send(errorMessage);
+      });
   },
   findUserDocuments(request, response) {
     const limit = request.query.limit || '6';
@@ -193,22 +211,23 @@ module.exports = {
       })
       .then((documents) => {
         if (!documents) {
-          return response.status(404).send({
-            message: 'Document(s) Not Found',
-          });
+          throw new Error('Document(s) Not Found');
         }
-        const pagination = limit && offset ? {
+        const pagination = {
           totalCount: documents.count,
           pages: Math.ceil(documents.count / limit),
           currentPage: Math.floor(offset / limit) + 1,
           pageSize: documents.rows.length,
-        } : null;
+        };
         return response.status(200).send({
           documents: documents.rows,
           pagination,
         });
       })
-      .catch(error => response.status(400).send(error));
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        response.status(400).send(errorMessage);
+      });
   },
   searchForUser(request, response) {
     return User
@@ -230,13 +249,14 @@ module.exports = {
         limit: 10,
       }).then((searchResult) => {
         if (!searchResult.length) {
-          return response.status(404).send({
-            message: 'No user found',
-          });
+          throw new Error('No user(s) found');
         }
         return response.status(200).send(searchResult);
       })
-      .catch(error => response.status(400).send(error));
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        response.status(400).send(errorMessage);
+      });
   },
   signOut(request, response) {
     return response.status(200).send({ message: 'Successfully logged out' });

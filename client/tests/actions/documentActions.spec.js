@@ -54,11 +54,11 @@ describe('Document Action', () => {
       }]);
     });
   });
-  it('should fail and dispatch error on failed request viewAllDocuments request', () => {
+  it('should fail and dispatch error on failed viewAllDocuments request', () => {
     return store.dispatch(viewAllDocuments('error-url')).then(() => {
       expect(store.getActions()).to.deep.equal([{
         type: VIEW_DOCUMENTS_ERROR,
-        error: error.response.data }]);
+        errorMessage: error.response.data }]);
     });
   });
   it('should dispatch appropriate actions on createDocument', () => {

@@ -3,13 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createUser } from '../actions/userActions';
 
-/**
-* This is a pure function that receives properties as props parameter
-* and is the parent component in which all other child components
-* are displayed as "props.children".
-* @param {object} props
-* @returns a react element.
-*/
+
 export class SignUp extends React.Component {
   constructor() {
     super();

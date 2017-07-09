@@ -12,12 +12,12 @@ export default (state = {}, action) => {
     const { currentProfile = {} } = state;
     const filteredUsers =
     action.users.filter(user => user.id !== currentProfile.id);
-    return { ...state, users: filteredUsers, ...action.pagination };
+    return { ...state, users: filteredUsers, ...action.pagination, error: '' };
   }
   case CREATE_USER_ERROR:
   case SIGNIN_USER_ERROR:
   case VIEW_USERS_ERROR:
-    return { ...state, error: action.error };
+    return { ...state, error: action.errorMessage };
   default:
     return state;
   }

@@ -8,34 +8,34 @@ export default (state = {}, action) => {
   case VIEW_DOCUMENTS:
   case SEARCH_DOCUMENT: {
     const newDocuments = action.documents;
-    return { ...state, documents: newDocuments, ...action.pagination };
+    return { ...state, documents: newDocuments, ...action.pagination, error: '' };
   }
   case CHANGE_CURRENT_DOCUMENT: {
-    return { ...state, currentDocument: action.document };
+    return { ...state, currentDocument: action.document, error: '' };
   }
   case CREATE_DOCUMENT: {
     const { documents = [] } = state;
     const newDocuments = [action.document, ...documents];
-    return { ...state, documents: newDocuments };
+    return { ...state, documents: newDocuments, error: '' };
   }
   case EDIT_DOCUMENT: {
     const { documents = [] } = state;
     const filteredDocuments =
     documents.filter(document => action.document.id !== document.id);
-    return { ...state, documents: [action.document, ...filteredDocuments] };
+    return { ...state, documents: [action.document, ...filteredDocuments], error: '' };
   }
   case EDIT_DOCUMENT_ERROR:
   case DELETE_DOCUMENT_ERROR:
   case SEARCH_DOCUMENT_ERROR:
   case VIEW_DOCUMENTS_ERROR:
   case CREATE_DOCUMENT_ERROR: {
-    return { ...state, error: action.error };
+    return { ...state, error: action.errorMessage };
   }
   case DELETE_DOCUMENT: {
     const { documents = [] } = state;
     const filteredDocuments =
     documents.filter(document => action.document.id !== document.id);
-    return { ...state, documents: [...filteredDocuments] };
+    return { ...state, documents: [...filteredDocuments], error: '' };
   }
   default:
     return state;
