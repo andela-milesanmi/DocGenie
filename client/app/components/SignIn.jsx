@@ -4,18 +4,35 @@ import { connect } from 'react-redux';
 import { signInUser } from '../actions/userActions';
 
 
+/**
+ * SignIn component
+ * @export
+ * @class SignIn
+ * @extends {React.Component}
+ */
 export class SignIn extends React.Component {
   constructor(props) {
     super(props);
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  /**
+   * OnSubmit function handles form-submit event
+   * @param {any} event
+   * @memberOf SignIn
+   */
   onSubmit(event) {
     event.preventDefault();
     const email = event.target.email.value;
     const password = event.target.password.value;
     this.props.signInUser({ email, password });
   }
+
+  /**
+   * React lifecycle method
+   * @returns a DOM element
+   * @memberOf SignUp
+   */
   render() {
     return (
       <div className="container">

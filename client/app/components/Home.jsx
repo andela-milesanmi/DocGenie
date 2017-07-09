@@ -2,6 +2,12 @@ import React from 'react';
 import SignUp from './SignUp.jsx';
 import SignIn from './SignIn.jsx';
 
+
+/**
+ * Home component renders welcome screen, SignUp and SignIn screens
+ * @class Home
+ * @extends {React.Component}
+ */
 class Home extends React.Component {
   constructor() {
     super();
@@ -11,9 +17,21 @@ class Home extends React.Component {
     };
     this.changeScreen = this.changeScreen.bind(this);
   }
+
+  /**
+   * changeScreen method toggles between SignIn and SignUp forms
+   * @memberOf Home
+   */
   changeScreen() {
     this.setState({ isSignInScreen: !this.state.isSignInScreen });
   }
+
+  /**
+   * renderSigninOrSignUp method conditionally renders SignIn or SignUp
+   * component
+   * @returns a DOM element
+   * @memberOf Home
+   */
   renderSigninOrSignUp() {
     if (this.state.isSignInScreen) {
       return (<SignIn changeScreen={this.changeScreen}
@@ -22,6 +40,12 @@ class Home extends React.Component {
     return (<SignUp isSignInScreen={this.state.isSignInScreen}
       changeScreen={this.changeScreen} />);
   }
+
+  /**
+   * render method, React lifecycle method
+   * @returns a DOM element
+   * @memberOf Home
+   */
   render() {
     return (
       <div className="index-page container">

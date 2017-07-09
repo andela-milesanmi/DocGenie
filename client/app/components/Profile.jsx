@@ -3,6 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { updateProfile } from '../actions/userActions';
 
+/**
+ * User Profile component
+ * @export
+ * @class Profile
+ * @extends {React.Component}
+ */
 export class Profile extends React.Component {
   constructor(props) {
     super(props);
@@ -16,23 +22,41 @@ export class Profile extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.handleProfileUpdate = this.handleProfileUpdate.bind(this);
   }
+
+  /**
+   * onChange method handles form-input change event
+   * @param {object} e, event
+   * @memberOf Profile
+   */
   onChange(e) {
     const user = { ...this.state.user, [e.target.name]: e.target.value };
     this.setState({ user });
   }
+
+  /**
+   * toggle method toggles state: isChecked and isEdit
+   * @param {string} field
+   * @memberOf Profile
+   */
   toggle(field) {
     this.setState({ [field]: !this.state[field] });
   }
 
+
+  /**
+   * renderProfile method renders profile information or profile edit form
+   * @returns DOM element
+   * @memberOf Profile
+   */
   renderProfile() {
     if (!this.state.isEdit) {
       return (
-        <div className="col s8 offset-s2" style={{ backgroundColor: '#fff' }}>
+        <div className="col s8 offset-s2">
           <h4>Profile Information</h4>
           <p>Fullname: {this.state.user.fullname}</p>
           <p>Username: {this.state.user.username}</p>
           <p>Email: {this.state.user.email}</p>
-          {(this.state.user.roleId === 1) ? <p>Role: Admin</p> : ''}
+          {(this.state.user.roleId === 1) ? <p>Role: Admin</p> : <p>Role: User</p>}
           <button type="submit" onClick={() => this.toggle('isEdit')}>
             Edit Profile
           </button>
@@ -40,19 +64,29 @@ export class Profile extends React.Component {
       );
     }
     return (
-      <div className="col s8 offset-s2" style={{ backgroundColor: '#fff' }}>
+      <div className="col s8 offset-s2">
         <h4>Edit Profile</h4>
         <form name="profile-edit" onSubmit={this.handleProfileUpdate} action="#">
-          <div style={{ color: 'red' }}>{this.state.errorMessage || this.props.error}</div>
-          <p>Fullname: <input type="text" name="fullname" value={this.state.user.fullname} onChange={this.onChange}/></p>
-          <p>Username: <input type="text" name="username" value={this.state.user.username} onChange={this.onChange}/></p>
-          <p>Email: <input type="text" name="email" value={this.state.user.email} onChange={this.onChange}/></p>
+          <div style={{ color: 'red' }}>
+            {this.state.errorMessage || this.props.error}
+          </div>
+          <p>Fullname: <input type="text" name="fullname"
+            value={this.state.user.fullname} onChange={this.onChange}/>
+          </p>
+          <p>Username: <input type="text" name="username"
+            value={this.state.user.username} onChange={this.onChange}/>
+          </p>
+          <p>Email: <input type="text" name="email"
+            value={this.state.user.email} onChange={this.onChange}/>
+          </p>
           <p>
               Change Password?
             <div className="switch">
               <label>
                 Off
-                <input type="checkbox" name="showPassword" checked={this.state.isChecked} onChange={() => this.toggle('isChecked')} />
+                <input type="checkbox" name="showPassword"
+                  checked={this.state.isChecked}
+                  onChange={() => this.toggle('isChecked')} />
                 <span className="lever" />
                 On
               </label>
@@ -60,32 +94,58 @@ export class Profile extends React.Component {
           </p>
           {this.state.isChecked && (
             <div>
-              <p>Old Password: <input type="password" name="oldPassword" onChange={this.onChange}/></p>
-              <p>New Password: <input type="password" name="newPassword" onChange={this.onChange}/></p>
-              <p>Confirm Password: <input type="password" name="confirmPassword" onChange={this.onChange} /></p>
+              <p>Old Password: <input type="password" name="oldPassword"
+                onChange={this.onChange}/>
+              </p>
+              <p>New Password: <input type="password" name="newPassword"
+                onChange={this.onChange}/>
+              </p>
+              <p>Confirm Password: <input type="password" name="confirmPassword"
+                onChange={this.onChange} />
+              </p>
             </div>
           )}
           <button type="submit">Save</button>
-          <button type="submit" onClick={() => this.toggle('isEdit')}>Cancel</button>
+          <button type="" onClick={() => this.toggle('isEdit')}>Cancel</button>
         </form>
       </div>
     );
   }
 
+
+  /**
+   * handleProfileUpdate dispatches an updateProfile action
+   * @param {object} event
+   * @returns a DOM element
+   * @memberOf Profile
+   */
   handleProfileUpdate(event) {
     event.preventDefault();
-    const { fullname: { value: fullname } = {}, username: { value: username } = {},
-      email: { value: email } = {}, oldPassword: { value: oldPassword } = {},
-      newPassword: { value: newPassword } = {}, confirmPassword: { value: confirmPassword } = {} } = event.target;
+    const { fullname: { value: fullname } = {},
+      username: { value: username } = {},
+      email: { value: email } = {},
+      oldPassword: { value: oldPassword } = {},
+      newPassword: { value: newPassword } = {},
+      confirmPassword: { value: confirmPassword } = {} } = event.target;
     if (newPassword || confirmPassword || oldPassword) {
       if (newPassword !== confirmPassword) {
         this.setState({ errorMessage: 'Passwords do not match' });
         return;
       }
     }
-    this.props.updateProfile({ fullname, username, email, oldPassword, newPassword, confirmPassword });
+    this.props.updateProfile({ fullname,
+      username,
+      email,
+      oldPassword,
+      newPassword,
+      confirmPassword });
   }
 
+  /**
+   * render, React lifecycle method
+   * @returns a DOM element
+   * @memberOf Profile
+   */
   render() {
     return (
       <div className="row">
@@ -97,7 +157,7 @@ export class Profile extends React.Component {
 // Maps state from store to props
 const mapStateToProps = (state) => {
   return {
-    // You can now say this.props.documents
+    // You can now say this.props.user
     user: state.user.currentProfile,
     currentDocument: state.documents.currentDocument || {},
     error: state.user.error

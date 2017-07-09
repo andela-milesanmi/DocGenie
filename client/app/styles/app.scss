@@ -88,3 +88,8 @@ body{
 .document-card{
   text-align: center;
 }
+.document-card-title{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
