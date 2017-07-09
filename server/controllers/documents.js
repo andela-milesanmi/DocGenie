@@ -41,16 +41,14 @@ module.exports = {
       })
       .then((documents) => {
         if (!documents) {
-          return response.status(404).send({
-            message: 'No documents found',
-          });
+          throw new Error('No documents found');
         }
-        const pagination = limit ? {
+        const pagination = {
           totalCount: documents.count,
           pages: Math.ceil(documents.count / limit),
           currentPage: Math.floor(offset / limit) + 1,
           pageSize: documents.rows.length,
-        } : null;
+        };
 
         return response.status(200).send({
           documents: documents.rows,
@@ -58,7 +56,8 @@ module.exports = {
         });
       })
       .catch((error) => {
-        response.status(400).send(error);
+        const errorMessage = error.message || error;
+        response.status(400).send(errorMessage);
       });
   },
   findADocument(request, response) {
@@ -66,22 +65,21 @@ module.exports = {
       .findById(request.params.id)
       .then((document) => {
         if (!document) {
-          return response.status(404).send({
-            message: 'Document Not Found',
-          });
+          throw new Error('Document Not Found');
         }
         return response.status(200).send(document);
       })
-      .catch(error => response.status(400).send(error));
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        response.status(404).send(errorMessage);
+      });
   },
   updateADocument(request, response) {
     return Document
       .findById(request.params.id)
       .then((document) => {
         if (!document) {
-          return response.status(404).send({
-            message: 'Document Not Found',
-          });
+          throw new Error('Document Not Found');
         }
         return document
           .update({
@@ -91,7 +89,10 @@ module.exports = {
             content: request.body.content || document.content,
           })
           .then(() => response.status(200).send(document))
-          .catch((error) => { response.status(400).send(error); });
+          .catch((error) => {
+            const errorMessage = error.message || error;
+            response.status(400).send(errorMessage);
+          });
       })
       .catch((error) => { response.status(400).send(error); });
   },
@@ -100,9 +101,7 @@ module.exports = {
       .findById(request.params.id)
       .then((document) => {
         if (!document) {
-          return response.status(400).send({
-            message: 'Document Not Found',
-          });
+          throw new Error('Document Not Found');
         }
         return document
           .destroy()
@@ -110,15 +109,19 @@ module.exports = {
             response.status(200).send('Document deleted successfully');
           })
           .catch((error) => {
-            response.status(400).send(error);
+            const errorMessage = error.message || error;
+            response.status(400).send(errorMessage);
           });
       })
       .catch(error => response.status(400).send(error));
   },
   searchForDocument(request, response) {
     const { roleId, userId } = request.decoded;
+    const limit = request.query.limit || '6';
+    const offset = request.query.page ? (Number(request.query.page - 1) * limit) : 0;
+
     return Document
-      .findAll({
+      .findAndCountAll({
         include: [{ model: User,
           as: 'user' }],
         where: {
@@ -141,15 +144,27 @@ module.exports = {
             }
           ]
         },
-        limit: 10,
-      }).then((searchResult) => {
-        if (!searchResult.length) {
-          return response.status(404).send({
-            message: 'No documents found',
-          });
+        limit,
+        offset,
+        order: '"createdAt" DESC',
+      }).then((documents) => {
+        if (!documents) {
+          throw new Error('Document(s) Not Found');
         }
-        return response.status(200).send(searchResult);
+        const pagination = {
+          totalCount: documents.count,
+          pages: Math.ceil(documents.count / limit),
+          currentPage: Math.floor(offset / limit) + 1,
+          pageSize: documents.rows.length,
+        };
+        return response.status(200).send({
+          documents: documents.rows,
+          pagination
+        });
       })
-      .catch(error => response.status(400).send(error));
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        response.status(400).send(errorMessage);
+      });
   }
 };

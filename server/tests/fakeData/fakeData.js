@@ -84,7 +84,7 @@ export default {
     userId: 1,
   },
   bulkDocuments: [{
-    title: faker.lorem.words(),
+    title: 'first document',
     content: faker.lorem.text(),
     access: 0,
     userId: 2,

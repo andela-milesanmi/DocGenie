@@ -4,9 +4,7 @@ import models from '../../models';
 import fakeData from '../fakeData/fakeData';
 import server from '../../../server';
 
-
 chai.use(chaiHttp);
-// const server = 'http://localhost:3333';
 
 const promisify = (data) => {
   return new Promise((resolve, reject) => {
@@ -24,7 +22,7 @@ const promisify = (data) => {
 };
 
 describe('Documents', () => {
-let adminToken, userToken;
+  let adminToken, userToken;
   before(() => {
     return models.Role.create(fakeData.adminRole)
       .then((roleData) => {
@@ -62,7 +60,6 @@ let adminToken, userToken;
         expect(response.body.user.username).to.equal(username);
         expect(response.body.user.email).to.equal(email);
         expect(response).to.have.status(200);
-        // expect(response.body.token).to.equal(adminToken);
         done();
       });
   });
@@ -183,7 +180,7 @@ let adminToken, userToken;
         expect(response.body).to.be.an('object');
         expect(response.body).to.not.have.property('id');
         expect(response.body).to.not.have.property('userId');
-        expect(response.body.message).to.equal('Document Not Found');
+        expect(response.text).to.equal('Document Not Found');
         done();
       });
   });
@@ -199,13 +196,12 @@ let adminToken, userToken;
   });
   it('should retrieve documents on /api/search/documents GET if token is valid', (done) => {
     chai.request(server)
-      .get('/api/search/documents/public')
+      .get('/api/search/documents/doc')
       .set('authorization', userToken)
       .end((error, response) => {
-        console.log(error, 'error in search')
         expect(response).to.have.status(200);
-        expect(response).to.be.an('object');
-        expect(response.body).to.be.an('array');
+        expect(response.body).to.be.an('object');
+        expect(response.body.pagination).to.be.an('object');
         done();
       });
   });
@@ -291,45 +287,8 @@ let adminToken, userToken;
         expect(response.body).to.be.an('object');
         expect(response.body).to.not.have.property('id');
         expect(response.body).to.not.have.property('userId');
-        expect(response.body.message).to.equal('Document Not Found');
+        expect(response.text).to.equal('Document Not Found');
         done();
       });
   });
 });
-
-// xdescribe('Documents', () => {
-//   before((done) => {
-//     chai.request(server)
-//       .post('/auth/api/users/login')
-//       .set('Accept', 'application/json')
-//       .send({ email: 'memuna.haruna@andela.com', password: 'memuna' })
-//       .end((error, response) => {
-//         expect(response.body.user.id).to.equal(1);
-//         expect(response.body.user.roleId).to.equal(1);
-//         expect(response.body.user.username).to.equal('memuna');
-//         expect(response.body.user.email).to.equal('memuna.haruna@andela.com');
-//         expect(response).to.have.status(200);
-//         // Save the token to use it later to access the application
-//         adminToken = response.body.token;
-//         done();
-//       });
-//   });
-
-//   it('fails, as expected', (done) => { // <= Pass in done callback
-//     chai.request(server)
-//       .get('/')
-//       .end((error, response) => {
-//         expect(response.body).to.eql({});
-//         done(); // <= Call done to signal callback end
-//       });
-//   });
-
-//   it('succeeds silently!', (done) => { // <= No done callback
-//     chai.request(server)
-//       .get('/')
-//       .end((error, response) => {
-//         expect(response).to.have.status(200); // <= Test completes before this runs
-//         done();
-//       });
-//   });
-// });

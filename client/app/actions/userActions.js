@@ -13,7 +13,7 @@ export const createUser = (user) => {
         browserHistory.push('/dashboard/documents');
       }).catch((error) => {
         dispatch({ type: CREATE_USER_ERROR,
-          error: error.response.data.message || error.response.data });
+          errorMessage: error.response.data.message || error.response.data });
         return Promise.reject(error);
       });
   };
@@ -27,7 +27,7 @@ export const signInUser = (user) => {
         browserHistory.push('/dashboard/documents');
       }).catch((error) => {
         dispatch({ type: SIGNIN_USER_ERROR,
-          error: error.response.data.message || error.response.data });
+          errorMessage: error.response.data.message || error.response.data });
         return Promise.reject(error);
       });
   };
@@ -44,7 +44,7 @@ export const getUser = () => {
         dispatch({ type: CREATE_USER, user: response.data });
       }).catch((error) => {
         dispatch({ type: CREATE_USER_ERROR,
-          error: error.response.data.message || error.response.data });
+          errorMessage: error.response.data.message || error.response.data });
         return Promise.reject(error);
       });
   };
@@ -70,7 +70,7 @@ export const updateProfile = (user) => {
         dispatch({ type: CREATE_USER, user: response.data });
       }).catch((error) => {
         dispatch({ type: CREATE_USER_ERROR,
-          error: error.response.data.message || error.response.data });
+          errorMessage: error.response.data.message || error.response.data });
       });
   };
 };
@@ -87,7 +87,7 @@ export const viewAllUsers = (page = '') => {
           pagination: response.data.pagination });
       }).catch((error) => {
         dispatch({ type: VIEW_USERS_ERROR,
-          error: error.response.data.message || error.response.data });
+          errorMessage: error.response.data.message || error.response.data });
       });
   };
 };

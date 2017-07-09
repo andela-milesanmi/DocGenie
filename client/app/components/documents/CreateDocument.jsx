@@ -17,9 +17,6 @@ export class CreateDocument extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   }
   componentWillReceiveProps(nextProps) {
-    if (Object.keys(nextProps.currentDocument).length === 0) {
-      return this.setState({ title: '', content: '', access: '' });
-    }
     return this.setState({ ...nextProps.currentDocument });
   }
   handleCreateDocument(event) {
@@ -29,19 +26,25 @@ export class CreateDocument extends React.Component {
     const access = event.target.access.value;
     const action = !this.props.currentDocument.id ? 'createDocument' : 'editDocument';
     this.props[action]({ title, content, access, user: this.props.user, id: this.props.currentDocument.id, }).then(() => {
+      console.log('got here?');
       this.setState({ title: '', content: '', access: '' });
     });
   }
 
   render() {
-    const { user, currentDocument } = this.props;
-    const { title } = this.state;
+    const { user, currentDocument, documentError } = this.props;
+    const { title, access } = this.state;
     return (
       <Modal
+        modalOptions={{
+          complete: () => {
+            this.setState({ title: '', content: '', access: '' });
+          }
+        }}
         header={!currentDocument.title ? 'Create Document' : `Edit: ${currentDocument.title}`} id="create-form">
         <div className="row">
           <form className="col s12 m12" onSubmit={this.handleCreateDocument} action="#" id="created-new-document">
-            <div className="error-message">{currentDocument.error}</div>
+            <div className="error-message">{documentError}</div>
             <div className="row">
               <div className="input-field col s12">
                 <input name="title" id="title" type="text" className="validate" placeholder="Title" value={title} onChange={this.onChange}/>
@@ -49,7 +52,7 @@ export class CreateDocument extends React.Component {
               </div>
             </div>
             <div className="row">
-              <select name="access" className="browser-default" onChange={this.onChange}>
+              <select name="access" value={access} className="browser-default" onChange={this.onChange}>
                 <option value="" disabled selected>Select access</option>
                 <option value="0">Public</option>
                 <option value="-1">Private</option>
@@ -76,6 +79,8 @@ export class CreateDocument extends React.Component {
 const mapStateToProps = (state) => {
   return {
     currentDocument: state.documents.currentDocument || {},
+    documentError: state.documents.error,
+    userError: state.user.error,
     user: state.user.currentProfile,
   };
 };
@@ -94,6 +99,7 @@ CreateDocument.propTypes = {
   editDocument: PropTypes.func.isRequired,
   createDocument: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
+  documentError: PropTypes.string,
 };
 // Use connect to put them together
 export default connect(mapStateToProps, mapDispatchToProps)(CreateDocument);

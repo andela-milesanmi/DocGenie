@@ -4,9 +4,7 @@ import models from '../../models';
 import fakeData from '../fakeData/fakeData';
 import server from '../../../server';
 
-
 chai.use(chaiHttp);
-// const server = 'http://localhost:3333';
 
 const promisify = (data) => {
   return new Promise((resolve, reject) => {
@@ -74,7 +72,7 @@ describe('Users', () => {
       .send({ email, password })
       .end((error, response) => {
         expect(response).to.have.status(400);
-        expect(response.body.message).to.equal('Not an existing user');
+        expect(response.text).to.equal('Not an existing user');
         done();
       });
   });

@@ -32,7 +32,7 @@ describe('Documents reducer', () => {
     expect(
       reducer({}, {
         type: CREATE_DOCUMENT_ERROR,
-        error: 'error while creating new document'
+        errorMessage: 'error while creating new document'
       })
     ).to.eql({
       error: 'error while creating new document'
