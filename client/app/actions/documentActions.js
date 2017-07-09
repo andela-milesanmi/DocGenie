@@ -5,6 +5,7 @@ import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
   EDIT_DOCUMENT_ERROR, DELETE_DOCUMENT, DELETE_DOCUMENT_ERROR,
   SEARCH_DOCUMENT, SEARCH_DOCUMENT_ERROR } from '../actionTypes';
 
+
 export const viewAllDocuments = (url) => {
   const token = localStorage.getItem('token');
   const config = {
@@ -30,13 +31,11 @@ export const createDocument = (document) => {
   return (dispatch) => {
     return axios.post('/api/documents', document, config)
       .then((response) => {
-        console.log(response, 'response');
         toastr.success('Document created!');
         dispatch({ type: CREATE_DOCUMENT,
           document: { ...document, ...response.data } });
         $('#create-form').modal('close');
       }).catch((error) => {
-        console.log(error, 'error in createDocument');
         const errorMessage = error.response.data.message || error.response.data;
         dispatch({ type: CREATE_DOCUMENT_ERROR,
           errorMessage });
