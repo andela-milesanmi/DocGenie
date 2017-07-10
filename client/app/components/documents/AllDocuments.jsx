@@ -9,6 +9,13 @@ import Search from '../Search.jsx';
 import DocumentCard from './DocumentCard.jsx';
 
 
+/**
+ * AllDocuments component, maps through all documents and renders DocumentCard
+ * component
+ * @export
+ * @class AllDocuments
+ * @extends {React.Component}
+ */
 export class AllDocuments extends React.Component {
   constructor(props) {
     super(props);
@@ -18,12 +25,30 @@ export class AllDocuments extends React.Component {
     this.showAllDocuments = this.showAllDocuments.bind(this);
     this.showOwnDocuments = this.showOwnDocuments.bind(this);
   }
+
+  /**
+   * editDocument method, triggers changeCurrentDocument action
+   * @param {object} document
+   * @memberOf AllDocuments
+   */
   editDocument(document) {
     this.props.changeCurrentDocument(document);
   }
+
+  /**
+   * componentDidMount, react lifecycle method which is invoked immediately the
+   * component mounts
+   * @memberOf AllDocuments
+   */
   componentDidMount() {
     this.showAllDocuments();
   }
+
+  /**
+   * showAllDocuments method, triggers viewAllDocuments action,
+   * which then displays all/general documents
+   * @memberOf AllDocuments
+   */
   showAllDocuments() {
     const { page = '' } = this.props.params;
     this.setState({ currentUrl: '/api/documents/?page=' },
@@ -31,6 +56,12 @@ export class AllDocuments extends React.Component {
         this.props.viewAllDocuments(this.state.currentUrl + page);
       });
   }
+
+  /**
+   * showOwnDocuments, triggers viewAllDocuments action which displays all
+   * a user's own documents
+   * @memberOf AllDocuments
+   */
   showOwnDocuments() {
     const { params: { page = '' } } = this.props;
     const { user } = this.props;
@@ -40,11 +71,24 @@ export class AllDocuments extends React.Component {
       this.props.viewAllDocuments(this.state.currentUrl + page);
     });
   }
+
+  /**
+   * componentWillReceiveProps, React lifecycle method which is called once a
+   * component receives next props, in this case: next page
+   * @param {object} nextProps
+   * @memberOf AllDocuments
+   */
   componentWillReceiveProps(nextProps) {
     if (this.props.params.page !== nextProps.params.page) {
       this.props.viewAllDocuments(this.state.currentUrl + nextProps.params.page);
     }
   }
+
+  /**
+   * render, react lifecyle method
+   * @returns a DOM element
+   * @memberOf AllDocuments
+   */
   render() {
     return (
       <div className="dashboard-container">
@@ -75,6 +119,7 @@ export class AllDocuments extends React.Component {
               )}
             </div>
           </div>
+          {/* pagination */}
           <div className="row paginate-docs">
             <ul className="pagination">
               {this.props.currentPage > 1 && <li><a href="#"

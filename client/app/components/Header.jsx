@@ -5,7 +5,10 @@ import { Navbar, Dropdown, NavItem, Icon } from 'react-materialize';
 import { connect } from 'react-redux';
 import { logoutUser } from '../actions/userActions';
 
-
+/**
+ * pure function Header, renders the navigation bar
+ * @params {object} props
+ */
 export const Header = (props) => {
   const { user } = props;
   return (

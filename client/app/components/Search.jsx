@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { searchForDocuments } from '../actions/documentActions';
 
-
+/**
+ * Pure function, Search
+ * @param {object} props
+ */
 export const Search = (props) => {
   const handleChange = (event) => {
     event.preventDefault();
@@ -24,7 +27,7 @@ export const Search = (props) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-  // You can now say this.props.createDocument
+  // You can now say this.props.searchForDocuments
     searchForDocuments: searchKey => dispatch(searchForDocuments(searchKey)),
   };
 };

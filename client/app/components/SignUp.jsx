@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createUser } from '../actions/userActions';
 
-
 /**
  *
- *
+ * SignUp component
  * @export
  * @class SignUp
  * @extends {React.Component}
@@ -17,6 +16,11 @@ export class SignUp extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  /**
+   * OnSubmit function handles form submission
+   * @param {object} e, event
+   * @memberOf SignUp
+   */
   onSubmit(e) {
     e.preventDefault();
     const fullname = e.target.fullname.value;
@@ -26,6 +30,12 @@ export class SignUp extends React.Component {
     const confirmPassword = e.target.confirmPassword.value;
     this.props.createUser({ username, fullname, email, password, confirmPassword });
   }
+
+  /**
+   * React lifecycle method
+   * @returns a DOM element
+   * @memberOf SignUp
+   */
   render() {
     return (
       <div className="container">

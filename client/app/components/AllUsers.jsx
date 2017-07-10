@@ -3,20 +3,33 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { viewAllUsers } from '../actions/userActions';
 
-export class AllUsers extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
+/**
+ * AllUsers component, renders all registered users for an admin user
+ * @export
+ * @class AllUsers
+ * @extends {React.Component}
+ */
+export class AllUsers extends React.Component {
+  /**
+   * componentDidMount, React lifecyle method which is invoked once the
+   * component mounts
+   * @memberOf AllUsers
+   */
   componentDidMount() {
     this.props.viewAllUsers(this.props.params.page);
   }
 
+  /**
+   * render, React lifecycle method
+   * @returns a DOM element
+   * @memberOf AllUsers
+   */
   render() {
     return (
-      <div className="col s12" style={{ color: '#000' }}>
+      <div className="col s12">
         <div className="row" style={{ fontSize: '15px' }}>
-          <ul className="collection col s8 offset-s2" style={{ backgroundColor: '#blue' }}>
+          <ul className="collection col s8 offset-s2">
             {this.props.users && this.props.users.map((user, i) => (
               <li index={i} className="collection-item">{user.username}, {user.email}</li>
             )
