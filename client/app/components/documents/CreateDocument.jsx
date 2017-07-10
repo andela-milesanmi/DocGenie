@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Modal } from 'react-materialize';
-import { createDocument, editDocument } from '../../actions/documentActions';
+import { createDocument, editDocument, changeCurrentDocument } from '../../actions/documentActions';
 
 
 /**
@@ -75,6 +75,7 @@ export class CreateDocument extends React.Component {
       <Modal
         modalOptions={{
           complete: () => {
+            this.props.changeCurrentDocument({});
             this.setState({ title: '', content: '', access: '' });
           }
         }}
@@ -133,7 +134,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     createDocument: document => dispatch(createDocument(document)),
-    editDocument: document => dispatch(editDocument(document))
+    editDocument: document => dispatch(editDocument(document)),
+    changeCurrentDocument: document => dispatch(changeCurrentDocument(document)),
   };
 };
 
@@ -141,6 +143,7 @@ CreateDocument.propTypes = {
   currentDocument: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
   editDocument: PropTypes.func.isRequired,
+  changeCurrentDocument: PropTypes.func.isRequired,
   createDocument: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   documentError: PropTypes.string,
