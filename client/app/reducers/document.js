@@ -1,6 +1,7 @@
 import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
   CREATE_DOCUMENT_ERROR, CHANGE_CURRENT_DOCUMENT, EDIT_DOCUMENT,
-  EDIT_DOCUMENT_ERROR, DELETE_DOCUMENT, DELETE_DOCUMENT_ERROR,
+  VIEW_ONE_DOCUMENT, EDIT_DOCUMENT_ERROR, DELETE_DOCUMENT,
+  DELETE_DOCUMENT_ERROR, VIEW_ONE_DOCUMENT_ERROR,
   SEARCH_DOCUMENT, SEARCH_DOCUMENT_ERROR } from '../actionTypes';
 
 export default (state = {}, action) => {
@@ -9,6 +10,9 @@ export default (state = {}, action) => {
   case SEARCH_DOCUMENT: {
     const newDocuments = action.documents;
     return { ...state, documents: newDocuments, ...action.pagination, error: '' };
+  }
+  case VIEW_ONE_DOCUMENT: {
+    return { ...state, document: action.document, error: '' };
   }
   case CHANGE_CURRENT_DOCUMENT: {
     return { ...state, currentDocument: action.document, error: '' };
@@ -28,7 +32,8 @@ export default (state = {}, action) => {
   case DELETE_DOCUMENT_ERROR:
   case SEARCH_DOCUMENT_ERROR:
   case VIEW_DOCUMENTS_ERROR:
-  case CREATE_DOCUMENT_ERROR: {
+  case CREATE_DOCUMENT_ERROR:
+  case VIEW_ONE_DOCUMENT_ERROR: {
     return { ...state, error: action.errorMessage };
   }
   case DELETE_DOCUMENT: {

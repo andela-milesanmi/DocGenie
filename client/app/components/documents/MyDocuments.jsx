@@ -10,26 +10,25 @@ import DocumentCard from './DocumentCard.jsx';
 
 
 /**
- * AllDocuments component, maps through all documents and renders DocumentCard
- * component
+ * MyDocuments component, maps through a user's own documents and renders
+ * each document as a DocumentCard component
  * @export
- * @class AllDocuments
+ * @class MyDocuments
  * @extends {React.Component}
  */
-export class AllDocuments extends React.Component {
+export class MyDocuments extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       currentUrl: ''
     };
-    this.showAllDocuments = this.showAllDocuments.bind(this);
     this.showOwnDocuments = this.showOwnDocuments.bind(this);
   }
 
   /**
    * editDocument method, triggers changeCurrentDocument action
    * @param {object} document
-   * @memberOf AllDocuments
+   * @memberOf MyDocuments
    */
   editDocument(document) {
     this.props.changeCurrentDocument(document);
@@ -38,29 +37,16 @@ export class AllDocuments extends React.Component {
   /**
    * componentDidMount, react lifecycle method which is invoked immediately the
    * component mounts
-   * @memberOf AllDocuments
+   * @memberOf MyDocuments
    */
   componentDidMount() {
-    this.showAllDocuments();
-  }
-
-  /**
-   * showAllDocuments method, triggers viewAllDocuments action,
-   * which then displays all/general documents
-   * @memberOf AllDocuments
-   */
-  showAllDocuments() {
-    const { page = '' } = this.props.params;
-    this.setState({ currentUrl: '/api/documents/?page=' },
-      () => {
-        this.props.viewAllDocuments(this.state.currentUrl + page);
-      });
+    this.showOwnDocuments();
   }
 
   /**
    * showOwnDocuments, triggers viewAllDocuments action which displays all
    * a user's own documents
-   * @memberOf AllDocuments
+   * @memberOf MyDocuments
    */
   showOwnDocuments() {
     const { params: { page = '' } } = this.props;
@@ -76,7 +62,7 @@ export class AllDocuments extends React.Component {
    * componentWillReceiveProps, React lifecycle method which is called once a
    * component receives next props, in this case: next page
    * @param {object} nextProps
-   * @memberOf AllDocuments
+   * @memberOf MyDocuments
    */
   componentWillReceiveProps(nextProps) {
     if (this.props.params.page !== nextProps.params.page) {
@@ -87,7 +73,7 @@ export class AllDocuments extends React.Component {
   /**
    * render, react lifecyle method
    * @returns a DOM element
-   * @memberOf AllDocuments
+   * @memberOf MyDocuments
    */
   render() {
     return (
@@ -117,27 +103,34 @@ export class AllDocuments extends React.Component {
               )}
               {this.props.documents && this.props.documents.length === 0 &&
               <div className="center-align">
-                <h4>We're sad...No Documents Found. Create some now?
-                </h4>
+                <h5>Aww shucks, No documents found. Create some now?
+                </h5>
               </div>}
             </div>
           </div>
           {/* pagination */}
           <div className="row paginate-docs">
             <ul className="pagination">
-              {this.props.currentPage > 1 && <li><a href="#"
+              {this.props.currentPage > 1 &&
+              <li><a href="#"
                 onClick={() => {
-                  browserHistory.push(`/dashboard/documents/all/${this.props.currentPage - 1}`);
+                  browserHistory.push(`/dashboard/documents/${this.props.currentPage - 1}`);
                 }}><i className="material-icons">chevron_left</i></a></li> }
+
               {Array(this.props.pages).fill(0).map((value, i) => {
                 return (<li><a href="#" onClick={() => {
-                  browserHistory.push(`/dashboard/documents/all/${i + 1}`);
+                  browserHistory.push(`/dashboard/documents/${i + 1}`);
                 }}>{i + 1}</a></li>);
               })}
+
               {this.props.currentPage < this.props.pages &&
-               <li className="waves-effect"><a href="#" onClick={() => {
-                 browserHistory.push(`/dashboard/documents/all/${this.props.currentPage + 1}`);
-               }}><i className="material-icons">chevron_right</i></a></li> }
+              <li className="waves-effect">
+                <a href="#" onClick={() => {
+                  browserHistory.push(`/dashboard/documents/${this.props.currentPage + 1}`);
+                }}>
+                  <i className="material-icons">chevron_right</i>
+                </a>
+              </li> }
             </ul>
           </div>
         </div>
@@ -165,15 +158,15 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-AllDocuments.propTypes = {
+MyDocuments.propTypes = {
   documents: PropTypes.array.isRequired,
   currentPage: PropTypes.number.isRequired,
   pages: PropTypes.number.isRequired,
   params: PropTypes.object.isRequired,
-  viewAllDocuments: PropTypes.func.isRequired,
   changeCurrentDocument: PropTypes.func.isRequired,
+  viewAllDocuments: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
 };
 
 // Use connect to put them together
-export default connect(mapStateToProps, mapDispatchToProps)(AllDocuments);
+export default connect(mapStateToProps, mapDispatchToProps)(MyDocuments);

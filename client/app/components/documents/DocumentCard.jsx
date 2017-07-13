@@ -1,6 +1,9 @@
 import React from 'react';
+import { browserHistory } from 'react-router';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import swal from 'sweetalert';
+import toastr from 'toastr';
 import { Modal } from 'react-materialize';
 import { changeCurrentDocument, deleteDocument }
   from '../../actions/documentActions';
@@ -37,7 +40,27 @@ export class DocumentCard extends React.Component {
    * @memberOf DocumentCard
    */
   deleteDocument(document) {
-    this.props.deleteDocument(document);
+    swal({
+      title: 'Are you sure?',
+      text: 'You will not be able to recover this document',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#DD6B55',
+      confirmButtonText: 'Yes, Please',
+      closeOnConfirm: false
+    }, (isConfirm) => {
+      if (isConfirm) {
+        this.props.deleteDocument(document)
+          .then(() => {
+            swal('Deleted!', 'The selected file has been deleted.', 'success');
+          })
+          .catch(() => {
+            toastr.error('Unable to delete document');
+          });
+      } else {
+        swal('Cancelled', 'Your document is safe :)', 'error');
+      }
+    });
   }
 
   /**
@@ -63,8 +86,8 @@ export class DocumentCard extends React.Component {
             <span className="card-title document-card-title">
               { document.title }
             </span>
-            <p>Author: {document.user.fullname}</p>
-            <p>Date: {document.createdAt.slice(0, 10)}</p>
+            <p><b>Author:</b> {document.user.fullname}</p>
+            <p><b>Date:</b> {document.createdAt.slice(0, 10)}</p>
           </div>
           <div className="card-action form-card-action">
             { currentUser.id === document.userId &&
@@ -78,26 +101,14 @@ export class DocumentCard extends React.Component {
               </span>
             }
             {!this.state.showMore &&
-              <a id="viewMore" href="#view-more"
-                onClick={() => this.editDocument(document)}>View More
-              </a> }
+            <a href="#" onClick={() => {
+              browserHistory.replace(`/dashboard/documents/view/${document.id}`);
+            }}>
+              VIEW MORE
+            </a>
+            }
           </div>
         </div>
-
-        {/*Modal to display full document content on VIEW MORE button click*/}
-        <Modal
-          modalOptions={{
-            complete: () => {
-              this.props.changeCurrentDocument();
-            }
-          }}
-          header={currentDocument.title} id="view-more">
-          <div className="row">
-            <p>
-              Content: {currentDocument.content}
-            </p>
-          </div>
-        </Modal>
       </div>
     );
   }
@@ -109,7 +120,6 @@ const mapStateToProps = (state) => {
     currentDocument: state.documents.currentDocument || {},
     documents: state.documents.documents,
     currentUser: state.user.currentProfile,
-
   };
 };
 

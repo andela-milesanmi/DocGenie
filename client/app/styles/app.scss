@@ -44,6 +44,7 @@ body{
 }
 .modal-close{
   display: none !important;
+  // margin: -115px 150px 0px 0px !important;
 }
 .form-card-action a{
   cursor: pointer;
@@ -58,7 +59,10 @@ body{
   background-color: #ffffff !important;
 }
 .nav-logo{
-  background-color: #08B2E3;
+  background-color: #291700;
+}
+.brand-logo{
+  margin-left: 3%;
 }
 .nav-dropdown-content{
   min-width: 12%;
@@ -92,4 +96,11 @@ body{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.chip-style{
+  margin-top: 3%;
+  background-color: #F44336 !important;
+}
+.viewOneDocument{
+  background-color: #FFF6EB;
 }
