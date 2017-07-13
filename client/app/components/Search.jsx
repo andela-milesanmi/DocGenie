@@ -15,7 +15,7 @@ export const Search = (props) => {
   };
   return (
     <div className="row search-docs">
-      <div className="col s8 offset-s2">
+      <div className="col s10">
         <input name="searchKey" id="searchKey" type="text"
           className="validate" placeholder="Search for documents here..."
           onChange={handleChange}/>

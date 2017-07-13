@@ -18,8 +18,9 @@ export const viewAllDocuments = (url) => {
           documents: response.data.documents,
           pagination: response.data.pagination });
       }).catch((error) => {
+        console.log(error, 'error in viewAllDocuments');
         dispatch({ type: VIEW_DOCUMENTS_ERROR,
-          errorMessage: error.response.data.message || error.response.data });
+          errorMessage: error.response.data || error.response.data.message });
       });
   };
 };

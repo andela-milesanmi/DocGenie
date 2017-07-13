@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import App from './components/App.jsx';
 import Home from './components/Home.jsx';
 import AllDocuments from './components/documents/AllDocuments.jsx';
+import MyDocuments from './components/documents/MyDocuments.jsx';
 import Profile from './components/Profile.jsx';
 import AllUsers from './components/AllUsers.jsx';
 import { getUser } from './actions/userActions';
@@ -20,12 +21,12 @@ window.jQuery = window.$ = jQuery;
 const requireAuth = store => (nextState, replace, callback) => {
   const token = localStorage.getItem('token');
   if (token && store.getState().user.id && nextState.location.pathname.includes('dashboard')) {
-    replace('/dashboard/documents');
+    replace('/dashboard/documents/all');
     return callback();
   }
   if (token && !store.getState().user.id) {
     return store.dispatch(getUser()).then(() => {
-      if (!nextState.location.pathname.includes('dashboard')) replace('/dashboard/documents');
+      if (!nextState.location.pathname.includes('dashboard')) replace('/dashboard/documents/all');
       return callback();
     }).catch(() => {
       localStorage.removeItem('token');
@@ -45,7 +46,8 @@ const Root = () => (
     <Router history={browserHistory}>
       <Route path="/" component={App} onEnter={requireAuth(store)}>
         <IndexRoute component={Home} />
-        <Route path="dashboard/documents(/:page)" component={AllDocuments} />
+        <Route path="dashboard/documents/all(/:page)" component={AllDocuments} />
+        <Route path="dashboard/documents(/:page)" component={MyDocuments} />
         <Route path="dashboard/profile" component={Profile} />
         <Route path="dashboard/users(/:page)" component={AllUsers} />
       </Route>

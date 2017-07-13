@@ -109,7 +109,6 @@ const mapStateToProps = (state) => {
     currentDocument: state.documents.currentDocument || {},
     documents: state.documents.documents,
     currentUser: state.user.currentProfile,
-
   };
 };
 

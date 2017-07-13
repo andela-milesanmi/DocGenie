@@ -5,6 +5,13 @@ import { Navbar, Dropdown, NavItem, Icon } from 'react-materialize';
 import { connect } from 'react-redux';
 import { logoutUser } from '../actions/userActions';
 
+const displayAllDocuments = () => {
+  browserHistory.replace('/dashboard/documents/all');
+};
+
+const displayOwnDocuments = () => {
+  browserHistory.replace('/dashboard/documents');
+};
 /**
  * pure function Header, renders the navigation bar
  * @params {object} props
@@ -13,9 +20,11 @@ export const Header = (props) => {
   const { user } = props;
   return (
     <Navbar id="nav" brand="DocGenie" className="nav-logo" right>
+      {user.id && <NavItem onClick={displayAllDocuments}>All Documents</NavItem>}
+      {user.id && <NavItem onClick={displayOwnDocuments}>My Documents</NavItem>}
+      {user.id && <NavItem className="chip chip-style">Welcome, @{user.username}</NavItem>}
       {user.id && <Dropdown
         className="col s4 nav-dropdown-content"
-        style={{ backgroundColor: '#ccc' }}
         trigger={
           <NavItem id="more_vert" href="#!">
             <Icon>more_vert</Icon>

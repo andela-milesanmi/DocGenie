@@ -10,7 +10,7 @@ export const createUser = (user) => {
       .then((response) => {
         localStorage.setItem('token', response.data.token);
         dispatch({ type: CREATE_USER, user: response.data.user });
-        browserHistory.push('/dashboard/documents');
+        browserHistory.replace('/dashboard/documents/all');
       }).catch((error) => {
         dispatch({ type: CREATE_USER_ERROR,
           errorMessage: error.response.data.message || error.response.data });
@@ -24,7 +24,7 @@ export const signInUser = (user) => {
       .then((response) => {
         localStorage.setItem('token', response.data.token);
         dispatch({ type: SIGNIN_USER, user: response.data.user });
-        browserHistory.push('/dashboard/documents');
+        browserHistory.push('/dashboard/documents/all');
       }).catch((error) => {
         dispatch({ type: SIGNIN_USER_ERROR,
           errorMessage: error.response.data.message || error.response.data });
