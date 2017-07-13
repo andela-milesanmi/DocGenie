@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Modal } from 'react-materialize';
-import { createDocument, editDocument, changeCurrentDocument } from '../../actions/documentActions';
+import { createDocument, editDocument, changeCurrentDocument }
+  from '../../actions/documentActions';
 
 
 /**

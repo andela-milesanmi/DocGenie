@@ -3,7 +3,8 @@ import toastr from 'toastr';
 import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
   CREATE_DOCUMENT_ERROR, CHANGE_CURRENT_DOCUMENT, EDIT_DOCUMENT,
   EDIT_DOCUMENT_ERROR, DELETE_DOCUMENT, DELETE_DOCUMENT_ERROR,
-  SEARCH_DOCUMENT, SEARCH_DOCUMENT_ERROR } from '../actionTypes';
+  SEARCH_DOCUMENT, SEARCH_DOCUMENT_ERROR, VIEW_ONE_DOCUMENT,
+  VIEW_ONE_DOCUMENT_ERROR } from '../actionTypes';
 
 
 export const viewAllDocuments = (url) => {
@@ -18,7 +19,6 @@ export const viewAllDocuments = (url) => {
           documents: response.data.documents,
           pagination: response.data.pagination });
       }).catch((error) => {
-        console.log(error, 'error in viewAllDocuments');
         dispatch({ type: VIEW_DOCUMENTS_ERROR,
           errorMessage: error.response.data || error.response.data.message });
       });
@@ -63,7 +63,8 @@ export const editDocument = (document) => {
       document, config)
       .then((response) => {
         toastr.success('Document edited!');
-        dispatch({ type: EDIT_DOCUMENT, document: { ...document, ...response.data } });
+        dispatch({ type: EDIT_DOCUMENT,
+          document: { ...document, ...response.data } });
         $('#create-form').modal('close');
       }).catch((error) => {
         const errorMessage = error.response.data.message || error.response.data;
@@ -100,6 +101,22 @@ export const searchForDocuments = (searchKey) => {
         dispatch({ type: SEARCH_DOCUMENT, documents: response.data || [] });
       }).catch((error) => {
         dispatch({ type: SEARCH_DOCUMENT_ERROR,
+          errorMessage: error.response.data.message || error.response.data });
+      });
+  };
+};
+
+export const findADocument = (id) => {
+  const token = localStorage.getItem('token');
+  const config = {
+    headers: { authorization: token }
+  };
+  return (dispatch) => {
+    return axios.get(`/api/documents/${id}`, config)
+      .then((response) => {
+        dispatch({ type: VIEW_ONE_DOCUMENT, document: response.data || [] });
+      }).catch((error) => {
+        dispatch({ type: VIEW_ONE_DOCUMENT_ERROR,
           errorMessage: error.response.data.message || error.response.data });
       });
   };

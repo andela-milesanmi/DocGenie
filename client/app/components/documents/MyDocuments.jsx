@@ -101,24 +101,36 @@ export class MyDocuments extends React.Component {
                 <DocumentCard index={i} document={document} />
                 )
               )}
+              {this.props.documents && this.props.documents.length === 0 &&
+              <div className="center-align">
+                <h5>Aww shucks, No documents found. Create some now?
+                </h5>
+              </div>}
             </div>
           </div>
           {/* pagination */}
           <div className="row paginate-docs">
             <ul className="pagination">
-              {this.props.currentPage > 1 && <li><a href="#"
+              {this.props.currentPage > 1 &&
+              <li><a href="#"
                 onClick={() => {
                   browserHistory.push(`/dashboard/documents/${this.props.currentPage - 1}`);
                 }}><i className="material-icons">chevron_left</i></a></li> }
+
               {Array(this.props.pages).fill(0).map((value, i) => {
                 return (<li><a href="#" onClick={() => {
                   browserHistory.push(`/dashboard/documents/${i + 1}`);
                 }}>{i + 1}</a></li>);
               })}
+
               {this.props.currentPage < this.props.pages &&
-               <li className="waves-effect"><a href="#" onClick={() => {
-                 browserHistory.push(`/dashboard/documents/${this.props.currentPage + 1}`);
-               }}><i className="material-icons">chevron_right</i></a></li> }
+              <li className="waves-effect">
+                <a href="#" onClick={() => {
+                  browserHistory.push(`/dashboard/documents/${this.props.currentPage + 1}`);
+                }}>
+                  <i className="material-icons">chevron_right</i>
+                </a>
+              </li> }
             </ul>
           </div>
         </div>

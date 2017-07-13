@@ -115,7 +115,11 @@ export class AllDocuments extends React.Component {
                 <DocumentCard index={i} document={document} />
                 )
               )}
-              {/*{!this.props.documents.length && <h4>We're sad...No Documents Found. Create some now?</h4>}*/}
+              {this.props.documents && this.props.documents.length === 0 &&
+              <div className="center-align">
+                <h4>We're sad...No Documents Found. Create some now?
+                </h4>
+              </div>}
             </div>
           </div>
           {/* pagination */}

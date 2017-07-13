@@ -6,6 +6,7 @@ import App from './components/App.jsx';
 import Home from './components/Home.jsx';
 import AllDocuments from './components/documents/AllDocuments.jsx';
 import MyDocuments from './components/documents/MyDocuments.jsx';
+import ViewOneDocument from './components/documents/ViewOneDocument.jsx';
 import Profile from './components/Profile.jsx';
 import AllUsers from './components/AllUsers.jsx';
 import { getUser } from './actions/userActions';
@@ -20,6 +21,7 @@ window.jQuery = window.$ = jQuery;
 
 const requireAuth = store => (nextState, replace, callback) => {
   const token = localStorage.getItem('token');
+  // console.log(store.getState().user.currentProfile.id, 'currentProfile')
   if (token && store.getState().user.id && nextState.location.pathname.includes('dashboard')) {
     replace('/dashboard/documents/all');
     return callback();
@@ -48,6 +50,7 @@ const Root = () => (
         <IndexRoute component={Home} />
         <Route path="dashboard/documents/all(/:page)" component={AllDocuments} />
         <Route path="dashboard/documents(/:page)" component={MyDocuments} />
+        <Route path="dashboard/documents/view/:id" component={ViewOneDocument} />
         <Route path="dashboard/profile" component={Profile} />
         <Route path="dashboard/users(/:page)" component={AllUsers} />
       </Route>

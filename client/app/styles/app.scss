@@ -44,6 +44,7 @@ body{
 }
 .modal-close{
   display: none !important;
+  // margin: -115px 150px 0px 0px !important;
 }
 .form-card-action a{
   cursor: pointer;
@@ -99,4 +100,7 @@ body{
 .chip-style{
   margin-top: 3%;
   background-color: #F44336 !important;
+}
+.viewOneDocument{
+  background-color: #FFF6EB;
 }

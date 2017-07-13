@@ -10,7 +10,7 @@ export const createUser = (user) => {
       .then((response) => {
         localStorage.setItem('token', response.data.token);
         dispatch({ type: CREATE_USER, user: response.data.user });
-        browserHistory.replace('/dashboard/documents/all');
+        browserHistory.push('/dashboard/documents/all');
       }).catch((error) => {
         dispatch({ type: CREATE_USER_ERROR,
           errorMessage: error.response.data.message || error.response.data });
