@@ -32,6 +32,6 @@ describe('AllUsers component', () => {
     expect(component.props().params.page).to.equal('3');
   });
   it('should find the neccessary dom elements ', () => {
-    expect(component.find('.collection').length).to.equal(1);
+    expect(component.find('table').length).to.equal(1);
   });
 });

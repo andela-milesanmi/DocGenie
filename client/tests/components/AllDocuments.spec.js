@@ -15,7 +15,8 @@ describe('AllDocuments component', () => {
   let component;
   const store = mockStore({ documents: {}, user: { currentProfile: { id: 10 } } });
   const props = {
-    documents: [{ id: 2, title: 'A document', content: 'lorem ipsum', userId: 3, createdAt: '12-06-2017', user: { username: 'toodoo' } }],
+    documents: [{ id: 2, title: 'A document', content: 'lorem ipsum',
+      userId: 3, createdAt: '12-06-2017', user: { username: 'toodoo' } }],
     currentPage: 1,
     pages: 4,
     params: {
@@ -24,7 +25,9 @@ describe('AllDocuments component', () => {
     viewAllDocuments: sinon.spy(),
     changeCurrentDocument: sinon.spy(),
     user: { id: 3 },
-    mappedDocument: { id: 3, title: 'A doc', content: 'lorem ipsum jbachvzbjhvcbxxc', userId: 3, createdAt: '12-06-2017', user: { username: 'toodoo' } },
+    mappedDocument: { id: 3, title: 'A doc',
+      content: 'lorem ipsum jbachvzbjhvcbxxc', userId: 3,
+      createdAt: '12-06-2017', user: { username: 'toodoo' } },
   };
   beforeEach(() => {
     component = mount(<AllDocuments {...props}/>, {

@@ -50,11 +50,16 @@ class Home extends React.Component {
     return (
       <div className="index-page container">
         <div className="row">
-          <div className="col s6 homeText">
+          <div className="col s6 homeText center-align">
             <h4>Welcome to DocGenie</h4>
             <p>Docgenie allows you to manage your documents, easily!</p>
+            <div className="row">
+              <div className="col s4">Create Documents</div>
+              <div className="col s4">Edit your documents</div>
+              <div className="col s4">Share with friends</div>
+            </div>
           </div>
-          <div className="col s6 pull-s1 signInOrSignUp">
+          <div className="col s5 center-align signInOrSignUp">
             {this.renderSigninOrSignUp()}
           </div>
         </div>

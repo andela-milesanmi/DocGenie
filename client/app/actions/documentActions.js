@@ -98,7 +98,9 @@ export const searchForDocuments = (searchKey) => {
   return (dispatch) => {
     return axios.get(`/api/search/documents/${searchKey}`, config)
       .then((response) => {
-        dispatch({ type: SEARCH_DOCUMENT, documents: response.data || [] });
+        dispatch({ type: SEARCH_DOCUMENT,
+          documents: response.data.documents || [],
+          pagination: response.data.pagination });
       }).catch((error) => {
         dispatch({ type: SEARCH_DOCUMENT_ERROR,
           errorMessage: error.response.data.message || error.response.data });
@@ -114,7 +116,7 @@ export const findADocument = (id) => {
   return (dispatch) => {
     return axios.get(`/api/documents/${id}`, config)
       .then((response) => {
-        dispatch({ type: VIEW_ONE_DOCUMENT, document: response.data || [] });
+        dispatch({ type: VIEW_ONE_DOCUMENT, document: { ...response.data } });
       }).catch((error) => {
         dispatch({ type: VIEW_ONE_DOCUMENT_ERROR,
           errorMessage: error.response.data.message || error.response.data });

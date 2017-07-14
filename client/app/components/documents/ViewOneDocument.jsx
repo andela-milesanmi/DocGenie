@@ -37,14 +37,24 @@ export class ViewOneDocument extends React.Component {
               <h4>Title: {document.title}</h4>
               <hr/>
               <div className="row">
-                <p className="">
+                <p>
                   <i>
-                    <b>>Date Published</b>: {document.createdAt.slice(0, 10)}
+                    <b>Date Published: </b> {document.createdAt.slice(0, 10)}
                   </i>
                 </p>
               </div>
               {document.content}
             </div>}
+        </div>
+        <div>
+          <a
+            title="previous page"
+            href=""
+            onClick={browserHistory.goBack}
+            className="btn btn-large create-doc col s2 offset-s5"
+          >
+            Back
+          </a>
         </div>
       </div>
     );

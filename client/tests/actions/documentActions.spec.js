@@ -91,7 +91,9 @@ describe('Document Action', () => {
   it('should dispatch appropriate actions on searchForDocuments', () => {
     const searchKey = 'the';
     return store.dispatch(searchForDocuments(`good-url/${searchKey}`)).then(() => {
-      expect(store.getActions()).to.deep.equal([{ type: SEARCH_DOCUMENT, documents: response.data || [] }]);
+      expect(store.getActions()).to.deep.equal([{ type: SEARCH_DOCUMENT,
+        documents: response.data.documents || [],
+        pagination: response.data.pagination }]);
     });
   });
 });

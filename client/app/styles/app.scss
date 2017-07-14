@@ -4,8 +4,8 @@ body{
 .index-page{
   background:
   linear-gradient(
-      rgba(0,0,0,0.7),
-      rgba(0,0,0,0.7)
+      rgba(0,0,0,0.5),
+      rgba(0,0,0,0.5)
     ),url('../images/docgenie-new9.jpg');
   opacity: 0.9;
   min-height: 100%;
@@ -22,17 +22,17 @@ body{
   color: #C7AC5D;
 }
 .signup-form{
-  background-color: #EFE9F4;
+  background-color: #ffffff;
+  opacity: 0.8;
   padding: 15px !important;
+  border: 1px solid #ccc;
 }
 .signup-button{
-  color: #000000;
-  background-color: #08B2E3;
-  padding: 10px;
-  border-radius: 7%;
+  color: #fff;
+  background-color: #291700;
 }
 .error-message{
-  color: red;
+  color: #EE6352;
   font-size: 15px;
 }
 .create-doc{
@@ -48,6 +48,7 @@ body{
 }
 .form-card-action a{
   cursor: pointer;
+  //color: #3D2300 !important;
 }
 .search-docs{
   margin-top: 0px !important;
@@ -101,6 +102,12 @@ body{
   margin-top: 3%;
   background-color: #F44336 !important;
 }
-.viewOneDocument{
+.viewOneDocument, .profile, .all-users{
   background-color: #FFF6EB;
+  margin: 3%;
+  padding: 10px;
+  text-align: center;
+}
+.profile-save{
+  margin-right: 2%;
 }
