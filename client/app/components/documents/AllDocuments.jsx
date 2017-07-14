@@ -117,8 +117,8 @@ export class AllDocuments extends React.Component {
               )}
               {this.props.documents && this.props.documents.length === 0 &&
               <div className="center-align">
-                <h4>Aww shucks...No documents found
-                </h4>
+                <h5>Aww shucks...No documents found
+                </h5>
               </div>}
             </div>
           </div>

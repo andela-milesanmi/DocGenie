@@ -118,11 +118,8 @@ describe('Users', () => {
       .set('authorization', userToken)
       .end((error, response) => {
         expect(response).to.have.status(200);
-        expect(response.body).to.be.an('array');
-        expect(response.body[0]).to.have.property('roleId');
-        expect(response.body[0]).to.have.property('fullname');
-        expect(response.body[0]).to.have.property('email');
-        expect(response.body[0]).to.have.property('username');
+        expect(response.body).to.be.an('object');
+        expect(response.body).to.be.an('object').that.has.all.keys('users', 'pagination');
         done();
       });
   });

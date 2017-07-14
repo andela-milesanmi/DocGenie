@@ -1,8 +1,8 @@
 const Document = require('../models').Document;
 const User = require('../models').User;
-// const jwt = require('jwt-decode');
 
 module.exports = {
+  // create a document
   createADocument(request, response) {
     return Document
       .create({
@@ -16,6 +16,7 @@ module.exports = {
         response.status(400).send(error);
       });
   },
+  // list all general documents
   listAllDocuments(request, response) {
     const limit = request.query.limit || '6';
     const offset = request.query.page ? (Number(request.query.page - 1) * limit) : 0;
@@ -60,6 +61,7 @@ module.exports = {
         response.status(400).send(errorMessage);
       });
   },
+  // fetch a particular document
   findADocument(request, response) {
     return Document
       .findById(request.params.id)
@@ -74,6 +76,7 @@ module.exports = {
         response.status(404).send(errorMessage);
       });
   },
+  // update document attributes
   updateADocument(request, response) {
     return Document
       .findById(request.params.id)
@@ -96,6 +99,7 @@ module.exports = {
       })
       .catch((error) => { response.status(400).send(error); });
   },
+  // delete a document
   deleteADocument(request, response) {
     return Document
       .findById(request.params.id)
@@ -115,6 +119,7 @@ module.exports = {
       })
       .catch(error => response.status(400).send(error));
   },
+  // search for a particular document
   searchForDocument(request, response) {
     const { roleId, userId } = request.decoded;
     const limit = request.query.limit || '6';
