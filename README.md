@@ -4,7 +4,7 @@ A document management system that allows users create documents, set access priv
 
 ### About the Application
 
-### API Features
+#### API Features
 
 The following features make up the Document Management System API:
 
@@ -41,7 +41,7 @@ The following features make up the Document Management System API:
 ##### Search
 
 * It allows users to search public/role documents that belong to other users (as well as documents that belong to the user).
-* It allows admin to retrieve all documents that matches search term, be it public or role-based.
+* It allows admin to search for a particular user.
 
 ##### Tech Stack
 
@@ -68,7 +68,11 @@ $ npm run start:dev
 $ npm start
 $ npm test
 ```
-###### Run in Postman
+
+##### How to use
+* Visit ```http://docgenie.herokuapp.com/``` to use this app online.
+
+##### Run in Postman
 
 * Download and install Postman and check the API Documentation for the endpoints.
 
@@ -195,7 +199,7 @@ Body (application/json)
 - The limitations to the DocGenie API are as follows:
 
 * Users cannot upload images in their documents yet.
-* Users cannot share documents with people, but can make document public to make it available to other users.
+* Users cannot share documents with people on social platforms, but can make document public to make it available to other users in the app.
 
 ###### Contributing
 
@@ -203,7 +207,7 @@ Body (application/json)
 
 * Download/Clone this repository.
 * Install the dependencies using npm install.
-* Run npm start to start the application.
+* Run npm start:dev to start the application.
 * To test: run npm test.
 * Fork this repo to your own repository.
 * Create a new branch: git checkout -b new-branch-name.
