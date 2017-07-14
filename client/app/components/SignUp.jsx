@@ -67,12 +67,12 @@ export class SignUp extends React.Component {
               </div>
             </div>
             <div>
-              <button type="submit" className="signup-button">SUBMIT</button>
+              <button type="submit" className="btn btn-large create-doc signup-button">SUBMIT</button>
             </div>
 
             <div>
-              <p style={{ textAlign: 'center' }}>Already have an account?
-                <a onClick={this.props.changeScreen}>Sign In</a>
+              <p className="center-align">Already have an account?
+                <a style={{ color: '#EE6352' }} onClick={this.props.changeScreen}>Sign In</a>
               </p>
             </div>
           </form>

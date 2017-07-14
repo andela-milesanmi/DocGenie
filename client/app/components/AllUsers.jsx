@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { viewAllUsers } from '../actions/userActions';
 
-
 /**
  * AllUsers component, renders all registered users for an admin user
  * @export
@@ -27,15 +26,31 @@ export class AllUsers extends React.Component {
    */
   render() {
     return (
-      <div className="col s12">
-        <div className="row" style={{ fontSize: '15px' }}>
-          <ul className="collection col s8 offset-s2">
+      <div className="container">
+        <table className="col s8 responsive-table centered highlight
+         all-users">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>Fullname</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody>
             {this.props.users && this.props.users.map((user, i) => (
-              <li index={i} className="collection-item">{user.username}, {user.email}</li>
+              <tr index={i}>
+                <td>{i + 1}</td>
+                <td>{user.fullname}</td>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+                <td>{user.roleId === 1 ? 'Admin' : 'User' }</td>
+              </tr>
             )
             )}
-          </ul>
-        </div>
+          </tbody>
+        </table>
       </div>
     );
   }

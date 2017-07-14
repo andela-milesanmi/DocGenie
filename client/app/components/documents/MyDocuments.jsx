@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { viewAllDocuments, changeCurrentDocument, deleteDocument,
   showOwnDocuments } from '../../actions/documentActions';
 import CreateDocument from './CreateDocument.jsx';
-import Search from '../Search.jsx';
+import SearchDocuments from '../SearchDocuments.jsx';
 import DocumentCard from './DocumentCard.jsx';
 
 
@@ -83,7 +83,7 @@ export class MyDocuments extends React.Component {
         </div>
         <div className="row">
           <div className="col s8 offset-s1">
-            <Search />
+            <SearchDocuments />
           </div>
           <div className="col s2">
             <a href="#create-form" className="btn-floating
@@ -103,7 +103,7 @@ export class MyDocuments extends React.Component {
               )}
               {this.props.documents && this.props.documents.length === 0 &&
               <div className="center-align">
-                <h5>Aww shucks, No documents found. Create some now?
+                <h5>Aww shucks, No documents found
                 </h5>
               </div>}
             </div>

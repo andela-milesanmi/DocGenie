@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import toastr from 'toastr';
 import { connect } from 'react-redux';
 import { updateProfile } from '../actions/userActions';
 
@@ -42,7 +43,6 @@ export class Profile extends React.Component {
     this.setState({ [field]: !this.state[field] });
   }
 
-
   /**
    * renderProfile method renders profile information or profile edit form
    * @returns DOM element
@@ -51,36 +51,40 @@ export class Profile extends React.Component {
   renderProfile() {
     if (!this.state.isEdit) {
       return (
-        <div className="col s8 offset-s2">
+        <div className="">
           <h4>Profile Information</h4>
-          <p>Fullname: {this.state.user.fullname}</p>
-          <p>Username: {this.state.user.username}</p>
-          <p>Email: {this.state.user.email}</p>
-          {(this.state.user.roleId === 1) ? <p>Role: Admin</p> : <p>Role: User</p>}
-          <button type="submit" onClick={() => this.toggle('isEdit')}>
+          <hr />
+          <p><b>Fullname: </b>{this.state.user.fullname}</p>
+          <p><b>Username: </b>{this.state.user.username}</p>
+          <p><b>Email: </b>{this.state.user.email}</p>
+          {(this.state.user.roleId === 1) ? <p><b>Role:</b> Admin</p> :
+            <p><b>Role:</b> User</p>}
+          <button className="btn btn-large create-doc" type="submit"
+            onClick={() => this.toggle('isEdit')}>
             Edit Profile
           </button>
         </div>
       );
     }
     return (
-      <div className="col s8 offset-s2">
+      <div className="">
         <h4>Edit Profile</h4>
+        <hr/>
         <form name="profile-edit" onSubmit={this.handleProfileUpdate} action="#">
           <div style={{ color: 'red' }}>
             {this.state.errorMessage || this.props.error}
           </div>
-          <p>Fullname: <input type="text" name="fullname"
+          <p><b>Fullname: </b> <input type="text" name="fullname"
             value={this.state.user.fullname} onChange={this.onChange}/>
           </p>
-          <p>Username: <input type="text" name="username"
+          <p><b>Username: </b> <input type="text" name="username"
             value={this.state.user.username} onChange={this.onChange}/>
           </p>
-          <p>Email: <input type="text" name="email"
+          <p><b>Email: </b> <input type="text" name="email"
             value={this.state.user.email} onChange={this.onChange}/>
           </p>
           <p>
-              Change Password?
+            <b>Change Password? </b>
             <div className="switch">
               <label>
                 Off
@@ -94,19 +98,22 @@ export class Profile extends React.Component {
           </p>
           {this.state.isChecked && (
             <div>
-              <p>Old Password: <input type="password" name="oldPassword"
+              <p><b>Old Password: </b><input type="password" name="oldPassword"
                 onChange={this.onChange}/>
               </p>
-              <p>New Password: <input type="password" name="newPassword"
+              <p><b>New Password: </b><input type="password" name="newPassword"
                 onChange={this.onChange}/>
               </p>
-              <p>Confirm Password: <input type="password" name="confirmPassword"
+              <p><b>Confirm Password: </b><input type="password"
+                name="confirmPassword"
                 onChange={this.onChange} />
               </p>
             </div>
           )}
-          <button type="submit">Save</button>
-          <button type="" onClick={() => this.toggle('isEdit')}>Cancel</button>
+          <button type="submit" className="btn btn-large create-doc profile-save">
+            Save</button>
+          <button type="" className="btn btn-large create-doc profile-save"
+            onClick={() => this.toggle('isEdit')}>Cancel</button>
         </form>
       </div>
     );
@@ -138,7 +145,12 @@ export class Profile extends React.Component {
       email,
       oldPassword,
       newPassword,
-      confirmPassword });
+      confirmPassword }).then(() => {
+      toastr.success('Profile Updated!');
+      this.toggle('isEdit');
+    }).catch((error) => {
+      toastr.error(error.message);
+    });
   }
 
   /**
@@ -148,8 +160,10 @@ export class Profile extends React.Component {
    */
   render() {
     return (
-      <div className="row">
-        {this.renderProfile()}
+      <div className="container">
+        <div className="row profile col sm 10 offset-s1">
+          {this.renderProfile()}
+        </div>
       </div>
     );
   }

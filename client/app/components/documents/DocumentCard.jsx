@@ -45,7 +45,7 @@ export class DocumentCard extends React.Component {
       text: 'You will not be able to recover this document',
       type: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#DD6B55',
+      confirmButtonColor: '#EE6352',
       confirmButtonText: 'Yes, Please',
       closeOnConfirm: false
     }, (isConfirm) => {

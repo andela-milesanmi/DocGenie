@@ -2,7 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import { mount } from 'enzyme';
-import { Search } from '../../app/components/Search.jsx';
+import { SearchDocuments } from '../../app/components/SearchDocuments.jsx';
 
 describe('Search Component', () => {
   let component;
@@ -10,7 +10,7 @@ describe('Search Component', () => {
     searchForDocuments: sinon.spy(),
   };
   beforeEach(() => {
-    component = mount(<Search {...props}/>);
+    component = mount(<SearchDocuments {...props}/>);
   });
   afterEach(() => {
     props.searchForDocuments.reset();

@@ -32,10 +32,6 @@ export const Header = (props) => {
         }
       >
         <div className="nav-drop-div">
-          <ul className="nav-dropdown-list logout"
-            style={{ marginLeft: '10%' }}>
-              @{user.username}
-          </ul>
           <ul className="nav-dropdown-list">
             <Link to="/dashboard/profile" style={{ color: '#000' }}>
                 Profile

@@ -7,7 +7,7 @@ import { searchForDocuments } from '../actions/documentActions';
  * Pure function, Search
  * @param {object} props
  */
-export const Search = (props) => {
+export const SearchDocuments = (props) => {
   const handleChange = (event) => {
     event.preventDefault();
     const searchKey = event.target.value;
@@ -32,8 +32,8 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-Search.propTypes = {
+SearchDocuments.propTypes = {
   searchForDocuments: PropTypes.func.isRequired,
 };
 
-export default connect(null, mapDispatchToProps)(Search);
+export default connect(null, mapDispatchToProps)(SearchDocuments);
