@@ -1,8 +1,10 @@
 import axios from 'axios';
 import jwt from 'jwt-decode';
 import { browserHistory } from 'react-router';
+import toastr from 'toastr';
 import { CREATE_USER, SIGNIN_USER, LOGOUT_USER, VIEW_USERS, SEARCH_USERS,
-  SEARCH_USERS_ERROR, VIEW_USERS_ERROR, CREATE_USER_ERROR, SIGNIN_USER_ERROR, } from '../actionTypes';
+  SEARCH_USERS_ERROR, VIEW_USERS_ERROR, CREATE_USER_ERROR, SIGNIN_USER_ERROR,
+  UPDATE_USER, UPDATE_USER_ERROR } from '../actionTypes';
 
 export const createUser = (user) => {
   return (dispatch) => {
@@ -57,9 +59,9 @@ export const logoutUser = () => {
   };
 };
 
-export const updateProfile = (user) => {
+export const updateProfile = (user, id) => {
   const token = localStorage.getItem('token');
-  const userId = jwt(token).userId;
+  const userId = id || jwt(token).userId;
   const config = {
     headers: { authorization: token }
   };
@@ -67,10 +69,12 @@ export const updateProfile = (user) => {
   return (dispatch) => {
     return axios.put(`/api/users/${userId}`, user, config)
       .then((response) => {
-        dispatch({ type: CREATE_USER, user: response.data });
+        dispatch({ type: UPDATE_USER, user: response.data });
+        return response.data;
       }).catch((error) => {
-        dispatch({ type: CREATE_USER_ERROR,
+        dispatch({ type: UPDATE_USER_ERROR,
           errorMessage: error.response.data.message || error.response.data });
+        return Promise.reject();
       });
   };
 };

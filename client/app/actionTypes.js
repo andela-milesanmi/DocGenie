@@ -22,9 +22,11 @@ export const SIGNIN_USER = 'SIGNIN_USER';
 export const LOGOUT_USER = 'LOGOUT_USER';
 export const CHANGE_CURRENT_PROFILE = 'CHANGE_CURRENT_PROFILE';
 export const SEARCH_USERS = 'SEARCH_USERS';
+export const UPDATE_USER = 'UPDATE_USER';
 
 // user error action types
 export const CREATE_USER_ERROR = 'CREATE_USER_ERROR';
 export const SIGNIN_USER_ERROR = 'SIGNIN_USER_ERROR';
 export const VIEW_USERS_ERROR = 'VIEW_USERS_ERROR';
 export const SEARCH_USERS_ERROR = 'SEARCH_USERS_ERROR';
+export const UPDATE_USER_ERROR = 'UPDATE_USER_ERROR';

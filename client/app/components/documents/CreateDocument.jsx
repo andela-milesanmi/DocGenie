@@ -74,6 +74,7 @@ export class CreateDocument extends React.Component {
     const { title, access, content } = this.state;
     return (
       <Modal
+        fixedFooter
         modalOptions={{
           complete: () => {
             this.props.changeCurrentDocument({});

@@ -4,8 +4,8 @@ import sinon from 'sinon';
 import { shallow, mount } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import SearchUsers from '../../app/components/SearchUsers.jsx';
-import { AllUsers } from '../../app/components/AllUsers.jsx';
+import SearchUsers from '../../app/components/users/SearchUsers.jsx';
+import { AllUsers } from '../../app/components/users/AllUsers.jsx';
 
 
 describe('AllUsers component', () => {

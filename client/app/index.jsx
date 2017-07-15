@@ -8,7 +8,7 @@ import AllDocuments from './components/documents/AllDocuments.jsx';
 import MyDocuments from './components/documents/MyDocuments.jsx';
 import ViewOneDocument from './components/documents/ViewOneDocument.jsx';
 import Profile from './components/Profile.jsx';
-import AllUsers from './components/AllUsers.jsx';
+import AllUsers from './components/users/AllUsers.jsx';
 import { getUser } from './actions/userActions';
 import './styles/app.scss';
 
@@ -17,16 +17,18 @@ import configureStore from './store/configureStore';
 const store = configureStore();
 
 window.clientStore = store;
+
+// solves react-materialize error: '$() is not a function'
 window.jQuery = window.$ = jQuery;
 
 const requireAuth = store => (nextState, replace, callback) => {
   const token = localStorage.getItem('token');
-  // console.log(store.getState().user.currentProfile.id, 'currentProfile')
-  if (token && store.getState().user.id && nextState.location.pathname.includes('dashboard')) {
+  const { user: { currentProfile: { id } = {} } = {} } = store.getState();
+  if (token && id && !nextState.location.pathname.includes('dashboard')) {
     replace('/dashboard/documents/all');
     return callback();
   }
-  if (token && !store.getState().user.id) {
+  if (token && !id) {
     return store.dispatch(getUser()).then(() => {
       if (!nextState.location.pathname.includes('dashboard')) replace('/dashboard/documents/all');
       return callback();

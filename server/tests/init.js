@@ -1,29 +1,38 @@
+// require dotenv so that sequelize recognizes env variables in .env file
 const dotenv = require('dotenv');
 
+const jsdom = require('jsdom');
+
+const { JSDOM } = jsdom;
+
+// invoke dotenv config method
 dotenv.config();
 
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
-const dom = new JSDOM(`<!DOCTYPE html><html><body></body></html>`);
+// JSDOM mocks the browser API for mocha and enzyme
+const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>');
 global.document = dom.window.document;
 global.window = document.defaultView;
 
-const exposedProperties = ['window', 'navigator', 'document'];
 
+// loops through all keys of document.defaultView and attaches each of those
+// properties to the global object
 Object.keys(document.defaultView).forEach((property) => {
   if (typeof global[property] === 'undefined') {
-    exposedProperties.push(property);
     global[property] = document.defaultView[property];
   }
 });
 
+// attaches HTMLElement to global object
 global.HTMLElement = window.HTMLElement;
 
+// mocks JQuery
 global.$ = () => ({
   modal: () => null,
   dropdown: () => null,
   sideNav: () => null,
 });
+
+// mocks localStorage
 global.localStorage = {
   getItem() {
     return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInJvbGVJZCI6MSwiaWF0IjoxNDk4Nzc5ODY1LCJleHAiOjE0OTg4NjYyNjV9.kAL9MtQNzhCwifkegup-DAeQllXi7bMoXvdMYHEQLrc';
@@ -36,13 +45,14 @@ global.localStorage = {
   }
 };
 
-const noop = () => null;
+// mocks all non-html, .js, or .jsx files
+// const noop = () => null;
 
-require.extensions['.css'] = noop;
-require.extensions['.scss'] = noop;
-require.extensions['.md'] = noop;
-require.extensions['.png'] = noop;
-require.extensions['.svg'] = noop;
-require.extensions['.jpg'] = noop;
-require.extensions['.jpeg'] = noop;
-require.extensions['.gif'] = noop;
+// require.extensions['.css'] = noop;
+// require.extensions['.scss'] = noop;
+// require.extensions['.md'] = noop;
+// require.extensions['.png'] = noop;
+// require.extensions['.svg'] = noop;
+// require.extensions['.jpg'] = noop;
+// require.extensions['.jpeg'] = noop;
+// require.extensions['.gif'] = noop;
