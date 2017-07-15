@@ -1,8 +1,8 @@
 import axios from 'axios';
 import jwt from 'jwt-decode';
 import { browserHistory } from 'react-router';
-import { CREATE_USER, SIGNIN_USER, CREATE_USER_ERROR, SIGNIN_USER_ERROR,
-  LOGOUT_USER, VIEW_USERS, VIEW_USERS_ERROR } from '../actionTypes';
+import { CREATE_USER, SIGNIN_USER, LOGOUT_USER, VIEW_USERS, SEARCH_USERS,
+  SEARCH_USERS_ERROR, VIEW_USERS_ERROR, CREATE_USER_ERROR, SIGNIN_USER_ERROR, } from '../actionTypes';
 
 export const createUser = (user) => {
   return (dispatch) => {
@@ -87,6 +87,24 @@ export const viewAllUsers = (page = '') => {
           pagination: response.data.pagination });
       }).catch((error) => {
         dispatch({ type: VIEW_USERS_ERROR,
+          errorMessage: error.response.data.message || error.response.data });
+      });
+  };
+};
+
+export const searchForUsers = (searchKey) => {
+  const token = localStorage.getItem('token');
+  const config = {
+    headers: { authorization: token }
+  };
+  return (dispatch) => {
+    return axios.get(`/api/search/users/${searchKey}`, config)
+      .then((response) => {
+        dispatch({ type: SEARCH_USERS,
+          users: response.data.users || [],
+          pagination: response.data.pagination });
+      }).catch((error) => {
+        dispatch({ type: SEARCH_USERS_ERROR,
           errorMessage: error.response.data.message || error.response.data });
       });
   };

@@ -4,6 +4,7 @@ const authentication = require('../middleware/authentication');
 const bcrypt = require('bcrypt-nodejs');
 
 module.exports = {
+  // create new user on sign up
   createNewUser(request, response) {
     const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
     if (!emailRegex.test(request.body.email)) {
@@ -60,6 +61,7 @@ module.exports = {
       response.status(400).send(errorMessage);
     });
   },
+  // sign in a user
   signIn(request, response) {
     if (!request.body.email || !request.body.password) {
       return response.status(401).send({
@@ -92,7 +94,6 @@ module.exports = {
   },
   listAllUsers(request, response) {
     const limit = request.query.limit || '6';
-    // const offset = request.query.offset || '0';
     const offset = request.query.page ? (Number(request.query.page - 1) * limit) : 0;
     const { userId } = request.decoded;
     return User
@@ -126,6 +127,7 @@ module.exports = {
         response.status(400).send(errorMessage);
       });
   },
+  // find a particular user
   findAUser(request, response) {
     return User
       .findById(request.params.id)
@@ -140,6 +142,7 @@ module.exports = {
         response.status(400).send(errorMessage);
       });
   },
+  // update user attributes
   updateAUser(request, response) {
     return User
       .findById(request.params.id)
@@ -152,7 +155,7 @@ module.exports = {
         && (Number(request.body.roleId) < Number(user.roleId) || Number(request.body.roleId) > Number(user.roleId)))) {
           throw new Error('You are not authorized to change your own role');
         }
-
+        // checking if user is authorized to change another user's role
         if (request.body.roleId && (request.body.roleId !== user.roleId && request.decoded.roleId !== 1)) {
           throw new Error('You are not authorized to change a user\'s role');
         }
@@ -174,6 +177,7 @@ module.exports = {
         response.status(400).send(error.message);
       });
   },
+  // delete a user
   deleteAUser(request, response) {
     const { userId, roleId } = request.decoded;
     return User
@@ -194,6 +198,7 @@ module.exports = {
         response.status(400).send(errorMessage);
       });
   },
+  // find all a user's documents
   findUserDocuments(request, response) {
     const limit = request.query.limit || '6';
     const offset = request.query.page ? (Number(request.query.page - 1) * limit) : 0;
@@ -229,9 +234,12 @@ module.exports = {
         response.status(400).send(errorMessage);
       });
   },
+  // search for users
   searchForUser(request, response) {
+    const limit = request.query.limit || '6';
+    const offset = request.query.page ? (Number(request.query.page - 1) * limit) : 0;
     return User
-      .findAll({
+      .findAndCountAll({
         where: {
           $or: [
             {
@@ -246,18 +254,30 @@ module.exports = {
             }
           ]
         },
-        limit: 10,
-      }).then((searchResult) => {
-        if (!searchResult.length) {
+        limit,
+        offset,
+        order: '"createdAt" DESC',
+      }).then((users) => {
+        if (!users) {
           throw new Error('No user(s) found');
         }
-        return response.status(200).send(searchResult);
+        const pagination = {
+          totalCount: users.count,
+          pages: Math.ceil(users.count / limit),
+          currentPage: Math.floor(offset / limit) + 1,
+          pageSize: users.rows.length,
+        };
+        return response.status(200).send({
+          users: users.rows,
+          pagination
+        });
       })
       .catch((error) => {
         const errorMessage = error.message || error;
         response.status(400).send(errorMessage);
       });
   },
+  // logout user
   signOut(request, response) {
     return response.status(200).send({ message: 'Successfully logged out' });
   },

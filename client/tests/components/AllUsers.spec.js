@@ -2,11 +2,17 @@ import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import { shallow, mount } from 'enzyme';
+import configureStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
+import SearchUsers from '../../app/components/SearchUsers.jsx';
 import { AllUsers } from '../../app/components/AllUsers.jsx';
 
 
 describe('AllUsers component', () => {
+  const mockStore = configureStore([thunk]);
   let component;
+  const store = mockStore({ documents: {}, user: { currentProfile: { id: 10 } } });
+
   const props = {
     params: {
       page: '3'
@@ -14,16 +20,28 @@ describe('AllUsers component', () => {
     viewAllUsers: sinon.spy(),
     user: { id: 3 },
     users: [],
+    currentPage: 1,
+    pages: 3,
   };
   beforeEach(() => {
-    component = mount(<AllUsers {...props}/>);
+    component = mount(<AllUsers {...props}/>, {
+      context: { store },
+      childContextTypes: {
+        store: React.PropTypes.object
+      }
+    });
   });
   afterEach(() => {
     props.viewAllUsers.reset();
   });
   it('should call the neccessary methods on mount', () => {
     const componentDidMountSpy = sinon.spy(AllUsers.prototype, 'componentDidMount');
-    mount(<AllUsers {...props}/>);
+    mount(<AllUsers {...props}/>, {
+      context: { store },
+      childContextTypes: {
+        store: React.PropTypes.object
+      }
+    });
     expect(componentDidMountSpy.callCount).to.equal(1);
   });
 
@@ -33,5 +51,6 @@ describe('AllUsers component', () => {
   });
   it('should find the neccessary dom elements ', () => {
     expect(component.find('table').length).to.equal(1);
+    expect(component.find(SearchUsers).length).to.equal(1);
   });
 });
