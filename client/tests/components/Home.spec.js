@@ -26,7 +26,7 @@ describe('Home component', () => {
     expect(component.state().isSignInScreen).to.equal(true);
   });
   it('should find the neccessary dom elements ', () => {
-    expect(component.find('h4').length).to.equal(1);
+    expect(component.find('h2').length).to.equal(1);
     expect(component.find('.index-page').length).to.equal(1);
   });
   it('should render SignIn component if isSignInScreen is set to true', () => {

@@ -15,7 +15,7 @@ module.exports = {
         next();
       });
     } else {
-      if (request.originalUrl.startsWith('/auth')) return next();
+      // if (request.originalUrl.startsWith('/auth')) return next();
       return response.status(403).send({
         message: 'Token required for access',
       });

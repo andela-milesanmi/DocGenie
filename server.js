@@ -2,17 +2,17 @@ const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
+const authentication = require('./server/middleware/authentication');
+
 const dotenv = require('dotenv');
 
 dotenv.config();
 
 // Set up the express app
 const app = express();
-const http = require('http');
 
 const port = parseInt(process.env.PORT, 10) || 5000;
 
-const authentication = require('./server/middleware/authentication');
 
 app.set('port', port);
 
@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // require jwt token for authenticated routes
 app.use('/api', authentication.verifyToken);
-app.use('/auth/api', authentication.verifyToken);
+// app.use('/auth/api', authentication.verifyToken);
 
 
 require('./server/routes')(app);
@@ -39,8 +39,6 @@ app.get('*', function (request, response) {
   response.sendFile(path.resolve(`${__dirname}/public/index.html`));
 });
 
-// const server = http.createServer(app);
-// server.listen(port);
 app.listen(port, () => {
   console.log('\nApplication is running on port ', port);
 });

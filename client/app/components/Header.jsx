@@ -20,8 +20,8 @@ export const Header = (props) => {
   const { user } = props;
   return (
     <Navbar id="nav" brand="DocGenie" className="nav-logo" right>
-      {user.id && <NavItem onClick={displayAllDocuments}>All Documents</NavItem>}
-      {user.id && <NavItem onClick={displayOwnDocuments}>My Documents</NavItem>}
+      {user.id && <NavItem onClick={displayAllDocuments} className="navbar-item">All Documents</NavItem>}
+      {user.id && <NavItem onClick={displayOwnDocuments} className="navbar-item">My Documents</NavItem>}
       {user.id && <NavItem className="chip chip-style">Welcome, @{user.username}</NavItem>}
       {user.id && <Dropdown
         className="col s4 nav-dropdown-content"

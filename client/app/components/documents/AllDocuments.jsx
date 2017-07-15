@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { viewAllDocuments, changeCurrentDocument, deleteDocument,
   showOwnDocuments } from '../../actions/documentActions';
 import CreateDocument from './CreateDocument.jsx';
-import SearchDocuments from '../SearchDocuments.jsx';
+import SearchDocuments from './SearchDocuments.jsx';
 import DocumentCard from './DocumentCard.jsx';
 
 

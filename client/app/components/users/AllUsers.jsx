@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import SearchUsers from './SearchUsers.jsx';
-import { viewAllUsers } from '../actions/userActions';
+import UserRow from './UserRow.jsx';
+import { viewAllUsers } from '../../actions/userActions';
 
 /**
  * AllUsers component, renders all registered users for an admin user
@@ -42,7 +43,7 @@ export class AllUsers extends React.Component {
         <h4 className="center-align">ALL USERS</h4>
         <SearchUsers />
         <div className="col s12 all-users">
-          <table className="responsive-table striped centered highlight
+          <table className="responsive-table striped centered
          all-users">
             <thead>
               <tr>
@@ -51,17 +52,12 @@ export class AllUsers extends React.Component {
                 <th>Username</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {this.props.users && this.props.users.map((user, i) => (
-                <tr index={i}>
-                  <td>{i + 1}</td>
-                  <td>{user.fullname}</td>
-                  <td>{user.username}</td>
-                  <td>{user.email}</td>
-                  <td>{user.roleId === 1 ? 'Admin' : 'User' }</td>
-                </tr>
+              {this.props.users.map(({ ...rest, role }, i) => (
+                <UserRow user={rest} role={role} key={rest.fullname} index={i} />
               )
               )}
             </tbody>
@@ -97,13 +93,13 @@ export class AllUsers extends React.Component {
 }
 
 // Maps state from store to props
-const mapStateToProps = (state) => {
+const mapStateToProps = ({ user: { users, pages, currentProfile, currentPage } }) => {
   return {
     // You can now say this.props.user
-    user: state.user.currentProfile || {},
-    users: state.user.users,
-    pages: state.user.pages,
-    currentPage: state.user.currentPage,
+    user: currentProfile || {},
+    users: users || [],
+    pages,
+    currentPage,
   };
 };
 

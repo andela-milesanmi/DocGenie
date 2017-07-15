@@ -5,7 +5,7 @@ import thunk from 'redux-thunk';
 import axios from 'axios';
 import sinon from 'sinon';
 import { CREATE_USER, SIGNIN_USER,
-  LOGOUT_USER, VIEW_USERS } from '../../app/actionTypes';
+  LOGOUT_USER, VIEW_USERS, UPDATE_USER } from '../../app/actionTypes';
 
 import { createUser,
   signInUser, getUser, logoutUser,
@@ -51,7 +51,6 @@ describe('User Actions', () => {
   });
   it('should dispatch appropriate actions on createUser', () => {
     const user = { id: 23, roleId: 2, username: 'tada' };
-    console.log(response, 'response in test');
     return store.dispatch(createUser(user)).then(() => {
       expect(store.getActions()).to.deep.equal([{ type: CREATE_USER, user: response.data.user }]);
     });
@@ -73,7 +72,7 @@ describe('User Actions', () => {
   it('should dispatch appropriate actions on updateProfile', () => {
     const user = { id: 23, roleId: 2, username: 'tada' };
     return store.dispatch(updateProfile(user)).then(() => {
-      expect(store.getActions()).to.deep.equal([{ type: CREATE_USER, user: response.data }]);
+      expect(store.getActions()).to.deep.equal([{ type: UPDATE_USER, user: response.data }]);
     });
   });
   it('should dispatch appropriate actions on viewAllUsers', () => {

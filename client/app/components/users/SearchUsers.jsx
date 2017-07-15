@@ -1,23 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { searchForDocuments } from '../actions/documentActions';
+import { searchForUsers } from '../../actions/userActions';
 
 /**
  * Pure function, Search
  * @param {object} props
  */
-export const SearchDocuments = (props) => {
+export const SearchUsers = (props) => {
+  // handleChange function triggers searchForUsers action on input change
   const handleChange = (event) => {
     event.preventDefault();
     const searchKey = event.target.value;
-    if (searchKey) props.searchForDocuments(searchKey);
+    if (searchKey) props.searchForUsers(searchKey);
   };
   return (
     <div className="row search-docs">
-      <div className="col s10">
+      <div className="col s12">
         <input name="searchKey" id="searchKey" type="text"
-          className="validate" placeholder="Search for documents here..."
+          className="validate" placeholder="Search for a user here..."
           onChange={handleChange}/>
       </div>
     </div>
@@ -28,12 +29,12 @@ export const SearchDocuments = (props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
   // You can now say this.props.searchForDocuments
-    searchForDocuments: searchKey => dispatch(searchForDocuments(searchKey)),
+    searchForUsers: searchKey => dispatch(searchForUsers(searchKey)),
   };
 };
 
-SearchDocuments.propTypes = {
-  searchForDocuments: PropTypes.func.isRequired,
+SearchUsers.propTypes = {
+  searchForUsers: PropTypes.func.isRequired,
 };
 
-export default connect(null, mapDispatchToProps)(SearchDocuments);
+export default connect(null, mapDispatchToProps)(SearchUsers);

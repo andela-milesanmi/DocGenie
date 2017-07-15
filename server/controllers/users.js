@@ -1,5 +1,6 @@
 const User = require('../models').User;
 const Document = require('../models').Document;
+const Role = require('../models').Role;
 const authentication = require('../middleware/authentication');
 const bcrypt = require('bcrypt-nodejs');
 
@@ -98,11 +99,11 @@ module.exports = {
     const { userId } = request.decoded;
     return User
       .findAndCountAll({
-        // where: {
-        //   id: {
-        //     $ne: userId
-        //   }
-        // },
+        where: {
+          id: {
+            $ne: userId
+          }
+        },
         limit,
         offset,
         order: '"createdAt" DESC',

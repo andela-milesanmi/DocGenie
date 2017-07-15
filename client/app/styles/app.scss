@@ -43,12 +43,11 @@ body{
   background-color: #08B2E3;
 }
 .modal-close{
-  display: none !important;
+  // display: none !important;
   // margin: -115px 150px 0px 0px !important;
 }
 .form-card-action a{
   cursor: pointer;
-  //color: #3D2300 !important;
 }
 .search-docs{
   margin-top: 0px !important;
@@ -113,4 +112,18 @@ body{
 }
 .all-users{
   margin: 0 auto;
+}
+.welcome-text{
+  font-size: 18px;
+}
+.navbar-item:hover{
+  background-color: #ccc;
+  color: #000 !important;
+}
+.update-role{
+  background-color: #EE6352;
+}
+.update-role:hover{
+  background-color: #ccc;
+  color: #000;
 }
