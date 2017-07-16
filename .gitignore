@@ -8,3 +8,4 @@ coverage
 bundle.js
 ./coverage/index.html
 .coveralls.yml
+server-dist

@@ -2,7 +2,9 @@ const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
-const authentication = require('./server/middleware/authentication');
+
+const serverPath = process.env.NODE_ENV === 'production' ? 'server-dist' : 'server';
+const authentication = require(`./${serverPath}/middleware/authentication`); // eslint-disable-line
 
 const dotenv = require('dotenv');
 
@@ -28,7 +30,7 @@ app.use('/api', authentication.verifyToken);
 // app.use('/auth/api', authentication.verifyToken);
 
 
-require('./server/routes')(app);
+require(`./${serverPath}/routes`)(app); // eslint-disable-line
 
 app.use(express.static(path.resolve(`${__dirname}/public`)));
 

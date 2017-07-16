@@ -87,10 +87,11 @@ describe('Users', () => {
 
   it('should validate that a regular user can update their account details ', (done) => {
     chai.request(server)
-      .put('/api/users/1')
+      .put('/api/users/2')
       .set('authorization', userToken)
       .send({ fullname: 'Mikhail Stanislaski', email: 'mikhail.s@gmail.com' })
       .end((error, response) => {
+        console.log(response.body, response.text, 'response in user spec')
         expect(response).to.have.status(200);
         expect(response.body).to.be.an('object');
         expect(response.body).to.have.property('id');

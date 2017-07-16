@@ -155,9 +155,9 @@ describe('Documents', () => {
         done();
       });
   });
-  it('should allow admin to update their own document successfully', (done) => {
+  it('should allow an admin user to update their own document successfully', (done) => {
     chai.request(server)
-      .put('/api/documents/2')
+      .put('/api/documents/8')
       .set('authorization', adminToken)
       .send({ content: 'sample document updated' })
       .end((error, response) => {
@@ -264,7 +264,7 @@ describe('Documents', () => {
   });
   it('should allow a regular user to update their own document successfully', (done) => {
     chai.request(server)
-      .put('/api/documents/1')
+      .put('/api/documents/3')
       .set('authorization', userToken)
       .send({ content: 'pulic user document updated' })
       .end((error, response) => {

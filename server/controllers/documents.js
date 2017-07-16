@@ -19,7 +19,8 @@ module.exports = {
   // list all general documents
   listAllDocuments(request, response) {
     const limit = request.query.limit || '6';
-    const offset = request.query.page ? (Number(request.query.page - 1) * limit) : 0;
+    const offset =
+    request.query.page ? (Number(request.query.page - 1) * limit) : 0;
     const { roleId, userId } = request.decoded;
     return Document
       .findAndCountAll({
@@ -84,20 +85,23 @@ module.exports = {
         if (!document) {
           throw new Error('Document Not Found');
         }
+        if (request.decoded.userId !== document.userId) {
+          throw new Error('You\'re not allowed to update this document');
+        }
         return document
           .update({
             userId: request.body.userId || document.userId,
             title: request.body.title || document.title,
             access: request.body.access || document.access,
             content: request.body.content || document.content,
-          })
-          .then(() => response.status(200).send(document))
-          .catch((error) => {
-            const errorMessage = error.message || error;
-            response.status(400).send(errorMessage);
           });
+      }).then((updatedDocument) => {
+        response.status(200).send(updatedDocument);
       })
-      .catch((error) => { response.status(400).send(error); });
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        response.status(400).send(errorMessage);
+      });
   },
   // delete a document
   deleteADocument(request, response) {
@@ -111,19 +115,19 @@ module.exports = {
           .destroy()
           .then(() => {
             response.status(200).send('Document deleted successfully');
-          })
-          .catch((error) => {
-            const errorMessage = error.message || error;
-            response.status(400).send(errorMessage);
           });
       })
-      .catch(error => response.status(400).send(error));
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        response.status(400).send(errorMessage);
+      });
   },
   // search for a particular document
   searchForDocument(request, response) {
     const { roleId, userId } = request.decoded;
     const limit = request.query.limit || '6';
-    const offset = request.query.page ? (Number(request.query.page - 1) * limit) : 0;
+    const offset =
+     request.query.page ? (Number(request.query.page - 1) * limit) : 0;
 
     return Document
       .findAndCountAll({
@@ -163,7 +167,19 @@ module.exports = {
           pageSize: documents.rows.length,
         };
         return response.status(200).send({
-          documents: documents.rows,
+          documents: documents.rows.map(({
+            user, id, access, title, content,
+            userId: docUserId, createdAt, updatedAt }) => {
+            return {
+              id,
+              access,
+              title,
+              content,
+              userId: docUserId,
+              createdAt,
+              updatedAt,
+              user: user.toJSON() };
+          }),
           pagination
         });
       })

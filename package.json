@@ -5,9 +5,9 @@
   "main": "server.js",
   "scripts": {
     "build": "webpack -p",
-    "seed-migrate": "node runMigrations.js",
-    "start:dev": "npm run seed-migrate && NODE_ENV=development webpack -p & nodemon server.js",
-    "start": "NODE_ENV=production npm run seed-migrate && node server.js",
+    "compile-dist": "rm -rf server-dist && NODE_ENV=production babel ./server/ -d ./server-dist -D",
+    "start:dev": "babel-node runMigrations.js && NODE_ENV=development webpack -p & nodemon server.js --exec babel-node",
+    "start": "NODE_ENV=production node runMigrations.js && NODE_ENV=production node server.js",
     "debug": "nodemon --inspect server.js",
     "test": "NODE_ENV=test PORT=3333 nyc --reporter=html --reporter=text mocha -r mock-local-storage --compilers js:babel-core/register --colors ./server/tests/*/*.spec.js ./client/tests/*/*.spec.js --require ./server/tests/init.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
@@ -29,7 +29,7 @@
   "dependencies": {
     "axios": "^0.16.2",
     "babel": "^6.23.0",
-    "babel-cli": "^6.24.0",
+    "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.4.1",
@@ -85,6 +85,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-react-hmre": "^1.1.1",
     "babel-preset-stage-2": "^6.24.1",
     "chai": "^4.0.2",
