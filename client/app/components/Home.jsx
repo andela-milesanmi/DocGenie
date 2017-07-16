@@ -2,7 +2,6 @@ import React from 'react';
 import SignUp from './SignUp.jsx';
 import SignIn from './SignIn.jsx';
 
-
 /**
  * Home component renders welcome screen, SignUp and SignIn screens
  * @class Home
@@ -52,11 +51,11 @@ class Home extends React.Component {
         <div className="row">
           <div className="col s6 homeText center-align">
             <h2>Welcome to DocGenie</h2>
-            <p className="welcome-text">Docgenie allows you to manage your documents, easily!</p>
+            <p className="welcome-text"><b>Docgenie allows you to manage your documents, easily!</b></p>
             <div className="row">
-              <div className="col s4 welcome-text">Create Documents</div>
-              <div className="col s4 welcome-text">Edit your documents</div>
-              <div className="col s4 welcome-text">Share with friends</div>
+              <div className="col s4 welcome-text"><i>Create Documents</i></div>
+              <div className="col s4 welcome-text"><i>Edit your documents</i></div>
+              <div className="col s4 welcome-text"><i>Share with friends</i></div>
             </div>
           </div>
           <div className="col s5 center-align signInOrSignUp">

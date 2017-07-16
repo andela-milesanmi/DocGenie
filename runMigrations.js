@@ -1,7 +1,10 @@
 require('dotenv').config();
 
 const { exec } = require('child_process');
-const models = require('./server/models');
+
+const serverPath = process.env.NODE_ENV === 'production' ? 'server-dist' : 'server';
+
+const models = require(`./${serverPath}/models`);
 
 const executePromisifiedSequelize = (command) => {
   return new Promise((resolve, reject) => {
@@ -15,8 +18,8 @@ const executePromisifiedSequelize = (command) => {
     });
   });
 };
-models.User.findOne({ where: { email: 'admin@gmail.com' } }).then((res) => {
-  if (!res) return executePromisifiedSequelize('./node_modules/.bin/sequelize db:migrate:undo:all');
+models.User.findOne({ where: { email: 'admin@gmail.com' } }).then((response) => {
+  if (!response) return executePromisifiedSequelize('./node_modules/.bin/sequelize db:migrate:undo:all');
   console.log('Haha.. you already seeded. Thanks for trying');
   return process.exit();
 }).catch(() => {

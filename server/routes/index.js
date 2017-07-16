@@ -9,13 +9,17 @@ module.exports = (app) => {
   }));
 
   // roles routes
-  app.post('/api/roles', rolesController.createNewRole);
-  app.get('/api/roles', authentication.verifyAdminAccess, rolesController.listAllRoles);
-  app.delete('/api/roles/:id', authentication.verifyAdminAccess, rolesController.destroyARole);
+  app.post('/api/roles', authentication.verifyAdminAccess,
+    rolesController.createNewRole);
+  app.get('/api/roles', authentication.verifyAdminAccess,
+    rolesController.listAllRoles);
+  app.delete('/api/roles/:id', authentication.verifyAdminAccess,
+    rolesController.destroyARole);
 
   // user routes
   app.post('/auth/api/users', UsersController.createNewUser);
-  app.get('/api/users', authentication.verifyAdminAccess, UsersController.listAllUsers);
+  app.get('/api/users', authentication.verifyAdminAccess,
+    UsersController.listAllUsers);
   app.get('/api/users/:id', UsersController.findAUser);
   app.get('/api/users/:id/documents', UsersController.findUserDocuments);
   app.put('/api/users/:id', UsersController.updateAUser);
@@ -32,5 +36,6 @@ module.exports = (app) => {
 
   // search routes
   app.get('/api/search/users/:searchKey', UsersController.searchForUser);
-  app.get('/api/search/documents/:searchKey', DocumentsController.searchForDocument);
+  app.get('/api/search/documents/:searchKey',
+    DocumentsController.searchForDocument);
 };

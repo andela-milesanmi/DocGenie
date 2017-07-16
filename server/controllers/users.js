@@ -1,6 +1,5 @@
 const User = require('../models').User;
 const Document = require('../models').Document;
-const Role = require('../models').Role;
 const authentication = require('../middleware/authentication');
 const bcrypt = require('bcrypt-nodejs');
 
@@ -15,7 +14,9 @@ module.exports = {
     }
     if (!request.body.fullname || !request.body.email || !request.body.password
       || !request.body.username) {
-      return response.status(401).send({ message: 'Please fill all the fields' });
+      return response.status(401).send({
+        message: 'Please fill all the fields'
+      });
     }
     if (request.body.password !== request.body.confirmPassword) {
       return response.status(401).send({ message: 'Password does not match' });
@@ -51,10 +52,9 @@ module.exports = {
         });
     }).then((user) => {
       const token = authentication.generateToken(user);
-
       return response.status(200).json({
         message: 'Signed up successfully',
-        user,
+        user: user.toJSON(),
         token,
       });
     }).catch((error) => {
@@ -85,7 +85,7 @@ module.exports = {
 
       return response.status(200).send({
         message: 'Signed in successfully',
-        user,
+        user: user.toJSON(),
         token,
       });
     }).catch((error) => {
@@ -95,7 +95,8 @@ module.exports = {
   },
   listAllUsers(request, response) {
     const limit = request.query.limit || '6';
-    const offset = request.query.page ? (Number(request.query.page - 1) * limit) : 0;
+    const offset = request.query.page ?
+      (Number(request.query.page - 1) * limit) : 0;
     const { userId } = request.decoded;
     return User
       .findAndCountAll({
@@ -118,8 +119,9 @@ module.exports = {
           currentPage: Math.floor(offset / limit) + 1,
           pageSize: users.rows.length,
         };
+
         return response.status(200).send({
-          users: users.rows,
+          users: users.rows.map(user => user.toJSON()),
           pagination,
         });
       })
@@ -136,7 +138,7 @@ module.exports = {
         if (!user) {
           throw new Error('User Not Found');
         }
-        return response.status(200).send(user);
+        return response.status(200).send(user.toJSON());
       })
       .catch((error) => {
         const errorMessage = error.message || error;
@@ -151,31 +153,39 @@ module.exports = {
         if (!user) {
           throw new Error('User Not Found');
         }
-        // checking if a user can change their own role
-        if (request.body.roleId && (Number(request.decoded.userId) === Number(user.id)
-        && (Number(request.body.roleId) < Number(user.roleId) || Number(request.body.roleId) > Number(user.roleId)))) {
-          throw new Error('You are not authorized to change your own role');
-        }
-        // checking if user is authorized to change another user's role
-        if (request.body.roleId && (request.body.roleId !== user.roleId && request.decoded.roleId !== 1)) {
-          throw new Error('You are not authorized to change a user\'s role');
-        }
-        if (request.body.oldPassword || request.body.newPassword || request.body.confirmPassword) {
+        // validating user password, confirming if old password is correct
+        if (request.body.oldPassword || request.body.newPassword
+         || request.body.confirmPassword) {
           if ((bcrypt.compareSync(request.body.oldPassword, user.password))) {
             throw new Error('Old password is incorrect');
           }
-          if (request.body.newPassword && (request.body.newPassword !== request.body.confirmPassword)) {
+          // checking if password and confirmPassword fields match
+          if (request.body.newPassword &&
+          (request.body.newPassword !== request.body.confirmPassword)) {
             throw new Error('Passwords do not match');
           }
           if (oldPassword === newPassword) {
             throw new Error('Please change your password');
           }
         }
+        let userDetails;
+
+        if (request.decoded.userId === user.id && !request.body.roleId) {
+          const { roleId, ...rest } = request.body;
+          userDetails = rest;
+        } else if (request.decoded.roleId === 1 &&
+          request.decoded.userId !== user.id && request.body.roleId) {
+          const { roleId } = request.body;
+          userDetails = { roleId };
+        } else {
+          throw new Error("Sorry, you/'re not authorized for this action");
+        }
         return user
-          .update(request.body);
-      }).then(user => response.status(200).send(user)) // Send back updated user
+          .update(userDetails);
+      }).then(user => response.status(200).send(user.toJSON()))
       .catch((error) => {
-        response.status(400).send(error.message);
+        const errorMessage = error.message || error;
+        response.status(400).send(errorMessage);
       });
   },
   // delete a user
@@ -202,7 +212,8 @@ module.exports = {
   // find all a user's documents
   findUserDocuments(request, response) {
     const limit = request.query.limit || '6';
-    const offset = request.query.page ? (Number(request.query.page - 1) * limit) : 0;
+    const offset =
+     request.query.page ? (Number(request.query.page - 1) * limit) : 0;
 
     return Document
       .findAndCountAll({
@@ -226,7 +237,19 @@ module.exports = {
           pageSize: documents.rows.length,
         };
         return response.status(200).send({
-          documents: documents.rows,
+          documents: documents.rows.map(({
+            user, id, access, title, content,
+            userId, createdAt, updatedAt }) => {
+            return {
+              id,
+              access,
+              title,
+              content,
+              userId,
+              createdAt,
+              updatedAt,
+              user: user.toJSON() };
+          }),
           pagination,
         });
       })
@@ -238,7 +261,8 @@ module.exports = {
   // search for users
   searchForUser(request, response) {
     const limit = request.query.limit || '6';
-    const offset = request.query.page ? (Number(request.query.page - 1) * limit) : 0;
+    const offset = request.query.page ?
+      (Number(request.query.page - 1) * limit) : 0;
     return User
       .findAndCountAll({
         where: {
@@ -269,7 +293,7 @@ module.exports = {
           pageSize: users.rows.length,
         };
         return response.status(200).send({
-          users: users.rows,
+          users: users.rows.map(user => user.toJSON()),
           pagination
         });
       })

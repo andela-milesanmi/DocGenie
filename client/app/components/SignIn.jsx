@@ -43,21 +43,23 @@ export class SignIn extends React.Component {
             <div className="row">
               <div className="input-field col s12">
                 <input name="email" id="email" type="text"
-                  className="validate" />
+                  className="validate" required/>
                 <label htmlFor="email">Email</label>
               </div>
               <div className="input-field col s12">
                 <input name="password" id="password" type="password"
-                  className="validate" />
+                  className="validate" required/>
                 <label htmlFor="password">Password</label>
               </div>
             </div>
             <div>
-              <button type="submit" className="btn btn-large create-doc signup-button">SUBMIT</button>
+              <button type="submit" className="btn btn-large create-doc
+                signup-button">SUBMIT</button>
             </div>
             <div>
               <p className="center-align">Don't have an account yet?
-                <a style={{ color: '#EE6352' }} onClick={this.props.changeScreen}> Sign Up</a>
+                <a style={{ color: '#EE6352' }}
+                  onClick={this.props.changeScreen}> Sign Up</a>
               </p>
             </div>
           </form>

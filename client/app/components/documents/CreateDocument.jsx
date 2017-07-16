@@ -90,7 +90,8 @@ export class CreateDocument extends React.Component {
             <div className="row">
               <div className="input-field col s12">
                 <input name="title" id="title" type="text" className="validate"
-                  placeholder="Title" value={title} onChange={this.onChange}/>
+                  placeholder="Title" value={title} onChange={this.onChange}
+                  required/>
                 <label htmlFor="title" />
               </div>
             </div>
@@ -108,7 +109,7 @@ export class CreateDocument extends React.Component {
                 <textarea name="content" id="content"
                   className="materialize-textarea"
                   placeholder="Body of document here..."
-                  value={content} onChange={this.onChange} />
+                  value={content} onChange={this.onChange} required/>
                 <label htmlFor="content" />
               </div>
             </div>

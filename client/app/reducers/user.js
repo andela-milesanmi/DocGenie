@@ -12,7 +12,10 @@ export default (state = {}, action) => {
   case UPDATE_USER: {
     const { users = [] } = state;
     const filteredUsers = users.filter(user => action.user.id !== user.id);
-    return { ...state, users: ([...filteredUsers, action.user]).sort((a, b) => b.id - a.id), error: '' };
+    return { ...state,
+      users: ([...filteredUsers, action.user]).sort((a, b) =>
+        b.id - a.id),
+      error: '' };
   }
 
   case VIEW_USERS:

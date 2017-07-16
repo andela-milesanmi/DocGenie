@@ -44,35 +44,42 @@ export class SignUp extends React.Component {
             <div className="error-message">{this.props.user.error}</div>
             <div className="row">
               <div className="input-field col s6">
-                <input name="username" id="username" type="text" className="validate" />
+                <input name="username" id="username" type="text"
+                  className="validate" required/>
                 <label htmlFor="username">Username</label>
               </div>
               <div className="input-field col s6">
-                <input name="fullname" id="fullname" type="text" className="validate" />
+                <input name="fullname" id="fullname" type="text"
+                  className="validate" required/>
                 <label htmlFor="fullname">Fullname</label>
               </div>
               <div className="input-field col s12">
-                <input name="email" id="email" type="text" className="validate" />
+                <input name="email" id="email" type="text"
+                  className="validate" required/>
                 <label htmlFor="email">Email</label>
               </div>
             </div>
             <div className="row">
               <div className="input-field col s6">
-                <input name="password" id="password" type="password" className="validate"/>
+                <input name="password" id="password" type="password"
+                  className="validate" required/>
                 <label htmlFor="password">Password</label>
               </div>
               <div className="input-field col s6">
-                <input name="confirmPassword" id="confirmPassword" type="password" className="validate" />
+                <input name="confirmPassword" id="confirmPassword"
+                  type="password" className="validate" required/>
                 <label htmlFor="email">Confirm password</label>
               </div>
             </div>
             <div>
-              <button type="submit" className="btn btn-large create-doc signup-button">SUBMIT</button>
+              <button type="submit" className="btn btn-large create-doc
+               signup-button">SUBMIT</button>
             </div>
 
             <div>
               <p className="center-align">Already have an account?
-                <a style={{ color: '#EE6352' }} onClick={this.props.changeScreen}>Sign In</a>
+                <a style={{ color: '#EE6352' }}
+                  onClick={this.props.changeScreen}>Sign In</a>
               </p>
             </div>
           </form>

@@ -70,12 +70,19 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     instanceMethods: {
+      // hash password
       generatePasswordHash: (user) => {
         user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(8), null);
       },
+      // validate password after user signs in
       validatePassword: (password, user) => {
         return bcrypt.compareSync(password, user.password);
       },
+      // remove password from fields returned from User table
+      toJSON() {
+        const { password, ...rest } = this.get();
+        return rest;
+      }
     },
     hooks: {
       beforeCreate: (user) => {
