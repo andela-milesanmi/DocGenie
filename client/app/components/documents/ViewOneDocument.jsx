@@ -77,6 +77,8 @@ const mapDispatchToProps = (dispatch) => {
 ViewOneDocument.propTypes = {
   documents: PropTypes.array.isRequired,
   findADocument: PropTypes.func.isRequired,
+  document: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
 };
 
 // Use connect to put them together
