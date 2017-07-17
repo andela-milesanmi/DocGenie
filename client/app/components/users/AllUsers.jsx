@@ -95,7 +95,6 @@ export class AllUsers extends React.Component {
 // Maps state from store to props
 const mapStateToProps = ({ user: { users, pages, currentProfile, currentPage } }) => {
   return {
-    // You can now say this.props.user
     user: currentProfile || {},
     users: users || [],
     pages,

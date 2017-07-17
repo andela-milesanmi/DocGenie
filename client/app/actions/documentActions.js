@@ -8,6 +8,7 @@ import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
 
 
 export const viewAllDocuments = (url) => {
+  console.log(url, 'urls');
   const token = localStorage.getItem('token');
   const config = {
     headers: { authorization: token }
@@ -19,6 +20,7 @@ export const viewAllDocuments = (url) => {
           documents: response.data.documents,
           pagination: response.data.pagination });
       }).catch((error) => {
+        console.log(error, 'error')
         dispatch({ type: VIEW_DOCUMENTS_ERROR,
           errorMessage: error.response.data || error.response.data.message });
       });
@@ -74,7 +76,7 @@ export const editDocument = (document) => {
       });
   };
 };
-export const deleteDocument = (document) => {
+export const deleteDocument = (document, documentUrl) => {
   const token = localStorage.getItem('token');
   const config = {
     headers: { authorization: token }
@@ -83,6 +85,7 @@ export const deleteDocument = (document) => {
     return axios.delete(`/api/documents/${document.id}`, config)
       .then((response) => {
         dispatch({ type: DELETE_DOCUMENT, document });
+        dispatch(viewAllDocuments(documentUrl));
       }).catch((error) => {
         dispatch({ type: DELETE_DOCUMENT_ERROR,
           errorMessage: error.response.data.message || error.response.data });

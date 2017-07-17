@@ -50,7 +50,7 @@ export class DocumentCard extends React.Component {
       closeOnConfirm: false
     }, (isConfirm) => {
       if (isConfirm) {
-        this.props.deleteDocument(document)
+        this.props.deleteDocument(document, this.props.documentUrl)
           .then(() => {
             swal('Deleted!', 'The selected file has been deleted.', 'success');
           })
@@ -78,7 +78,7 @@ export class DocumentCard extends React.Component {
    */
   render() {
     // document props is passed down from the parent component, AllDocuments
-    const { document, currentUser, currentDocument } = this.props;
+    const { document, currentUser, documentUrl } = this.props;
     return (
       <div className="col s4 darken-1">
         <div className="card document-card">
@@ -128,7 +128,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
   // You can now say this.props.changeCurrentDocument
     changeCurrentDocument: document => dispatch(changeCurrentDocument(document)),
-    deleteDocument: document => dispatch(deleteDocument(document)),
+    deleteDocument: (document, documentUrl) => dispatch(deleteDocument(document, documentUrl)),
   };
 };
 

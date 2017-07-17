@@ -84,8 +84,8 @@ describe('Document Action', () => {
   });
   it('should dispatch appropriate actions on deleteDocument', () => {
     const document = { id: 23, userId: 45, title: 'A good life', content: 'A good life by Marion Bennet' };
-    return store.dispatch(deleteDocument(document)).then(() => {
-      expect(store.getActions()).to.deep.equal([{ type: DELETE_DOCUMENT, document }]);
+    return store.dispatch(deleteDocument(document, 'good-url')).then(() => {
+      expect(store.getActions().map(action => action.type)).to.deep.equal([DELETE_DOCUMENT, VIEW_DOCUMENTS]);
     });
   });
   it('should dispatch appropriate actions on searchForDocuments', () => {

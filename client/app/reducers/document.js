@@ -20,7 +20,8 @@ export default (state = {}, action) => {
   case CREATE_DOCUMENT: {
     const { documents = [] } = state;
     const newDocuments = [action.document, ...documents];
-    return { ...state, documents: newDocuments, error: '' };
+    const extractedDocuments = newDocuments.length > 6 ? [...newDocuments].slice(0, -1) : newDocuments;
+    return { ...state, documents: extractedDocuments, error: '' };
   }
   case EDIT_DOCUMENT: {
     const { documents = [] } = state;

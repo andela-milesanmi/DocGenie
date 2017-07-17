@@ -23,7 +23,6 @@ export class AllDocuments extends React.Component {
       currentUrl: ''
     };
     this.showAllDocuments = this.showAllDocuments.bind(this);
-    this.showOwnDocuments = this.showOwnDocuments.bind(this);
   }
 
   /**
@@ -55,21 +54,6 @@ export class AllDocuments extends React.Component {
       () => {
         this.props.viewAllDocuments(this.state.currentUrl + page);
       });
-  }
-
-  /**
-   * showOwnDocuments, triggers viewAllDocuments action which displays all
-   * a user's own documents
-   * @memberOf AllDocuments
-   */
-  showOwnDocuments() {
-    const { params: { page = '' } } = this.props;
-    const { user } = this.props;
-    this.setState({
-      currentUrl: `/api/users/${user.id}/documents/?page=` },
-    () => {
-      this.props.viewAllDocuments(this.state.currentUrl + page);
-    });
   }
 
   /**
@@ -112,7 +96,7 @@ export class AllDocuments extends React.Component {
             <div className="col s10 offset-s1">
               {this.props.documents && this.props.documents.map((document, i) =>
                 (
-                <DocumentCard index={i} document={document} />
+                <DocumentCard index={i} document={document} documentUrl={this.state.currentUrl + this.props.params.page}/>
                 )
               )}
               {this.props.documents && this.props.documents.length === 0 &&
@@ -160,7 +144,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     viewAllDocuments: page => dispatch(viewAllDocuments(page)),
     changeCurrentDocument: document => dispatch(changeCurrentDocument(document)),
-    deleteDocument: document => dispatch(deleteDocument(document)),
     showOwnDocuments: (id, page) => dispatch(showOwnDocuments(id, page)),
   };
 };
