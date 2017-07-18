@@ -78,6 +78,7 @@ export class MyDocuments extends React.Component {
   render() {
     return (
       <div className="dashboard-container">
+        <h4 className="center-align">MY DOCUMENTS</h4>
         <div className="row">
           <CreateDocument />
         </div>

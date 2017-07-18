@@ -5,10 +5,10 @@ import axios from 'axios';
 import sinon from 'sinon';
 import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
   CHANGE_CURRENT_DOCUMENT, DELETE_DOCUMENT,
-  SEARCH_DOCUMENT } from '../../app/actionTypes';
+  SEARCH_DOCUMENT, EDIT_DOCUMENT } from '../../app/actionTypes';
 
 import { viewAllDocuments, changeCurrentDocument, deleteDocument, createDocument,
-  searchForDocuments } from '../../app/actions/documentActions';
+  searchForDocuments, editDocument } from '../../app/actions/documentActions';
 
 const mockStore = configureMockStore([thunk]);
 
@@ -63,9 +63,8 @@ describe('Document Action', () => {
   });
   it('should dispatch appropriate actions on createDocument', () => {
     const document = { id: 23, userId: 45, title: 'A good life', content: 'A good life by Marion Bennet' };
-    return store.dispatch(createDocument(document)).then(() => {
-      expect(store.getActions()).to.deep.equal([{ type: CREATE_DOCUMENT,
-        document: { ...document, ...response.data } }]);
+    return store.dispatch(createDocument(document, 'good-url')).then(() => {
+      expect(store.getActions().map(action => action.type)).to.deep.equal([CREATE_DOCUMENT, VIEW_DOCUMENTS]);
     });
   });
   it('should dispatch appropriate actions on changeCurrentDocument', () => {
@@ -77,8 +76,8 @@ describe('Document Action', () => {
   });
   it('should dispatch appropriate actions on editDocument', () => {
     const document = { id: 23, userId: 45, title: 'A good life', content: 'A good life by Marion Bennet' };
-    return store.dispatch(createDocument(document)).then(() => {
-      expect(store.getActions()).to.deep.equal([{ type: CREATE_DOCUMENT,
+    return store.dispatch(editDocument(document)).then(() => {
+      expect(store.getActions()).to.deep.equal([{ type: EDIT_DOCUMENT,
         document: { ...document, ...response.data } }]);
     });
   });

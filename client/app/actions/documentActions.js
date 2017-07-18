@@ -8,7 +8,6 @@ import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
 
 
 export const viewAllDocuments = (url) => {
-  console.log(url, 'urls');
   const token = localStorage.getItem('token');
   const config = {
     headers: { authorization: token }
@@ -20,13 +19,12 @@ export const viewAllDocuments = (url) => {
           documents: response.data.documents,
           pagination: response.data.pagination });
       }).catch((error) => {
-        console.log(error, 'error')
         dispatch({ type: VIEW_DOCUMENTS_ERROR,
           errorMessage: error.response.data || error.response.data.message });
       });
   };
 };
-export const createDocument = (document) => {
+export const createDocument = (document, documentUrl) => {
   const token = localStorage.getItem('token');
   const config = {
     headers: { authorization: token }
@@ -37,8 +35,10 @@ export const createDocument = (document) => {
         toastr.success('Document created!');
         dispatch({ type: CREATE_DOCUMENT,
           document: { ...document, ...response.data } });
+        dispatch(viewAllDocuments(documentUrl));
         $('#create-form').modal('close');
       }).catch((error) => {
+        console.log(error, 'this is the error');
         const errorMessage = error.response.data.message || error.response.data;
         dispatch({ type: CREATE_DOCUMENT_ERROR,
           errorMessage });
