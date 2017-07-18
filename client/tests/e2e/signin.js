@@ -30,7 +30,7 @@ module.exports = {
       .setValue('input[name=password]', 'password123')
       .click('#signin-button')
       .waitForElementVisible('h2', 5000)
-      .assert.elementPresent('h2', 'Welcome to DocGenie')
+      .assert.elementPresent('h2', 'Welcome to DocGenie');
   },
   'User sign in success': (browser) => {
     browser

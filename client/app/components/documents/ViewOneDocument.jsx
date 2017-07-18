@@ -1,4 +1,5 @@
 import React from 'react';
+import renderHtml from 'react-render-html';
 import { browserHistory } from 'react-router';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -43,7 +44,7 @@ export class ViewOneDocument extends React.Component {
                   </i>
                 </p>
               </div>
-              {document.content}
+              {renderHtml(document.content)}
             </div>}
         </div>
       </div>

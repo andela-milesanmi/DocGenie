@@ -78,14 +78,14 @@ export class AllDocuments extends React.Component {
       <div id="main-dash" className="dashboard-container">
         <h4 className="center-align">ALL DOCUMENTS</h4>
         <div className="row">
-          <CreateDocument />
+          <CreateDocument documentUrl={this.state.currentUrl + (this.props.params.page || '')} />
         </div>
         <div className="row">
           <div className="col s8 offset-s1">
             <SearchDocuments />
           </div>
           <div className="col s2">
-            <a href="#create-form" className="btn-floating
+            <a id="create-doc-btn" href="#create-form" className="btn-floating
              btn-large waves-effect waves-light red right"
               onClick={() => this.editDocument()}>
               <i className="material-icons">add</i>

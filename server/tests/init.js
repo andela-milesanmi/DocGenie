@@ -30,6 +30,8 @@ global.$ = () => ({
   modal: () => null,
   dropdown: () => null,
   sideNav: () => null,
+  froalaEditor: () => ({ data: () => ({ $el: 'whatever' }) }),
+  on: () => null,
 });
 
 // mocks localStorage

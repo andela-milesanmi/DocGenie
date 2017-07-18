@@ -1,10 +1,48 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import FroalaEditor from 'react-froala-wysiwyg';
 import { Modal } from 'react-materialize';
 import { createDocument, editDocument, changeCurrentDocument }
   from '../../actions/documentActions';
 
+// Require Editor JS files.
+require('../../../../node_modules/froala-editor/js/froala_editor.pkgd.min');
+
+const editorConfig = {
+  height: 130,
+  toolbarButtons: [
+    'bold',
+    'italic',
+    'underline',
+    '|',
+    'fontFamily',
+    'fontSize',
+    'color',
+    '|',
+    'paragraphFormat',
+    'align',
+    'formatOL',
+    'formatUL',
+    'outdent',
+    'indent',
+    'quote',
+    'strikeThrough',
+    'subscript',
+    'superscript',
+    '|',
+    'insertLink',
+    'insertHR',
+    'selectAll',
+    'clearFormatting',
+    '|',
+    'spellChecker',
+    'help',
+    '|',
+    'undo',
+    'redo'
+  ]
+};
 
 /**
  * CreateDocument component which renders the modal for creating documents
@@ -18,6 +56,7 @@ export class CreateDocument extends React.Component {
     super(props);
     this.state = { ...props.currentDocument };
     this.handleCreateDocument = this.handleCreateDocument.bind(this);
+    this.onContentChange = this.onContentChange.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
@@ -29,7 +68,9 @@ export class CreateDocument extends React.Component {
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
-
+  onContentChange(content) {
+    this.setState({ content });
+  }
   /**
    * componentWillReceiveProps, React lifecyle method, triggered once the
    * component receives next props
@@ -49,7 +90,7 @@ export class CreateDocument extends React.Component {
   handleCreateDocument(event) {
     event.preventDefault();
     const title = event.target.title.value;
-    const content = event.target.content.value;
+    const content = this.state.content;
     const access = event.target.access.value;
     const action = !this.props.currentDocument.id ?
       'createDocument' : 'editDocument';
@@ -59,7 +100,7 @@ export class CreateDocument extends React.Component {
       access,
       user: this.props.user,
       id: this.props.currentDocument.id,
-    }).then(() => {
+    }, this.props.documentUrl).then(() => {
       this.setState({ title: '', content: '', access: '' });
     });
   }
@@ -84,36 +125,39 @@ export class CreateDocument extends React.Component {
         header={!currentDocument.title ? 'Create Document' :
           `Edit: ${currentDocument.title}`} id="create-form">
         <div className="row">
-          <form className="col s12 m12" onSubmit={this.handleCreateDocument}
+          <form className="col s12 doc-form" onSubmit={this.handleCreateDocument}
             action="#" id="created-new-document">
             <div className="error-message">{documentError}</div>
             <div className="row">
-              <div className="input-field col s12">
+              <div className="input-field col s6">
                 <input name="title" id="title" type="text" className="validate"
                   placeholder="Title" value={title} onChange={this.onChange}
                   required/>
                 <label htmlFor="title" />
               </div>
-            </div>
-            <div className="row">
-              <select name="access" value={access} className="browser-default"
-                onChange={this.onChange}>
-                <option value="" disabled selected>Select access</option>
-                <option value="0">Public</option>
-                <option value="-1">Private</option>
-                <option value={user.roleId}>Role</option>
-              </select>
+              <div className="input-field col s6">
+                <select name="access" value={access} className="browser-default"
+                  onChange={this.onChange}>
+                  <option value="" disabled selected>Select access</option>
+                  <option value="0">Public</option>
+                  <option value="-1">Private</option>
+                  <option value={user.roleId}>Role</option>
+                </select>
+              </div>
             </div>
             <div className="row">
               <div className="input-field col s12">
-                <textarea name="content" id="content"
-                  className="materialize-textarea"
-                  placeholder="Body of document here..."
-                  value={content} onChange={this.onChange} required/>
+                <FroalaEditor
+                  tag="textarea"
+                  className="content"
+                  config={editorConfig}
+                  model={content}
+                  onModelChange={this.onContentChange}
+                />
                 <label htmlFor="content" />
               </div>
             </div>
-            <button type="submit" className="btn btn-large create-doc right">
+            <button id="save-doc" type="submit" className="btn btn-large create-doc right">
               SAVE
             </button>
           </form>
@@ -136,7 +180,7 @@ const mapStateToProps = (state) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    createDocument: document => dispatch(createDocument(document)),
+    createDocument: (document, documentUrl) => dispatch(createDocument(document, documentUrl)),
     editDocument: document => dispatch(editDocument(document)),
     changeCurrentDocument: document => dispatch(changeCurrentDocument(document)),
   };

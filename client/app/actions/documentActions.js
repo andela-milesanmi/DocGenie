@@ -24,7 +24,7 @@ export const viewAllDocuments = (url) => {
       });
   };
 };
-export const createDocument = (document) => {
+export const createDocument = (document, documentUrl) => {
   const token = localStorage.getItem('token');
   const config = {
     headers: { authorization: token }
@@ -35,8 +35,10 @@ export const createDocument = (document) => {
         toastr.success('Document created!');
         dispatch({ type: CREATE_DOCUMENT,
           document: { ...document, ...response.data } });
+        dispatch(viewAllDocuments(documentUrl));
         $('#create-form').modal('close');
       }).catch((error) => {
+        console.log(error, 'this is the error');
         const errorMessage = error.response.data.message || error.response.data;
         dispatch({ type: CREATE_DOCUMENT_ERROR,
           errorMessage });

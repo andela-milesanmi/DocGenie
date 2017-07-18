@@ -11,6 +11,10 @@ import Profile from './components/Profile.jsx';
 import AllUsers from './components/users/AllUsers.jsx';
 import { getUser } from './actions/userActions';
 import './styles/app.scss';
+import '../../node_modules/froala-editor/css/froala_style.min.css';
+import '../../node_modules/froala-editor/css/froala_editor.pkgd.min.css';
+
+// import '../../node_modules/font-awesome/css/font-awesome.css';
 
 import configureStore from './store/configureStore';
 
@@ -32,8 +36,11 @@ const requireAuth = store => (nextState, replace, callback) => {
     return store.dispatch(getUser()).then(() => {
       if (!nextState.location.pathname.includes('dashboard')) replace('/dashboard/documents/all');
       return callback();
-    }).catch(() => {
-      localStorage.removeItem('token');
+    }).catch((error) => {
+      console.log(error.message, 'error in index.jsx, we are having errors eaefafa');
+      if (error.message === 'Token required for access') {
+        localStorage.removeItem('token');
+      }
       replace('/');
       return callback();
     });

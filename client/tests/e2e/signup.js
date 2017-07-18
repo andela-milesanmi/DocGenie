@@ -17,7 +17,7 @@ module.exports = {
       .setValue('input[name=password]', '')
       .setValue('input[name=confirmPassword]', '')
       .click('#signup-button')
-      .pause(2000)
+      .pause(1000)
       .waitForElementVisible('h2', 5000)
       .assert.containsText('h2', 'Welcome to DocGenie');
   },
@@ -36,7 +36,7 @@ module.exports = {
       .setValue('input[name=password]', 'password')
       .setValue('input[name=confirmPassword]', 'password')
       .click('#signup-button')
-      .pause(2000)
+      .pause(1000)
       .waitForElementVisible('h2', 5000)
       .assert.containsText('h2', 'Welcome to DocGenie');
   },
@@ -56,7 +56,7 @@ module.exports = {
       .setValue('input[name=password]', 'password')
       .setValue('input[name=confirmPassword]', 'confirmPassword')
       .click('#signup-button')
-      .pause(2000)
+      .pause(1000)
       .waitForElementVisible('h2', 5000)
       .assert.containsText('h2', 'Welcome to DocGenie');
   },
