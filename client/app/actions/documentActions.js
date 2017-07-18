@@ -8,7 +8,6 @@ import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
 
 
 export const viewAllDocuments = (url) => {
-  console.log(url, 'urls');
   const token = localStorage.getItem('token');
   const config = {
     headers: { authorization: token }
@@ -20,7 +19,6 @@ export const viewAllDocuments = (url) => {
           documents: response.data.documents,
           pagination: response.data.pagination });
       }).catch((error) => {
-        console.log(error, 'error')
         dispatch({ type: VIEW_DOCUMENTS_ERROR,
           errorMessage: error.response.data || error.response.data.message });
       });

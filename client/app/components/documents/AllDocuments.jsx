@@ -75,7 +75,8 @@ export class AllDocuments extends React.Component {
    */
   render() {
     return (
-      <div className="dashboard-container">
+      <div id="main-dash" className="dashboard-container">
+        <h4 className="center-align">ALL DOCUMENTS</h4>
         <div className="row">
           <CreateDocument />
         </div>

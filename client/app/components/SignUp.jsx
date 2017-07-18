@@ -40,7 +40,7 @@ export class SignUp extends React.Component {
     return (
       <div className="container">
         <div className="row">
-          <form className="signup-form" onSubmit={this.onSubmit} action="#">
+          <form id="signup-form" className="signup-form" onSubmit={this.onSubmit} action="#">
             <div className="error-message">{this.props.user.error}</div>
             <div className="row">
               <div className="input-field col s6">
@@ -72,12 +72,12 @@ export class SignUp extends React.Component {
               </div>
             </div>
             <div>
-              <button type="submit" className="btn btn-large create-doc
+              <button id="signup-button" type="submit" className="btn btn-large create-doc
                signup-button">SUBMIT</button>
             </div>
 
             <div>
-              <p className="center-align">Already have an account?
+              <p id="signup-text" className="center-align">Already have an account?
                 <a style={{ color: '#EE6352' }}
                   onClick={this.props.changeScreen}>Sign In</a>
               </p>
