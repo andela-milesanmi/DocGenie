@@ -8,7 +8,7 @@ module.exports = {
       jwt.verify(token, process.env.JWTSECRET, (error, decoded) => {
         if (error) {
           return response.status(401).send({
-            message: 'Invalid token',
+            message: 'Session expired. Please login to continue',
           });
         }
         request.decoded = decoded;

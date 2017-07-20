@@ -53,7 +53,19 @@ module.exports = {
         };
 
         return response.status(200).send({
-          documents: documents.rows,
+          documents: documents.rows.map(({
+            user, id, access, title, content,
+            userId: docUserId, createdAt, updatedAt }) => {
+            return {
+              id,
+              access,
+              title,
+              content,
+              userId: docUserId,
+              createdAt,
+              updatedAt,
+              user: user.toJSON() };
+          }),
           pagination,
         });
       })
@@ -122,7 +134,7 @@ module.exports = {
         response.status(400).send(errorMessage);
       });
   },
-  // search for a particular document
+  // search for particular documents
   searchForDocument(request, response) {
     const { roleId, userId } = request.decoded;
     const limit = request.query.limit || '6';

@@ -6,6 +6,7 @@ import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
   SEARCH_DOCUMENT, SEARCH_DOCUMENT_ERROR, VIEW_ONE_DOCUMENT,
   VIEW_ONE_DOCUMENT_ERROR } from '../actionTypes';
 
+let errorMessage;
 
 export const viewAllDocuments = (url) => {
   const token = localStorage.getItem('token');
@@ -20,7 +21,8 @@ export const viewAllDocuments = (url) => {
           pagination: response.data.pagination });
       }).catch((error) => {
         dispatch({ type: VIEW_DOCUMENTS_ERROR,
-          errorMessage: error.response.data || error.response.data.message });
+          errorMessage: error.response.data || error.response.data.message || '' });
+        return Promise.reject(errorMessage);
       });
   };
 };
@@ -38,11 +40,16 @@ export const createDocument = (document, documentUrl) => {
         dispatch(viewAllDocuments(documentUrl));
         $('#create-form').modal('close');
       }).catch((error) => {
-        console.log(error, 'this is the error');
-        const errorMessage = error.response.data.message || error.response.data;
+        console.log(error, 'error');
+        console.log(error.message, 'error.message');
+        console.log(error.response.data, 'error.response.data');
+
+        errorMessage = error.response.data.message || error.response.data;
+        console.log(errorMessage, 'error messageeee');
+
         dispatch({ type: CREATE_DOCUMENT_ERROR,
           errorMessage });
-        return Promise.reject(toastr.error(errorMessage));
+        // return Promise.reject(toastr.error(errorMessage));
       });
   };
 };
@@ -69,7 +76,7 @@ export const editDocument = (document) => {
           document: { ...document, ...response.data } });
         $('#create-form').modal('close');
       }).catch((error) => {
-        const errorMessage = error.response.data.message || error.response.data;
+        errorMessage = error.response.data.message || error.response.data;
         dispatch({ type: EDIT_DOCUMENT_ERROR,
           errorMessage });
         return Promise.reject(toastr.error(errorMessage));

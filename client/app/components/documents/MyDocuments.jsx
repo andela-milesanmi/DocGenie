@@ -78,22 +78,22 @@ export class MyDocuments extends React.Component {
   render() {
     return (
       <div className="dashboard-container">
-        <h4 className="center-align">MY DOCUMENTS</h4>
-        <div className="row">
-          <CreateDocument />
-        </div>
-        <div className="row">
-          <div className="col s8 offset-s1">
-            <SearchDocuments />
-          </div>
-          <div className="col s2">
+        <div className="row my-documents">
+          <h4 className="my-documents-text">MY DOCUMENTS</h4>
+          <span className="col s2 my-documents-icon">
             <a href="#create-form" className="btn-floating
              btn-large waves-effect waves-light red right"
               onClick={() => this.editDocument()}>
               <i className="material-icons">add</i>
             </a>
-          </div>
+          </span>
+          <CreateDocument />
         </div>
+        {/*<div className="row">
+          <div className="col s8 offset-s1">
+            <SearchDocuments />
+          </div>
+        </div>*/}
         <div className="col s12">
           <div className="row" style={{ fontSize: '15px' }}>
             <div className="col s10 offset-s1">

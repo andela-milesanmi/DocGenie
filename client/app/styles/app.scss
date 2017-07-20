@@ -97,9 +97,13 @@ body{
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.chip-style{
+.chip-style {
   margin-top: 3%;
   background-color: #F44336 !important;
+  cursor: none !important;
+}
+.chip-style a{
+  cursor: none !important;
 }
 .viewOneDocument, .profile, .all-users{
   background-color: #FFF6EB;
@@ -129,4 +133,13 @@ body{
 }
 .doc-form .row{
   margin: 15px 0px;
+}
+.my-documents-icon{
+  float: right !important;
+  margin-top: 1%;
+  margin-right: 8%;
+}
+.my-documents-text{
+  margin-left: 38%;
+  display: inline-block;
 }

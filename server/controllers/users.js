@@ -154,24 +154,24 @@ module.exports = {
           throw new Error('User Not Found');
         }
         // validating user password, confirming if old password is correct
-        if (request.body.oldPassword || request.body.newPassword
+        if (request.body.oldPassword || request.body.password
          || request.body.confirmPassword) {
-          if ((bcrypt.compareSync(request.body.oldPassword, user.password))) {
+          if (!bcrypt.compareSync(request.body.oldPassword, user.password)) {
             throw new Error('Old password is incorrect');
           }
           // checking if password and confirmPassword fields match
-          if (request.body.newPassword &&
-          (request.body.newPassword !== request.body.confirmPassword)) {
+          if (request.body.password &&
+          (request.body.password !== request.body.confirmPassword)) {
             throw new Error('Passwords do not match');
           }
-          if (oldPassword === newPassword) {
+          if (request.body.oldPassword === request.body.password) {
             throw new Error('Please change your password');
           }
         }
         let userDetails;
 
         if (request.decoded.userId === user.id && !request.body.roleId) {
-          const { roleId, ...rest } = request.body;
+          const { roleId, oldPassword, confirmPassword, ...rest } = request.body;
           userDetails = rest;
         } else if (request.decoded.roleId === 1 &&
           request.decoded.userId !== user.id && request.body.roleId) {
@@ -306,4 +306,61 @@ module.exports = {
   signOut(request, response) {
     return response.status(200).send({ message: 'Successfully logged out' });
   },
+  // // search for only a particular user's documents
+  // searchForUserDocuments(request, response) {
+  //   const { userId } = request.decoded;
+  //   const limit = request.query.limit || '6';
+  //   const offset =
+  //    request.query.page ? (Number(request.query.page - 1) * limit) : 0;
+
+  //   return Document
+  //     .findAndCountAll({
+  //       include: [{ model: User,
+  //         as: 'user' }],
+  //       where: {
+  //         $and: [
+  //           {
+  //             $or: [
+  //               { title: { $iLike: `%${request.params.searchKey}%` } },
+  //               { content: { $iLike: `%${request.params.searchKey}%` } }
+  //             ]
+  //           },
+  //           { userId }
+  //         ]
+  //       },
+  //       limit,
+  //       offset,
+  //       order: '"createdAt" DESC',
+  //     }).then((documents) => {
+  //       if (!documents) {
+  //         throw new Error('Document(s) Not Found');
+  //       }
+  //       const pagination = {
+  //         totalCount: documents.count,
+  //         pages: Math.ceil(documents.count / limit),
+  //         currentPage: Math.floor(offset / limit) + 1,
+  //         pageSize: documents.rows.length,
+  //       };
+  //       return response.status(200).send({
+  //         documents: documents.rows.map(({
+  //           user, id, access, title, content,
+  //           userId: docUserId, createdAt, updatedAt }) => {
+  //           return {
+  //             id,
+  //             access,
+  //             title,
+  //             content,
+  //             userId: docUserId,
+  //             createdAt,
+  //             updatedAt,
+  //             user: user.toJSON() };
+  //         }),
+  //         pagination
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       const errorMessage = error.message || error;
+  //       response.status(400).send(errorMessage);
+  //     });
+  // }
 };

@@ -13,7 +13,7 @@ dotenv.config();
 // Set up the express app
 const app = express();
 
-const port = parseInt(process.env.PORT, 10) || 5000;
+const port = parseInt(process.env.PORT, 10) || 5050;
 
 
 app.set('port', port);
