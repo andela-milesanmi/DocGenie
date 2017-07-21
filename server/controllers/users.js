@@ -1,7 +1,7 @@
 const User = require('../models').User;
 const Document = require('../models').Document;
 const authentication = require('../middleware/authentication');
-const errorHandler = require('../helpers/errorHandler')
+const errorHandler = require('../helpers/errorHandler');
 const bcrypt = require('bcrypt-nodejs');
 
 module.exports = {
@@ -222,6 +222,7 @@ module.exports = {
     const limit = request.query.limit || '6';
     const offset =
      request.query.page ? (Number(request.query.page - 1) * limit) : 0;
+    const { userId, roleId } = request.decoded;
 
     return Document
       .findAndCountAll({
@@ -229,6 +230,16 @@ module.exports = {
           as: 'user' }],
         where: {
           userId: request.params.id,
+          $or: [
+            { userId },
+            { access: {
+              $gte: roleId,
+              $ne: -1
+            }
+            },
+            { access: 0 }
+          ]
+
         },
         limit,
         offset,

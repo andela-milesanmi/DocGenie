@@ -42,7 +42,9 @@ module.exports = {
     return Document
       .findAndCountAll({
         include: [{ model: User,
-          as: 'user' }],
+          as: 'user',
+          attributes: ['id', 'username', 'roleId', 'fullname', 'email']
+        }],
         where: {
           $or: [
             { userId },
@@ -70,19 +72,7 @@ module.exports = {
         };
 
         return response.status(200).send({
-          documents: documents.rows.map(({
-            user, id, access, title, content,
-            userId: docUserId, createdAt, updatedAt }) => {
-            return {
-              id,
-              access,
-              title,
-              content,
-              userId: docUserId,
-              createdAt,
-              updatedAt,
-              user: user.filterUserDetails() };
-          }),
+          documents: documents.rows,
           pagination,
         });
       })
@@ -94,8 +84,26 @@ module.exports = {
   },
   // fetch a particular document
   findADocument(request, response) {
+    const { roleId, userId } = request.decoded;
     return Document
-      .findById(request.params.id)
+      .findOne({
+        include: [{ model: User,
+          as: 'user',
+          attributes: ['id', 'username', 'roleId', 'fullname', 'email']
+        }],
+        where: {
+          id: request.params.id,
+          $or: [
+            { userId },
+            { access: {
+              $gte: roleId,
+              $ne: -1
+            }
+            },
+            { access: 0 }
+          ]
+        },
+      })
       .then((document) => {
         if (!document) {
           throw new Error('Document Not Found');
@@ -117,7 +125,7 @@ module.exports = {
           throw new Error('Document Not Found');
         }
         if (request.decoded.userId !== document.userId) {
-          throw new Error('You\'re not allowed to update this document');
+          throw new Error('You are not allowed to update this document');
         }
         return document
           .update({
@@ -165,7 +173,9 @@ module.exports = {
     return Document
       .findAndCountAll({
         include: [{ model: User,
-          as: 'user' }],
+          as: 'user',
+          attributes: ['id', 'username', 'roleId', 'fullname', 'email']
+        }],
         where: {
           $and: [
             {
@@ -200,19 +210,7 @@ module.exports = {
           pageSize: documents.rows.length,
         };
         return response.status(200).send({
-          documents: documents.rows.map(({
-            user, id, access, title, content,
-            userId: docUserId, createdAt, updatedAt }) => {
-            return {
-              id,
-              access,
-              title,
-              content,
-              userId: docUserId,
-              createdAt,
-              updatedAt,
-              user: user.filterUserDetails() };
-          }),
+          documents: documents.rows,
           pagination
         });
       })
