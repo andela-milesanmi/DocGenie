@@ -67,7 +67,7 @@ describe('Documents', () => {
     chai.request(server)
       .get('/api/documents')
       .end((error, response) => {
-        expect(response).to.have.status(403); // <= Test completes before this runs
+        expect(response).to.have.status(401); // <= Test completes before this runs
         done();
       });
   });
@@ -266,7 +266,7 @@ describe('Documents', () => {
     chai.request(server)
       .put('/api/documents/3')
       .set('authorization', userToken)
-      .send({ content: 'pulic user document updated' })
+      .send({ content: 'public user document updated' })
       .end((error, response) => {
         expect(response).to.have.status(200);
         expect(response.body).to.be.an('object');
@@ -274,7 +274,7 @@ describe('Documents', () => {
         expect(response.body).to.have.property('userId');
         expect(response.body).to.have.property('title');
         expect(response.body).to.have.property('access');
-        expect(response.body.content).to.equal('pulic user document updated');
+        expect(response.body.content).to.equal('public user document updated');
         done();
       });
   });

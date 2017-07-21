@@ -17,7 +17,6 @@ module.exports = {
           key: 'id',
           as: 'userId'
         },
-        onUpdate: 'CASCADE',
       },
       title: {
         type: Sequelize.STRING,

@@ -14,7 +14,11 @@ const mockStore = configureMockStore([thunk]);
 
 
 describe('Document Action', () => {
-  let store, axiosGetStub, axiosPostStub, axiosPutStub, axiosDeleteStub;
+  let store,
+    axiosGetStub,
+    axiosPostStub,
+    axiosPutStub,
+    axiosDeleteStub;
   const response = { data: {
     documents: ['I am one document'],
     pagination: 'pagination object'
@@ -55,10 +59,12 @@ describe('Document Action', () => {
     });
   });
   it('should fail and dispatch error on failed viewAllDocuments request', () => {
-    return store.dispatch(viewAllDocuments('error-url')).then(() => {
+    const errorMessage = error.response.data;
+    return store.dispatch(viewAllDocuments('error-url')).catch((error) => {
+      console.log('error url', error);
       expect(store.getActions()).to.deep.equal([{
         type: VIEW_DOCUMENTS_ERROR,
-        errorMessage: error.response.data }]);
+        errorMessage }]);
     });
   });
   it('should dispatch appropriate actions on createDocument', () => {

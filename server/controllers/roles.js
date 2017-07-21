@@ -25,7 +25,7 @@ module.exports = {
       .findById(request.params.id)
       .then((role) => {
         if (!role) {
-          return response.status(400).send({
+          return response.status(404).send({
             message: 'Role Not Found',
           });
         }

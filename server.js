@@ -3,6 +3,10 @@ const logger = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
 
+// This kills all running nodemon processes before restarting.
+// To resolve the listen EADDRINUSE error
+process.on('SIGUSR2', () => { process.exit(0); });
+
 const serverPath = process.env.NODE_ENV === 'production' ? 'server-dist' : 'server';
 const authentication = require(`./${serverPath}/middleware/authentication`); // eslint-disable-line
 

@@ -1,8 +1,15 @@
 const Document = require('../models').Document;
 const User = require('../models').User;
+const errorHandler = require('../helpers/errorHandler');
 
 module.exports = {
-  // create a document
+
+  /**
+   * Creates a new document
+  * @param {object} request - request object received from the client
+   * @param {object} response - response object served to the client
+   * @returns {promise} document - new document created
+   */
   createADocument(request, response) {
     return Document
       .create({
@@ -13,10 +20,20 @@ module.exports = {
       })
       .then(document => response.status(201).send(document))
       .catch((error) => {
-        response.status(400).send(error);
+        const errorMessage = error.message || error;
+        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        response.status(400).send(customError);
       });
   },
-  // list all general documents
+
+
+  /**
+   * Fetches all documents which the current user has access to view
+  * @param {object} request - request object received from the client
+   * @param {object} response - response object served to the client
+   * @returns {promise} documents - all documents fetched
+   */
+
   listAllDocuments(request, response) {
     const limit = request.query.limit || '6';
     const offset =
@@ -53,13 +70,26 @@ module.exports = {
         };
 
         return response.status(200).send({
-          documents: documents.rows,
+          documents: documents.rows.map(({
+            user, id, access, title, content,
+            userId: docUserId, createdAt, updatedAt }) => {
+            return {
+              id,
+              access,
+              title,
+              content,
+              userId: docUserId,
+              createdAt,
+              updatedAt,
+              user: user.filterUserDetails() };
+          }),
           pagination,
         });
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        response.status(400).send(errorMessage);
+        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        response.status(400).send(customError);
       });
   },
   // fetch a particular document
@@ -74,7 +104,8 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        response.status(404).send(errorMessage);
+        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        response.status(404).send(customError);
       });
   },
   // update document attributes
@@ -100,7 +131,8 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        response.status(400).send(errorMessage);
+        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        response.status(400).send(customError);
       });
   },
   // delete a document
@@ -119,10 +151,11 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        response.status(400).send(errorMessage);
+        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        response.status(400).send(customError);
       });
   },
-  // search for a particular document
+  // search for particular documents
   searchForDocument(request, response) {
     const { roleId, userId } = request.decoded;
     const limit = request.query.limit || '6';
@@ -178,14 +211,15 @@ module.exports = {
               userId: docUserId,
               createdAt,
               updatedAt,
-              user: user.toJSON() };
+              user: user.filterUserDetails() };
           }),
           pagination
         });
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        response.status(400).send(errorMessage);
+        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        response.status(400).send(customError);
       });
   }
 };

@@ -76,22 +76,21 @@ describe('Users', () => {
         done();
       });
   });
-  it('should validate that a user cannot access an authenticated route without a token', (done) => { // <= No done callback
+  it('should not be able to access an authenticated route without a token', (done) => { // <= No done callback
     chai.request(server)
       .get('/api/users')
       .end((error, response) => {
-        expect(response).to.have.status(403); // <= Test completes before this runs
+        expect(response).to.have.status(401); // <= Test completes before this runs
         done();
       });
   });
 
-  it('should validate that a regular user can update their account details ', (done) => {
+  it('should be able to update their account details ', (done) => {
     chai.request(server)
       .put('/api/users/2')
       .set('authorization', userToken)
       .send({ fullname: 'Mikhail Stanislaski', email: 'mikhail.s@gmail.com' })
       .end((error, response) => {
-        console.log(response.body, response.text, 'response in user spec')
         expect(response).to.have.status(200);
         expect(response.body).to.be.an('object');
         expect(response.body).to.have.property('id');
@@ -129,6 +128,8 @@ describe('Users', () => {
       .delete('/api/users/2')
       .set('authorization', userToken)
       .end((error, response) => {
+        console.log(response, 'response in delete user');
+        console.log(error, 'response in delete user');
         expect(response).to.have.status(200);
         expect(response.text).to.eql('User deleted successfully');
         done();

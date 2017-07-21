@@ -1,6 +1,7 @@
 const User = require('../models').User;
 const Document = require('../models').Document;
 const authentication = require('../middleware/authentication');
+const errorHandler = require('../helpers/errorHandler')
 const bcrypt = require('bcrypt-nodejs');
 
 module.exports = {
@@ -54,12 +55,13 @@ module.exports = {
       const token = authentication.generateToken(user);
       return response.status(200).json({
         message: 'Signed up successfully',
-        user: user.toJSON(),
+        user: user.filterUserDetails(),
         token,
       });
     }).catch((error) => {
       const errorMessage = error.message || error;
-      response.status(400).send(errorMessage);
+      const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+      response.status(400).send(customError);
     });
   },
   // sign in a user
@@ -85,12 +87,13 @@ module.exports = {
 
       return response.status(200).send({
         message: 'Signed in successfully',
-        user: user.toJSON(),
+        user: user.filterUserDetails(),
         token,
       });
     }).catch((error) => {
       const errorMessage = error.message || error;
-      response.status(400).send(errorMessage);
+      const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+      response.status(400).send(customError);
     });
   },
   listAllUsers(request, response) {
@@ -121,13 +124,14 @@ module.exports = {
         };
 
         return response.status(200).send({
-          users: users.rows.map(user => user.toJSON()),
+          users: users.rows.map(user => user.filterUserDetails()),
           pagination,
         });
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        response.status(400).send(errorMessage);
+        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        response.status(400).send(customError);
       });
   },
   // find a particular user
@@ -138,11 +142,12 @@ module.exports = {
         if (!user) {
           throw new Error('User Not Found');
         }
-        return response.status(200).send(user.toJSON());
+        return response.status(200).send(user.filterUserDetails());
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        response.status(400).send(errorMessage);
+        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        response.status(400).send(customError);
       });
   },
   // update user attributes
@@ -153,39 +158,41 @@ module.exports = {
         if (!user) {
           throw new Error('User Not Found');
         }
+
         // validating user password, confirming if old password is correct
-        if (request.body.oldPassword || request.body.newPassword
+        if (request.body.oldPassword || request.body.password
          || request.body.confirmPassword) {
-          if ((bcrypt.compareSync(request.body.oldPassword, user.password))) {
+          if (!bcrypt.compareSync(request.body.oldPassword, user.password)) {
             throw new Error('Old password is incorrect');
           }
           // checking if password and confirmPassword fields match
-          if (request.body.newPassword &&
-          (request.body.newPassword !== request.body.confirmPassword)) {
+          if (request.body.password &&
+          (request.body.password !== request.body.confirmPassword)) {
             throw new Error('Passwords do not match');
           }
-          if (oldPassword === newPassword) {
+          if (request.body.oldPassword === request.body.password) {
             throw new Error('Please change your password');
           }
         }
         let userDetails;
 
         if (request.decoded.userId === user.id && !request.body.roleId) {
-          const { roleId, ...rest } = request.body;
+          const { roleId, oldPassword, confirmPassword, ...rest } = request.body;
           userDetails = rest;
         } else if (request.decoded.roleId === 1 &&
           request.decoded.userId !== user.id && request.body.roleId) {
           const { roleId } = request.body;
           userDetails = { roleId };
         } else {
-          throw new Error("Sorry, you/'re not authorized for this action");
+          throw new Error('Sorry, you are not authorized for this action');
         }
         return user
           .update(userDetails);
-      }).then(user => response.status(200).send(user.toJSON()))
+      }).then(user => response.status(200).send(user.filterUserDetails()))
       .catch((error) => {
         const errorMessage = error.message || error;
-        response.status(400).send(errorMessage);
+        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        response.status(400).send(customError);
       });
   },
   // delete a user
@@ -206,7 +213,8 @@ module.exports = {
       }).then(() => response.status(200).send('User deleted successfully'))
       .catch((error) => {
         const errorMessage = error.message || error;
-        response.status(400).send(errorMessage);
+        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        response.status(400).send(customError);
       });
   },
   // find all a user's documents
@@ -248,14 +256,15 @@ module.exports = {
               userId,
               createdAt,
               updatedAt,
-              user: user.toJSON() };
+              user: user.filterUserDetails() };
           }),
           pagination,
         });
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        response.status(400).send(errorMessage);
+        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        response.status(400).send(customError);
       });
   },
   // search for users
@@ -293,13 +302,14 @@ module.exports = {
           pageSize: users.rows.length,
         };
         return response.status(200).send({
-          users: users.rows.map(user => user.toJSON()),
+          users: users.rows.map(user => user.filterUserDetails()),
           pagination
         });
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        response.status(400).send(errorMessage);
+        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        response.status(400).send(customError);
       });
   },
   // logout user

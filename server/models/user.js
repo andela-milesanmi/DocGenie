@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         len: {
-          args: [3, 30],
+          args: [3, 40],
           msg: 'Fullname length must be between 3 and 30 characters'
         }
       }
@@ -48,8 +48,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         len: {
-          args: [6, 20],
-          type: null,
+          args: 6,
           msg: 'Password length must be between 6 and 20 characters'
         }
       }
@@ -57,7 +56,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     classMethods: {
       associate(models) {
-        // associations can be defined here
         User.hasMany(models.Document, {
           foreignKey: 'userId',
           onDelete: 'CASCADE',
@@ -78,9 +76,9 @@ module.exports = (sequelize, DataTypes) => {
       validatePassword: (password, user) => {
         return bcrypt.compareSync(password, user.password);
       },
-      // remove password from fields returned from User table
-      toJSON() {
-        const { password, ...rest } = this.get();
+      // remove unwanted fields from values fetched from User table
+      filterUserDetails() {
+        const { password, createdAt, updatedAt, ...rest } = this.get();
         return rest;
       }
     },
@@ -88,7 +86,7 @@ module.exports = (sequelize, DataTypes) => {
       beforeCreate: (user) => {
         user.generatePasswordHash(user);
       },
-      afterUpdate: (user) => {
+      beforeUpdate: (user) => {
         user.generatePasswordHash(user);
       }
     }

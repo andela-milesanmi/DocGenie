@@ -47,7 +47,7 @@ export const getUser = () => {
       }).catch((error) => {
         dispatch({ type: CREATE_USER_ERROR,
           errorMessage: error.response.data.message || error.response.data });
-        return Promise.reject(error);
+        throw new Error('UserInvalidToken');
       });
   };
 };

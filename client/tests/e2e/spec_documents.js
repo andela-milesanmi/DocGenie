@@ -15,9 +15,12 @@ module.exports = {
       .click('#create-doc-btn')
       .waitForElementVisible('#created-new-document', 5000)
       .pause(1000)
+      .waitForElementVisible('.fr-box', 5000)
       .setValue('input[name=title]', 'e2e test doc')
       .setValue('select[name=access]', 'Public')
-      .setValue('textarea[name=content]', 'new content here')
+      .waitForElementVisible('.fr-element', 3000)
+      .waitForElementVisible('.fr-view', 3000)
+      .setValue('div.fr-element', 'froala content here')
       .click('#save-doc')
       .pause(1000)
       .end();

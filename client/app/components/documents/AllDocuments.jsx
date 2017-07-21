@@ -86,8 +86,7 @@ export class AllDocuments extends React.Component {
           </div>
           <div className="col s2">
             <a id="create-doc-btn" href="#create-form" className="btn-floating
-             btn-large waves-effect waves-light red right"
-              onClick={() => this.editDocument()}>
+             btn-large waves-effect waves-light red right" onClick={() => this.editDocument()}>
               <i className="material-icons">add</i>
             </a>
           </div>
