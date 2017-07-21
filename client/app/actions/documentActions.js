@@ -41,12 +41,7 @@ export const createDocument = (document, documentUrl) => {
         dispatch(viewAllDocuments(documentUrl));
         $('#create-form').modal('close');
       }).catch((error) => {
-        console.log(error, 'error');
-        console.log(error.message, 'error.message');
-        console.log(error.response.data, 'error.response.data');
-
         errorMessage = error.response.data.message || error.response.data;
-        console.log(errorMessage, 'error messageeee');
 
         dispatch({ type: CREATE_DOCUMENT_ERROR,
           errorMessage });

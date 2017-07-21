@@ -1,6 +1,15 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = {
+
+  /**
+   * Validates registered users' token
+   * @param {object} request - request object received from the client
+   * @param {object} response - response object served to the client
+   * @param {function} next - express callback function which invokes the next
+   * middleware or route-handler
+   * @returns {object} message - error response
+   */
   verifyToken(request, response, next) {
     const token = request.headers.authorization ||
       request.headers['x-access-token'];
@@ -16,16 +25,16 @@ module.exports = {
       });
     } else {
       // if (request.originalUrl.startsWith('/auth')) return next();
-      return response.status(403).send({
+      return response.status(401).send({
         message: 'Token required for access',
       });
     }
   },
 
   /**
-   * generateToken generates token for authentication
-   * @param {Object} user object
-   * @returns {Object} jwt
+   * Generates token for user authentication
+   * @param {Object} user - object containing user details
+   * @returns {Object} token - jwt token
    */
   generateToken(user) {
     return jwt.sign({
@@ -37,17 +46,18 @@ module.exports = {
   /**
   *
   * Verifies admin access
-  * @param {any} request
-  * @param {any} response
-  * @param {any} next
-  * @returns {object} response message
+  * @param {object} request - request object received from the client
+  * @param {object} response object served to the client
+  * @param {function} next - express callback function which invokes the next
+   * middleware or route-handler
+  * @returns {object} message - error response
   */
   verifyAdminAccess(request, response, next) {
     if (request.decoded.roleId === 1) {
       next();
     } else {
       return response.status(401).send({
-        message: 'Sorry, You\'re not authorized to perform this action',
+        message: 'Sorry, You are not authorized to perform this action',
       });
     }
   }

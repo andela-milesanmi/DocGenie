@@ -80,7 +80,7 @@ describe('Users', () => {
     chai.request(server)
       .get('/api/users')
       .end((error, response) => {
-        expect(response).to.have.status(403); // <= Test completes before this runs
+        expect(response).to.have.status(401); // <= Test completes before this runs
         done();
       });
   });
@@ -128,6 +128,8 @@ describe('Users', () => {
       .delete('/api/users/2')
       .set('authorization', userToken)
       .end((error, response) => {
+        console.log(response, 'response in delete user');
+        console.log(error, 'response in delete user');
         expect(response).to.have.status(200);
         expect(response.text).to.eql('User deleted successfully');
         done();

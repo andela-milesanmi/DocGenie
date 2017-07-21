@@ -67,7 +67,7 @@ describe('Documents', () => {
     chai.request(server)
       .get('/api/documents')
       .end((error, response) => {
-        expect(response).to.have.status(403); // <= Test completes before this runs
+        expect(response).to.have.status(401); // <= Test completes before this runs
         done();
       });
   });

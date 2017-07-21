@@ -134,6 +134,7 @@ export class Profile extends React.Component {
       oldPassword: { value: oldPassword } = {},
       password: { value: password } = {},
       confirmPassword: { value: confirmPassword } = {} } = event.target;
+      console.log(oldPassword, password, confirmPassword, 'oldPassword, newPassword, confirmPassword')
     if (password || confirmPassword || oldPassword) {
       if (password !== confirmPassword) {
         this.setState({ errorMessage: 'Passwords do not match' });
@@ -149,7 +150,7 @@ export class Profile extends React.Component {
       toastr.success('Profile Updated!');
       this.toggle('isEdit');
     }).catch((error) => {
-      toastr.error(error.message);
+      toastr.error(error);
     });
   }
 

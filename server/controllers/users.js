@@ -1,6 +1,7 @@
 const User = require('../models').User;
 const Document = require('../models').Document;
 const authentication = require('../middleware/authentication');
+const errorHandler = require('../helpers/errorHandler')
 const bcrypt = require('bcrypt-nodejs');
 
 module.exports = {
@@ -54,12 +55,13 @@ module.exports = {
       const token = authentication.generateToken(user);
       return response.status(200).json({
         message: 'Signed up successfully',
-        user: user.toJSON(),
+        user: user.filterUserDetails(),
         token,
       });
     }).catch((error) => {
       const errorMessage = error.message || error;
-      response.status(400).send(errorMessage);
+      const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+      response.status(400).send(customError);
     });
   },
   // sign in a user
@@ -85,12 +87,13 @@ module.exports = {
 
       return response.status(200).send({
         message: 'Signed in successfully',
-        user: user.toJSON(),
+        user: user.filterUserDetails(),
         token,
       });
     }).catch((error) => {
       const errorMessage = error.message || error;
-      response.status(400).send(errorMessage);
+      const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+      response.status(400).send(customError);
     });
   },
   listAllUsers(request, response) {
@@ -121,13 +124,14 @@ module.exports = {
         };
 
         return response.status(200).send({
-          users: users.rows.map(user => user.toJSON()),
+          users: users.rows.map(user => user.filterUserDetails()),
           pagination,
         });
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        response.status(400).send(errorMessage);
+        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        response.status(400).send(customError);
       });
   },
   // find a particular user
@@ -138,11 +142,12 @@ module.exports = {
         if (!user) {
           throw new Error('User Not Found');
         }
-        return response.status(200).send(user.toJSON());
+        return response.status(200).send(user.filterUserDetails());
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        response.status(400).send(errorMessage);
+        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        response.status(400).send(customError);
       });
   },
   // update user attributes
@@ -153,6 +158,7 @@ module.exports = {
         if (!user) {
           throw new Error('User Not Found');
         }
+
         // validating user password, confirming if old password is correct
         if (request.body.oldPassword || request.body.password
          || request.body.confirmPassword) {
@@ -178,14 +184,15 @@ module.exports = {
           const { roleId } = request.body;
           userDetails = { roleId };
         } else {
-          throw new Error("Sorry, you/'re not authorized for this action");
+          throw new Error('Sorry, you are not authorized for this action');
         }
         return user
           .update(userDetails);
-      }).then(user => response.status(200).send(user.toJSON()))
+      }).then(user => response.status(200).send(user.filterUserDetails()))
       .catch((error) => {
         const errorMessage = error.message || error;
-        response.status(400).send(errorMessage);
+        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        response.status(400).send(customError);
       });
   },
   // delete a user
@@ -206,7 +213,8 @@ module.exports = {
       }).then(() => response.status(200).send('User deleted successfully'))
       .catch((error) => {
         const errorMessage = error.message || error;
-        response.status(400).send(errorMessage);
+        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        response.status(400).send(customError);
       });
   },
   // find all a user's documents
@@ -248,14 +256,15 @@ module.exports = {
               userId,
               createdAt,
               updatedAt,
-              user: user.toJSON() };
+              user: user.filterUserDetails() };
           }),
           pagination,
         });
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        response.status(400).send(errorMessage);
+        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        response.status(400).send(customError);
       });
   },
   // search for users
@@ -293,74 +302,18 @@ module.exports = {
           pageSize: users.rows.length,
         };
         return response.status(200).send({
-          users: users.rows.map(user => user.toJSON()),
+          users: users.rows.map(user => user.filterUserDetails()),
           pagination
         });
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        response.status(400).send(errorMessage);
+        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        response.status(400).send(customError);
       });
   },
   // logout user
   signOut(request, response) {
     return response.status(200).send({ message: 'Successfully logged out' });
   },
-  // // search for only a particular user's documents
-  // searchForUserDocuments(request, response) {
-  //   const { userId } = request.decoded;
-  //   const limit = request.query.limit || '6';
-  //   const offset =
-  //    request.query.page ? (Number(request.query.page - 1) * limit) : 0;
-
-  //   return Document
-  //     .findAndCountAll({
-  //       include: [{ model: User,
-  //         as: 'user' }],
-  //       where: {
-  //         $and: [
-  //           {
-  //             $or: [
-  //               { title: { $iLike: `%${request.params.searchKey}%` } },
-  //               { content: { $iLike: `%${request.params.searchKey}%` } }
-  //             ]
-  //           },
-  //           { userId }
-  //         ]
-  //       },
-  //       limit,
-  //       offset,
-  //       order: '"createdAt" DESC',
-  //     }).then((documents) => {
-  //       if (!documents) {
-  //         throw new Error('Document(s) Not Found');
-  //       }
-  //       const pagination = {
-  //         totalCount: documents.count,
-  //         pages: Math.ceil(documents.count / limit),
-  //         currentPage: Math.floor(offset / limit) + 1,
-  //         pageSize: documents.rows.length,
-  //       };
-  //       return response.status(200).send({
-  //         documents: documents.rows.map(({
-  //           user, id, access, title, content,
-  //           userId: docUserId, createdAt, updatedAt }) => {
-  //           return {
-  //             id,
-  //             access,
-  //             title,
-  //             content,
-  //             userId: docUserId,
-  //             createdAt,
-  //             updatedAt,
-  //             user: user.toJSON() };
-  //         }),
-  //         pagination
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       const errorMessage = error.message || error;
-  //       response.status(400).send(errorMessage);
-  //     });
-  // }
 };

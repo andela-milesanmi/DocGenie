@@ -43,7 +43,6 @@ export const getUser = () => {
   return (dispatch) => {
     return axios.get(`/api/users/${userId}`, config)
       .then((response) => {
-        console.log('got to the response');
         dispatch({ type: CREATE_USER, user: response.data });
       }).catch((error) => {
         dispatch({ type: CREATE_USER_ERROR,
