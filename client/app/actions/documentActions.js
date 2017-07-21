@@ -19,9 +19,10 @@ export const viewAllDocuments = (url) => {
         dispatch({ type: VIEW_DOCUMENTS,
           documents: response.data.documents,
           pagination: response.data.pagination });
-      }).catch((error) => {
+      }, () => {}).catch((error) => {
+        errorMessage = error.response.data.message || error.response.data || '';
         dispatch({ type: VIEW_DOCUMENTS_ERROR,
-          errorMessage: error.response.data || error.response.data.message || '' });
+          errorMessage });
         return Promise.reject(errorMessage);
       });
   };
@@ -49,7 +50,7 @@ export const createDocument = (document, documentUrl) => {
 
         dispatch({ type: CREATE_DOCUMENT_ERROR,
           errorMessage });
-        // return Promise.reject(toastr.error(errorMessage));
+        return Promise.reject(toastr.error(errorMessage));
       });
   };
 };
