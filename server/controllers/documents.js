@@ -151,6 +151,9 @@ module.exports = {
         if (!document) {
           throw new Error('Document Not Found');
         }
+        if (request.decoded.userId !== document.userId) {
+          throw new Error('You are not allowed to delete this document');
+        }
         return document
           .destroy()
           .then(() => {
