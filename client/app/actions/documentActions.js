@@ -15,7 +15,7 @@ export const viewAllDocuments = (paginationMetadata) => {
   };
   const { limit, offset } = paginationMetadata;
   return (dispatch) => {
-    return axios.get(`/api/documents/?offset=${offset}&limit=${limit}`, config)
+    return axios.get(`/api/documents/?limit=${limit}&offset=${offset}`, config)
       .then((response) => {
         dispatch({ type: VIEW_DOCUMENTS,
           documents: response.data.documents,
@@ -35,7 +35,7 @@ export const viewOwnDocuments = (paginationMetadata) => {
     headers: { authorization: token }
   };
   const { limit, offset, userId } = paginationMetadata;
-  const url = `/api/users/${userId}/documents/?offset=${offset}&limit=${limit}`;
+  const url = `/api/users/${userId}/documents/?limit=${limit}&offset=${offset}`;
   return (dispatch) => {
     return axios.get(url, config)
       .then((response) => {

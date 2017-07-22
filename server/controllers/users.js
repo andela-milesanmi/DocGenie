@@ -201,7 +201,8 @@ module.exports = {
       }).then(user => response.status(200).send(user.filterUserDetails()))
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   },

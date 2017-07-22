@@ -46,10 +46,10 @@ export default {
     userId: 1
   },
   publicDocument: {
+    userId: 1,
     title: 'public document',
-    content: 'public document created',
     access: 0,
-    userId: 2,
+    content: 'public document created',
   },
   testPublicDocument: {
     id: 21,

@@ -26,16 +26,12 @@ describe('DocumentCard component', () => {
     expect(component.props().documents[0].content).to.equal('lorem ipsum');
     expect(component.props().currentUser.id).to.equal(22);
   });
-  it('should find the neccessary dom elements ', () => {
+  it('should have the neccessary dom elements ', () => {
     expect(component.find('.darken-1').length).to.equal(1);
     expect(component.find('a').length).to.equal(3);
   });
-  it('should call editDocument props', () => {
+  it('should allow a user trigger editDocument action on button click', () => {
     component.find('#edit').simulate('click');
     expect(props.changeCurrentDocument.callCount).to.equal(1);
-  });
-  xit('should call deleteDocument props', () => {
-    component.find('#delete').simulate('click');
-    expect(props.deleteDocument.callCount).to.equal(1);
   });
 });
