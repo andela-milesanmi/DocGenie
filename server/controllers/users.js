@@ -4,6 +4,9 @@ const authentication = require('../middleware/authentication');
 const errorHandler = require('../helpers/errorHandler');
 const bcrypt = require('bcrypt-nodejs');
 
+const LIMIT = 6;
+const OFFSET = 0;
+
 module.exports = {
   // create new user on sign up
   createNewUser(request, response) {
@@ -219,9 +222,11 @@ module.exports = {
   },
   // find all a user's documents
   findUserDocuments(request, response) {
-    const limit = request.query.limit || '6';
-    const offset =
-     request.query.page ? (Number(request.query.page - 1) * limit) : 0;
+    // const limit = request.query.limit || '6';
+    // const offset =
+    //  request.query.page ? (Number(request.query.page - 1) * limit) : 0;
+    const limit = request.query.limit || LIMIT;
+    const offset = request.query.offset || OFFSET;
     const { userId, roleId } = request.decoded;
 
     return Document

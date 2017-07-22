@@ -35,14 +35,29 @@ export class ViewOneDocument extends React.Component {
         <div className="row viewOneDocument">
           {document &&
             <div className="col s10 offset-s1">
-              <h4>Title: {document.title}</h4>
+              <h4>{document.title}</h4>
+              <p className="center-align">
+                <i>
+                  <b>Date Published: </b> {document.createdAt.slice(0, 10)}
+                </i>
+              </p>
               <hr/>
               <div className="row">
-                <p>
+                <p className="col s6">
                   <i>
-                    <b>Date Published: </b> {document.createdAt.slice(0, 10)}
+                    <b>Created by: </b> {document.user.fullname}
                   </i>
                 </p>
+                <p className="col s6">
+                  <i>
+                    <b>Access: </b>
+                    {document.access === 0 && 'Public'}
+                    {document.access === -1 && 'Private'}
+                    {document.access === 1 && 'Role'}
+                    {document.access === 2 && 'Role'}
+                  </i>
+                </p>
+
               </div>
               {renderHtml(document.content)}
             </div>}

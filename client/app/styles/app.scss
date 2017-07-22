@@ -52,8 +52,11 @@ body{
 .search-docs{
   margin-top: 0px !important;
 }
-.paginate-docs, .paginate-docs li a{
-  text-align: center !important;
+.pagination{
+  cursor: pointer;
+}
+.page-list{
+  background-color: #EE6352 !important;
 }
 .slideout-profile{
   background-color: #ffffff !important;

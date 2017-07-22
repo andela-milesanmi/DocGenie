@@ -20,7 +20,9 @@ export class DocumentCard extends React.Component {
   // Pass props back to parent
     super(props);
     this.state = {
-      showMore: false
+      showMore: false,
+      limit: this.props.limit,
+      offset: this.props.offset,
     };
     this.handleShowMore = this.handleShowMore.bind(this);
   }
@@ -40,6 +42,8 @@ export class DocumentCard extends React.Component {
    * @memberOf DocumentCard
    */
   deleteDocument(document) {
+    console.log(this.props, 'props in delete document');
+    const { limit, offset } = this.state;
     swal({
       title: 'Are you sure?',
       text: 'You will not be able to recover this document',
@@ -50,7 +54,7 @@ export class DocumentCard extends React.Component {
       closeOnConfirm: false
     }, (isConfirm) => {
       if (isConfirm) {
-        this.props.deleteDocument(document, this.props.documentUrl)
+        this.props.deleteDocument(document, { limit, offset })
           .then(() => {
             swal('Deleted!', 'The selected file has been deleted.', 'success');
           })
@@ -78,7 +82,7 @@ export class DocumentCard extends React.Component {
    */
   render() {
     // document props is passed down from the parent component, AllDocuments
-    const { document, currentUser, documentUrl } = this.props;
+    const { document, currentUser } = this.props;
     return (
       <div className="col s4 darken-1">
         <div className="card document-card">

@@ -2,79 +2,70 @@ import React from 'react';
 import { browserHistory } from 'react-router';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { viewAllDocuments, changeCurrentDocument, deleteDocument,
+import ReactPaginate from 'react-paginate';
+import { viewOwnDocuments, changeCurrentDocument, deleteDocument,
   showOwnDocuments } from '../../actions/documentActions';
 import CreateDocument from './CreateDocument.jsx';
 import SearchDocuments from './SearchDocuments.jsx';
 import DocumentCard from './DocumentCard.jsx';
 
-
 /**
- * MyDocuments component, maps through a user's own documents and renders
- * each document as a DocumentCard component
- * @export
- * @class MyDocuments
- * @extends {React.Component}
- */
+* MyDocuments component, maps through a user's own documents and renders
+* each document as a DocumentCard component
+* @export
+* @class MyDocuments
+* @extends {React.Component}
+*/
 export class MyDocuments extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUrl: ''
+      offset: 0,
+      limit: 6,
     };
-    this.showOwnDocuments = this.showOwnDocuments.bind(this);
+
+    this.handlePageChange = this.handlePageChange.bind(this);
   }
 
   /**
-   * editDocument method, triggers changeCurrentDocument action
-   * @param {object} document
-   * @memberOf MyDocuments
-   */
+  * componentDidMount, react lifecycle method which is invoked immediately the
+  * component mounts
+  * @memberOf MyDocuments
+  */
+  componentDidMount() {
+    const { limit, offset } = this.state;
+    const userId = this.props.user.id;
+    this.props.viewOwnDocuments({ limit, offset, userId });
+  }
+
+  /**
+  * editDocument method, triggers changeCurrentDocument action
+  * @param {object} document
+  * @memberOf MyDocuments
+  */
   editDocument(document) {
     this.props.changeCurrentDocument(document);
   }
 
   /**
-   * componentDidMount, react lifecycle method which is invoked immediately the
-   * component mounts
-   * @memberOf MyDocuments
-   */
-  componentDidMount() {
-    this.showOwnDocuments();
-  }
-
-  /**
-   * showOwnDocuments, triggers viewAllDocuments action which displays all
-   * a user's own documents
-   * @memberOf MyDocuments
-   */
-  showOwnDocuments() {
-    const { params: { page = '' } } = this.props;
-    const { user } = this.props;
-    this.setState({
-      currentUrl: `/api/users/${user.id}/documents/?page=` },
-    () => {
-      this.props.viewAllDocuments(this.state.currentUrl + page);
+  * @description Allows user navigate pages by changing limit and offset
+  * @param  {object} page
+  * @return {void}
+  */
+  handlePageChange(page) {
+    const { limit } = this.state;
+    const selected = page.selected;
+    const offset = Math.ceil(selected * this.state.limit);
+    this.setState({ offset }, () => {
+      this.props.viewOwnDocuments({ limit, offset });
     });
   }
 
   /**
-   * componentWillReceiveProps, React lifecycle method which is called once a
-   * component receives next props, in this case: next page
-   * @param {object} nextProps
-   * @memberOf MyDocuments
-   */
-  componentWillReceiveProps(nextProps) {
-    if (this.props.params.page !== nextProps.params.page) {
-      this.props.viewAllDocuments(this.state.currentUrl + nextProps.params.page);
-    }
-  }
-
-  /**
-   * render, react lifecyle method
-   * @returns a DOM element
-   * @memberOf MyDocuments
-   */
+  * render, react lifecyle method
+  * @returns a DOM element
+  * @memberOf MyDocuments
+  */
   render() {
     return (
       <div className="dashboard-container">
@@ -87,19 +78,15 @@ export class MyDocuments extends React.Component {
               <i className="material-icons">add</i>
             </a>
           </span>
-          <CreateDocument />
+          <CreateDocument limit={this.state.limit} offset={this.state.offset} />
         </div>
-        {/*<div className="row">
-          <div className="col s8 offset-s1">
-            <SearchDocuments />
-          </div>
-        </div>*/}
         <div className="col s12">
           <div className="row" style={{ fontSize: '15px' }}>
             <div className="col s10 offset-s1">
               {this.props.documents && this.props.documents.map((document, i) =>
                 (
-                <DocumentCard index={i} document={document} />
+                <DocumentCard index={i} document={document} key={document.id}
+                  limit={this.state.limit} offset={this.state.offset} />
                 )
               )}
               {this.props.documents && this.props.documents.length === 0 &&
@@ -109,31 +96,24 @@ export class MyDocuments extends React.Component {
               </div>}
             </div>
           </div>
+
           {/* pagination */}
-          <div className="row paginate-docs">
-            <ul className="pagination">
-              {this.props.currentPage > 1 &&
-              <li><a href="#"
-                onClick={() => {
-                  browserHistory.push(`/dashboard/documents/${this.props.currentPage - 1}`);
-                }}><i className="material-icons">chevron_left</i></a></li> }
-
-              {Array(this.props.pages).fill(0).map((value, i) => {
-                return (<li><a href="#" onClick={() => {
-                  browserHistory.push(`/dashboard/documents/${i + 1}`);
-                }}>{i + 1}</a></li>);
-              })}
-
-              {this.props.currentPage < this.props.pages &&
-              <li className="waves-effect">
-                <a href="#" onClick={() => {
-                  browserHistory.push(`/dashboard/documents/${this.props.currentPage + 1}`);
-                }}>
-                  <i className="material-icons">chevron_right</i>
-                </a>
-              </li> }
-            </ul>
-          </div>
+          {this.props.documents && this.props.documents.length === 0 ? '' :
+            (<div className="center-align">
+              <ReactPaginate
+                previousLabel={<i className="material-icons">chevron_left</i>}
+                nextLabel={<i className="material-icons">chevron_right</i>}
+                breakLabel={<a href="">...</a>}
+                breakClassName={'break-me'}
+                pageCount={this.props.pages}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={this.handlePageChange}
+                containerClassName={'pagination'}
+                subContainerClassName={'pages pagination'}
+                activeClassName={'active page-list'} />
+            </div>
+            )}
         </div>
       </div>
     );
@@ -152,7 +132,8 @@ const mapStateToProps = (state) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    viewAllDocuments: page => dispatch(viewAllDocuments(page)),
+    viewOwnDocuments: paginationMetadata =>
+      dispatch(viewOwnDocuments(paginationMetadata)),
     changeCurrentDocument: document => dispatch(changeCurrentDocument(document)),
     deleteDocument: document => dispatch(deleteDocument(document)),
     showOwnDocuments: (id, page) => dispatch(showOwnDocuments(id, page)),
@@ -165,9 +146,8 @@ MyDocuments.propTypes = {
   pages: PropTypes.number.isRequired,
   params: PropTypes.object.isRequired,
   changeCurrentDocument: PropTypes.func.isRequired,
-  viewAllDocuments: PropTypes.func.isRequired,
+  viewOwnDocuments: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
 };
 
-// Use connect to put them together
 export default connect(mapStateToProps, mapDispatchToProps)(MyDocuments);

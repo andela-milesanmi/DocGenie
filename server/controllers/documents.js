@@ -2,8 +2,10 @@ const Document = require('../models').Document;
 const User = require('../models').User;
 const errorHandler = require('../helpers/errorHandler');
 
-module.exports = {
+const LIMIT = 6;
+const OFFSET = 0;
 
+module.exports = {
   /**
    * Creates a new document
   * @param {object} request - request object received from the client
@@ -35,9 +37,8 @@ module.exports = {
    */
 
   listAllDocuments(request, response) {
-    const limit = request.query.limit || '6';
-    const offset =
-    request.query.page ? (Number(request.query.page - 1) * limit) : 0;
+    const limit = request.query.limit || LIMIT;
+    const offset = request.query.offset || OFFSET;
     const { roleId, userId } = request.decoded;
     return Document
       .findAndCountAll({
@@ -78,7 +79,8 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   },
@@ -112,7 +114,8 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(404).send(customError);
       });
   },
@@ -139,7 +142,8 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   },
@@ -162,7 +166,8 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   },
@@ -219,7 +224,8 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   }
