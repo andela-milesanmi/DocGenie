@@ -11,7 +11,8 @@ export const SearchDocuments = (props) => {
   const handleChange = (event) => {
     event.preventDefault();
     const searchKey = event.target.value;
-    if (searchKey) props.searchForDocuments(searchKey);
+    const { limit, offset } = props;
+    if (searchKey) props.searchForDocuments({ searchKey, limit, offset });
   };
   return (
     <div className="row search-docs">
@@ -28,7 +29,7 @@ export const SearchDocuments = (props) => {
 const mapDispatchToProps = (dispatch) => {
   return {
   // You can now say this.props.searchForDocuments
-    searchForDocuments: searchKey => dispatch(searchForDocuments(searchKey)),
+    searchForDocuments: searchData => dispatch(searchForDocuments(searchData)),
   };
 };
 

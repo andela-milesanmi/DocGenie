@@ -31,7 +31,7 @@ describe('Document Action', () => {
   beforeEach(() => {
     store = mockStore({ documents: [] });
     axiosGetStub = sinon.stub(axios, 'get', (url) => {
-      return url.indexOf('good-url') > -1 ? Promise.resolve(response) : Promise.reject(error);
+      return url.indexOf('api') > -1 ? Promise.resolve(response) : Promise.reject(error);
     });
     axiosPostStub = sinon.stub(axios, 'post', (url) => {
       return url.indexOf('api') > -1 ? Promise.resolve(response) : Promise.reject(error);
@@ -49,8 +49,8 @@ describe('Document Action', () => {
     axiosPutStub.restore();
     axiosDeleteStub.restore();
   });
-  it('should dispatch appropriate actions on viewAllDocuments', () => {
-    return store.dispatch(viewAllDocuments('good-url')).then(() => {
+  it('should dispatch appropriate actions when viewAllDocuments action is triggered', () => {
+    return store.dispatch(viewAllDocuments('good-url/?limit=3')).then(() => {
       expect(store.getActions()).to.deep.equal([{
         type: VIEW_DOCUMENTS,
         documents: response.data.documents,
@@ -61,7 +61,6 @@ describe('Document Action', () => {
   it('should fail and dispatch error on failed viewAllDocuments request', () => {
     const errorMessage = error.response.data;
     return store.dispatch(viewAllDocuments('error-url')).catch((error) => {
-      console.log('error url', error);
       expect(store.getActions()).to.deep.equal([{
         type: VIEW_DOCUMENTS_ERROR,
         errorMessage }]);
@@ -94,8 +93,8 @@ describe('Document Action', () => {
     });
   });
   it('should dispatch appropriate actions on searchForDocuments', () => {
-    const searchKey = 'the';
-    return store.dispatch(searchForDocuments(`good-url/${searchKey}`)).then(() => {
+    const searchKey = 'doc';
+    return store.dispatch(searchForDocuments(`good-url/?searchKey=${searchKey}`)).then(() => {
       expect(store.getActions()).to.deep.equal([{ type: SEARCH_DOCUMENT,
         documents: response.data.documents || [],
         pagination: response.data.pagination }]);

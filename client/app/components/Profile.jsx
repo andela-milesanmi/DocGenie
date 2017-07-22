@@ -119,7 +119,6 @@ export class Profile extends React.Component {
     );
   }
 
-
   /**
    * handleProfileUpdate dispatches an updateProfile action
    * @param {object} event
@@ -134,7 +133,6 @@ export class Profile extends React.Component {
       oldPassword: { value: oldPassword } = {},
       password: { value: password } = {},
       confirmPassword: { value: confirmPassword } = {} } = event.target;
-      console.log(oldPassword, password, confirmPassword, 'oldPassword, newPassword, confirmPassword')
     if (password || confirmPassword || oldPassword) {
       if (password !== confirmPassword) {
         this.setState({ errorMessage: 'Passwords do not match' });

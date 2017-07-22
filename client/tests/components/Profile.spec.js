@@ -33,7 +33,7 @@ describe('Profile Component', () => {
       username: { value: 'test12' },
       email: { value: 'test@yahoo.com' },
       oldPassword: { value: 'testing' },
-      newPassword: { value: 'testing12' },
+      password: { value: 'testing12' },
       confirmPassword: { value: 'testing12' } } });
     expect(props.updateProfile).to.have.property('callCount', 1);
   });

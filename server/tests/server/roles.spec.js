@@ -1,13 +1,12 @@
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import models from '../../models';
-import fakeData from '../fakeData/fakeData';
+import mockData from '../mockData/mockData';
 import server from '../../../server';
 
 chai.use(chaiHttp);
-// const server = 'http://localhost:3333';
 
-const promisify = (data) => {
+const getUserToken = (data) => {
   return new Promise((resolve, reject) => {
     chai.request(server)
       .post('/auth/api/users')
@@ -26,21 +25,21 @@ describe('Roles', () => {
   let adminToken, userToken, testToken, adminRoleId, userRoleId;
 
   before(() => {
-    return models.Role.create(fakeData.adminRole)
+    return models.Role.create(mockData.adminRole)
       .then((roleData) => {
-        fakeData.firstUser.roleId = roleData.dataValues.id;
-        return models.Role.create(fakeData.userRole);
+        mockData.firstUser.roleId = roleData.dataValues.id;
+        return models.Role.create(mockData.userRole);
       })
       .then(() => {
-        return promisify(fakeData.firstUser);
+        return getUserToken(mockData.firstUser);
       })
       .then((token) => {
         adminToken = token;
-        return promisify(fakeData.secondUser);
+        return getUserToken(mockData.secondUser);
       })
       .then((token) => {
         userToken = token;
-        return models.Document.bulkCreate(fakeData.bulkDocuments);
+        return models.Document.bulkCreate(mockData.bulkDocuments);
       })
       .catch((error) => {
         console.log(error, 'this is an error');
@@ -50,12 +49,12 @@ describe('Roles', () => {
     return models.Role.sequelize.sync({ force: true });
   });
 
-  it('should validate that a regular user cannot create a new role', (done) => { // <= No done callback
+  it('should validate that a regular user cannot create a new role', (done) => {
     chai.request(server)
       .get('/api/roles')
       .set('authorization', userToken)
       .end((error, response) => {
-        expect(response).to.have.status(401); // <= Test completes before this runs
+        expect(response).to.have.status(401);
         done();
       });
   });

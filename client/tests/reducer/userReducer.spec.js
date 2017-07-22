@@ -2,18 +2,18 @@ import { expect } from 'chai';
 import { CREATE_USER, SIGNIN_USER, CREATE_USER_ERROR, SIGNIN_USER_ERROR,
   LOGOUT_USER, VIEW_USERS, VIEW_USERS_ERROR } from '../../app/actionTypes';
 import reducer from '../../app/reducers/user';
-import fakeData from '../../../server/tests/fakeData/fakeData';
+import mockData from '../../../server/tests/mockData/mockData';
 
 describe('User reducer', () => {
   it('should handle CREATE_USER', () => {
     expect(
       reducer({}, {
         type: CREATE_USER,
-        user: fakeData.testUser
+        user: mockData.testUser
       })
     ).to.eql(
       {
-        currentProfile: fakeData.testUser,
+        currentProfile: mockData.testUser,
         error: ''
       }
     );
@@ -22,10 +22,10 @@ describe('User reducer', () => {
     expect(
       reducer({}, {
         type: SIGNIN_USER,
-        user: fakeData.testUser
+        user: mockData.testUser
       })
     ).to.eql({
-      currentProfile: fakeData.testUser,
+      currentProfile: mockData.testUser,
       error: ''
     });
   });
@@ -44,7 +44,7 @@ describe('User reducer', () => {
     expect(
       reducer({}, {
         type: LOGOUT_USER,
-        user: fakeData.testUser
+        user: mockData.testUser
       })
     ).to.eql({
       currentProfile: {},
@@ -55,10 +55,10 @@ describe('User reducer', () => {
     expect(
       reducer({}, {
         type: VIEW_USERS,
-        users: [fakeData.testUser]
+        users: [mockData.testUser]
       })
     ).to.eql({
-      users: [fakeData.testUser],
+      users: [mockData.testUser],
       error: ''
     });
   });

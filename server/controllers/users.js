@@ -1,8 +1,11 @@
 const User = require('../models').User;
 const Document = require('../models').Document;
 const authentication = require('../middleware/authentication');
-const errorHandler = require('../helpers/errorHandler')
+const errorHandler = require('../helpers/errorHandler');
 const bcrypt = require('bcrypt-nodejs');
+
+const LIMIT = 6;
+const OFFSET = 0;
 
 module.exports = {
   // create new user on sign up
@@ -60,7 +63,8 @@ module.exports = {
       });
     }).catch((error) => {
       const errorMessage = error.message || error;
-      const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+      const customError =
+        errorHandler.filterSequelizeErrorMessage(errorMessage);
       response.status(400).send(customError);
     });
   },
@@ -92,14 +96,16 @@ module.exports = {
       });
     }).catch((error) => {
       const errorMessage = error.message || error;
-      const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+      const customError =
+        errorHandler.filterSequelizeErrorMessage(errorMessage);
       response.status(400).send(customError);
     });
   },
+
+  // list all users
   listAllUsers(request, response) {
-    const limit = request.query.limit || '6';
-    const offset = request.query.page ?
-      (Number(request.query.page - 1) * limit) : 0;
+    const limit = request.query.limit || LIMIT;
+    const offset = request.query.offset || OFFSET;
     const { userId } = request.decoded;
     return User
       .findAndCountAll({
@@ -130,10 +136,12 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   },
+
   // find a particular user
   findAUser(request, response) {
     return User
@@ -146,10 +154,12 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   },
+
   // update user attributes
   updateAUser(request, response) {
     return User
@@ -191,7 +201,8 @@ module.exports = {
       }).then(user => response.status(200).send(user.filterUserDetails()))
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   },
@@ -213,15 +224,16 @@ module.exports = {
       }).then(() => response.status(200).send('User deleted successfully'))
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   },
   // find all a user's documents
   findUserDocuments(request, response) {
-    const limit = request.query.limit || '6';
-    const offset =
-     request.query.page ? (Number(request.query.page - 1) * limit) : 0;
+    const limit = request.query.limit || LIMIT;
+    const offset = request.query.offset || OFFSET;
+    const { userId, roleId } = request.decoded;
 
     return Document
       .findAndCountAll({
@@ -229,6 +241,16 @@ module.exports = {
           as: 'user' }],
         where: {
           userId: request.params.id,
+          $or: [
+            { userId },
+            { access: {
+              $gte: roleId,
+              $ne: -1
+            }
+            },
+            { access: 0 }
+          ]
+
         },
         limit,
         offset,
@@ -263,27 +285,28 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   },
   // search for users
   searchForUser(request, response) {
-    const limit = request.query.limit || '6';
-    const offset = request.query.page ?
-      (Number(request.query.page - 1) * limit) : 0;
+    const limit = request.query.limit || LIMIT;
+    const offset = request.query.offset || OFFSET;
+
     return User
       .findAndCountAll({
         where: {
           $or: [
             {
               username: {
-                $iLike: `%${request.params.searchKey}%`
+                $iLike: `%${request.query.searchKey}%`
               }
             },
             {
               fullname: {
-                $iLike: `%${request.params.searchKey}%`
+                $iLike: `%${request.query.searchKey}%`
               }
             }
           ]
@@ -308,7 +331,8 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   },

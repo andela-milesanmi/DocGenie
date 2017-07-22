@@ -3,18 +3,18 @@ import { VIEW_DOCUMENTS, CREATE_DOCUMENT, CHANGE_CURRENT_DOCUMENT, EDIT_DOCUMENT
   CREATE_DOCUMENT_ERROR, DELETE_DOCUMENT,
   SEARCH_DOCUMENT } from '../../app/actionTypes';
 import reducer from '../../app/reducers/document';
-import fakeData from '../../../server/tests/fakeData/fakeData';
+import mockData from '../../../server/tests/mockData/mockData';
 
 describe('Documents reducer', () => {
   it('should handle VIEW_DOCUMENTS', () => {
     expect(
       reducer({}, {
         type: VIEW_DOCUMENTS,
-        documents: fakeData.bulkDocuments
+        documents: mockData.bulkDocuments
       })
     ).to.eql(
       {
-        documents: fakeData.bulkDocuments,
+        documents: mockData.bulkDocuments,
         error: ''
       }
     );
@@ -23,10 +23,10 @@ describe('Documents reducer', () => {
     expect(
       reducer({}, {
         type: CREATE_DOCUMENT,
-        document: fakeData.publicDocument
+        document: mockData.publicDocument
       })
     ).to.eql({
-      documents: [fakeData.publicDocument],
+      documents: [mockData.publicDocument],
       error: ''
     });
   });
@@ -45,10 +45,10 @@ describe('Documents reducer', () => {
     expect(
       reducer({}, {
         type: CHANGE_CURRENT_DOCUMENT,
-        document: fakeData.publicDocument
+        document: mockData.publicDocument
       })
     ).to.eql({
-      currentDocument: fakeData.publicDocument,
+      currentDocument: mockData.publicDocument,
       error: ''
     });
   });
@@ -56,10 +56,10 @@ describe('Documents reducer', () => {
     expect(
       reducer({}, {
         type: EDIT_DOCUMENT,
-        document: fakeData.publicDocument
+        document: mockData.publicDocument
       })
     ).to.eql({
-      documents: [fakeData.publicDocument],
+      documents: [mockData.publicDocument],
       error: ''
     });
   });
@@ -67,19 +67,19 @@ describe('Documents reducer', () => {
     expect(
       reducer({}, {
         type: SEARCH_DOCUMENT,
-        documents: fakeData.publicDocument
+        documents: mockData.publicDocument
       })
     ).to.eql({
-      documents: fakeData.publicDocument,
+      documents: mockData.publicDocument,
       error: ''
     });
   });
 
   it('should handle DELETE_DOCUMENT', () => {
     expect(
-      reducer({ documents: [fakeData.testPublicDocument, { a: 1, b: 2 }] }, {
+      reducer({ documents: [mockData.testPublicDocument, { a: 1, b: 2 }] }, {
         type: DELETE_DOCUMENT,
-        document: fakeData.testPublicDocument
+        document: mockData.testPublicDocument
       })
     ).to.eql({
       documents: [{ a: 1, b: 2 }],

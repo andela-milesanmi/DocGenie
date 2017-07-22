@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
 import CreateDocument from '../../app/components/documents/CreateDocument.jsx';
 import DocumentCard from '../../app/components/documents/DocumentCard.jsx';
 import { AllDocuments } from '../../app/components/documents/AllDocuments.jsx';
-import fakeData from '../../../server/tests/fakeData/fakeData';
+// import mockData from '../../../server/tests/mockData/mockData';
 
 
 describe('AllDocuments component', () => {
@@ -49,7 +49,8 @@ describe('AllDocuments component', () => {
     expect(component.props().currentPage).to.equal(1);
   });
   it('should have the required states', () => {
-    expect(component.state().currentUrl).to.equal('/api/documents/?page=');
+    expect(component.state().limit).to.equal(6);
+    expect(component.state().offset).to.equal(0);
   });
   it('should call the neccessary methods on mount', () => {
     const componentDidMountSpy = sinon.spy(AllDocuments.prototype, 'componentDidMount');
@@ -66,25 +67,8 @@ describe('AllDocuments component', () => {
     expect(component.find('.dashboard-container').length).to.equal(1);
     expect(component.find(DocumentCard).length).to.equal(props.documents.length);
   });
-  xit('should call editDocument props on call', () => {
-    component.find('.create-doc').last().simulate('click');
+  it('should call editDocument props on call', () => {
+    component.find('#create-doc-btn').last().simulate('click');
     expect(props.changeCurrentDocument.callCount).to.equal(1);
-  });
-  xit('should fetch all a user\'s own documents on button-click', () => {
-    component.find('#ownDocuments').simulate('click');
-    expect(component.state().currentUrl).to.equal(`/api/users/${props.user.id}/documents/?page=`);
-    expect(props.viewAllDocuments.callCount).to.equal(2);
-  });
-  xit('should fetch all/general documents on button-click', () => {
-    component.find('#allDocuments').simulate('click');
-    expect(component.state().currentUrl).to.equal('/api/documents/?page=');
-    expect(props.viewAllDocuments.callCount).to.equal(2);
-  });
-  it('should receive next props in componentWillReceiveProps', () => {
-    const componentWillReceivePropsSpy = sinon.spy(AllDocuments.prototype, 'componentWillReceiveProps');
-    component.setProps({ params: { page: '5' } });
-    expect(props.viewAllDocuments.calledWith(`${component.state().currentUrl}5`)).to.equal(true);
-    expect(props.viewAllDocuments.callCount).to.equal(2);
-    expect(componentWillReceivePropsSpy.callCount).to.equal(1);
   });
 });

@@ -89,6 +89,7 @@ export class CreateDocument extends React.Component {
    */
   handleCreateDocument(event) {
     event.preventDefault();
+    const { limit, offset } = this.props;
     const title = event.target.title.value;
     const content = this.state.content;
     const access = event.target.access.value;
@@ -100,7 +101,7 @@ export class CreateDocument extends React.Component {
       access,
       user: this.props.user,
       id: this.props.currentDocument.id,
-    }, this.props.documentUrl).then(() => {
+    }, { limit, offset }).then(() => {
       this.setState({ title: '', content: '', access: '' });
     });
   }

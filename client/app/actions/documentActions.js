@@ -8,11 +8,34 @@ import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
 
 let errorMessage;
 
-export const viewAllDocuments = (url) => {
+export const viewAllDocuments = (paginationMetadata) => {
   const token = localStorage.getItem('token');
   const config = {
     headers: { authorization: token }
   };
+  const { limit, offset } = paginationMetadata;
+  return (dispatch) => {
+    return axios.get(`/api/documents/?limit=${limit}&offset=${offset}`, config)
+      .then((response) => {
+        dispatch({ type: VIEW_DOCUMENTS,
+          documents: response.data.documents,
+          pagination: response.data.pagination });
+      }, () => {}).catch((error) => {
+        errorMessage = error.response.data.message || error.response.data || '';
+        dispatch({ type: VIEW_DOCUMENTS_ERROR,
+          errorMessage });
+        return Promise.reject(errorMessage);
+      });
+  };
+};
+
+export const viewOwnDocuments = (paginationMetadata) => {
+  const token = localStorage.getItem('token');
+  const config = {
+    headers: { authorization: token }
+  };
+  const { limit, offset, userId } = paginationMetadata;
+  const url = `/api/users/${userId}/documents/?limit=${limit}&offset=${offset}`;
   return (dispatch) => {
     return axios.get(url, config)
       .then((response) => {
@@ -27,7 +50,8 @@ export const viewAllDocuments = (url) => {
       });
   };
 };
-export const createDocument = (document, documentUrl) => {
+
+export const createDocument = (document, paginationMetadata) => {
   const token = localStorage.getItem('token');
   const config = {
     headers: { authorization: token }
@@ -38,7 +62,7 @@ export const createDocument = (document, documentUrl) => {
         toastr.success('Document created!');
         dispatch({ type: CREATE_DOCUMENT,
           document: { ...document, ...response.data } });
-        dispatch(viewAllDocuments(documentUrl));
+        dispatch(viewAllDocuments(paginationMetadata));
         $('#create-form').modal('close');
       }).catch((error) => {
         errorMessage = error.response.data.message || error.response.data;
@@ -79,7 +103,7 @@ export const editDocument = (document) => {
       });
   };
 };
-export const deleteDocument = (document, documentUrl) => {
+export const deleteDocument = (document, paginationMetadata) => {
   const token = localStorage.getItem('token');
   const config = {
     headers: { authorization: token }
@@ -88,7 +112,7 @@ export const deleteDocument = (document, documentUrl) => {
     return axios.delete(`/api/documents/${document.id}`, config)
       .then((response) => {
         dispatch({ type: DELETE_DOCUMENT, document });
-        dispatch(viewAllDocuments(documentUrl));
+        dispatch(viewAllDocuments(paginationMetadata));
       }).catch((error) => {
         dispatch({ type: DELETE_DOCUMENT_ERROR,
           errorMessage: error.response.data.message || error.response.data });
@@ -96,13 +120,16 @@ export const deleteDocument = (document, documentUrl) => {
   };
 };
 
-export const searchForDocuments = (searchKey) => {
+export const searchForDocuments = (searchData) => {
   const token = localStorage.getItem('token');
   const config = {
     headers: { authorization: token }
   };
+  const { searchKey, limit, offset } = searchData;
+  const url =
+  `/api/search/documents/?searchKey=${searchKey}&limit=${limit}&offset=${offset}`;
   return (dispatch) => {
-    return axios.get(`/api/search/documents/${searchKey}`, config)
+    return axios.get(url, config)
       .then((response) => {
         dispatch({ type: SEARCH_DOCUMENT,
           documents: response.data.documents || [],

@@ -2,8 +2,10 @@ const Document = require('../models').Document;
 const User = require('../models').User;
 const errorHandler = require('../helpers/errorHandler');
 
-module.exports = {
+const LIMIT = 6;
+const OFFSET = 0;
 
+module.exports = {
   /**
    * Creates a new document
   * @param {object} request - request object received from the client
@@ -35,14 +37,15 @@ module.exports = {
    */
 
   listAllDocuments(request, response) {
-    const limit = request.query.limit || '6';
-    const offset =
-    request.query.page ? (Number(request.query.page - 1) * limit) : 0;
+    const limit = request.query.limit || LIMIT;
+    const offset = request.query.offset || OFFSET;
     const { roleId, userId } = request.decoded;
     return Document
       .findAndCountAll({
         include: [{ model: User,
-          as: 'user' }],
+          as: 'user',
+          attributes: ['id', 'username', 'roleId', 'fullname', 'email']
+        }],
         where: {
           $or: [
             { userId },
@@ -70,32 +73,39 @@ module.exports = {
         };
 
         return response.status(200).send({
-          documents: documents.rows.map(({
-            user, id, access, title, content,
-            userId: docUserId, createdAt, updatedAt }) => {
-            return {
-              id,
-              access,
-              title,
-              content,
-              userId: docUserId,
-              createdAt,
-              updatedAt,
-              user: user.filterUserDetails() };
-          }),
+          documents: documents.rows,
           pagination,
         });
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   },
   // fetch a particular document
   findADocument(request, response) {
+    const { roleId, userId } = request.decoded;
     return Document
-      .findById(request.params.id)
+      .findOne({
+        include: [{ model: User,
+          as: 'user',
+          attributes: ['id', 'username', 'roleId', 'fullname', 'email']
+        }],
+        where: {
+          id: request.params.id,
+          $or: [
+            { userId },
+            { access: {
+              $gte: roleId,
+              $ne: -1
+            }
+            },
+            { access: 0 }
+          ]
+        },
+      })
       .then((document) => {
         if (!document) {
           throw new Error('Document Not Found');
@@ -104,7 +114,8 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(404).send(customError);
       });
   },
@@ -117,7 +128,7 @@ module.exports = {
           throw new Error('Document Not Found');
         }
         if (request.decoded.userId !== document.userId) {
-          throw new Error('You\'re not allowed to update this document');
+          throw new Error('You are not allowed to update this document');
         }
         return document
           .update({
@@ -131,7 +142,8 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   },
@@ -143,6 +155,9 @@ module.exports = {
         if (!document) {
           throw new Error('Document Not Found');
         }
+        if (request.decoded.userId !== document.userId) {
+          throw new Error('You are not allowed to delete this document');
+        }
         return document
           .destroy()
           .then(() => {
@@ -151,27 +166,29 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   },
   // search for particular documents
   searchForDocument(request, response) {
     const { roleId, userId } = request.decoded;
-    const limit = request.query.limit || '6';
-    const offset =
-     request.query.page ? (Number(request.query.page - 1) * limit) : 0;
+    const limit = request.query.limit || LIMIT;
+    const offset = request.query.offset || OFFSET;
 
     return Document
       .findAndCountAll({
         include: [{ model: User,
-          as: 'user' }],
+          as: 'user',
+          attributes: ['id', 'username', 'roleId', 'fullname', 'email']
+        }],
         where: {
           $and: [
             {
               $or: [
-                { title: { $iLike: `%${request.params.searchKey}%` } },
-                { content: { $iLike: `%${request.params.searchKey}%` } }
+                { title: { $iLike: `%${request.query.searchKey}%` } },
+                { content: { $iLike: `%${request.query.searchKey}%` } }
               ]
             },
             {
@@ -200,25 +217,14 @@ module.exports = {
           pageSize: documents.rows.length,
         };
         return response.status(200).send({
-          documents: documents.rows.map(({
-            user, id, access, title, content,
-            userId: docUserId, createdAt, updatedAt }) => {
-            return {
-              id,
-              access,
-              title,
-              content,
-              userId: docUserId,
-              createdAt,
-              updatedAt,
-              user: user.filterUserDetails() };
-          }),
+          documents: documents.rows,
           pagination
         });
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   }

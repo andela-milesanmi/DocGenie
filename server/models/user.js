@@ -70,7 +70,10 @@ module.exports = (sequelize, DataTypes) => {
     instanceMethods: {
       // hash password
       generatePasswordHash: (user) => {
-        user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(8), null);
+        const [_, firstItem, secondItem] = user.password.split('$');
+        if (firstItem !== '2a' && secondItem !== '08') {
+          user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(8), null);
+        }
       },
       // validate password after user signs in
       validatePassword: (password, user) => {
