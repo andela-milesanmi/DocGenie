@@ -174,9 +174,8 @@ module.exports = {
   // search for particular documents
   searchForDocument(request, response) {
     const { roleId, userId } = request.decoded;
-    const limit = request.query.limit || '6';
-    const offset =
-     request.query.page ? (Number(request.query.page - 1) * limit) : 0;
+    const limit = request.query.limit || LIMIT;
+    const offset = request.query.offset || OFFSET;
 
     return Document
       .findAndCountAll({
@@ -188,8 +187,8 @@ module.exports = {
           $and: [
             {
               $or: [
-                { title: { $iLike: `%${request.params.searchKey}%` } },
-                { content: { $iLike: `%${request.params.searchKey}%` } }
+                { title: { $iLike: `%${request.query.searchKey}%` } },
+                { content: { $iLike: `%${request.query.searchKey}%` } }
               ]
             },
             {

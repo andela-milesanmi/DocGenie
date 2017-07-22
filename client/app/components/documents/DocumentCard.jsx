@@ -4,10 +4,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import swal from 'sweetalert';
 import toastr from 'toastr';
-import { Modal } from 'react-materialize';
 import { changeCurrentDocument, deleteDocument }
   from '../../actions/documentActions';
-
 
 /**
  * DocumentCard component renders each document
@@ -28,21 +26,20 @@ export class DocumentCard extends React.Component {
   }
 
   /**
-   * editDocument method triggers changeCurrentDocument action
-   * @param {object} document
-   * @memberOf DocumentCard
-   */
+  * editDocument method triggers changeCurrentDocument action
+  * @param {object} document
+  * @memberOf DocumentCard
+  */
   editDocument(document) {
     this.props.changeCurrentDocument(document);
   }
 
   /**
-   * deleteDocument method triggers deleteDocument action
-   * @param {object} document
-   * @memberOf DocumentCard
-   */
+  * deleteDocument method triggers deleteDocument action
+  * @param {object} document
+  * @memberOf DocumentCard
+  */
   deleteDocument(document) {
-    console.log(this.props, 'props in delete document');
     const { limit, offset } = this.state;
     swal({
       title: 'Are you sure?',
@@ -76,10 +73,10 @@ export class DocumentCard extends React.Component {
   }
 
   /**
-   * render, React lifecycle method
-   * @returns a DOM element
-   * @memberOf DocumentCard
-   */
+  * render, React lifecycle method
+  * @returns a DOM element
+  * @memberOf DocumentCard
+  */
   render() {
     // document props is passed down from the parent component, AllDocuments
     const { document, currentUser } = this.props;
@@ -120,7 +117,6 @@ export class DocumentCard extends React.Component {
 // Maps state from store to props
 const mapStateToProps = (state) => {
   return {
-    // You can now say this.props.documents
     currentDocument: state.documents.currentDocument || {},
     documents: state.documents.documents,
     currentUser: state.user.currentProfile,
@@ -130,9 +126,10 @@ const mapStateToProps = (state) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-  // You can now say this.props.changeCurrentDocument
-    changeCurrentDocument: document => dispatch(changeCurrentDocument(document)),
-    deleteDocument: (document, documentUrl) => dispatch(deleteDocument(document, documentUrl)),
+    changeCurrentDocument: document =>
+      dispatch(changeCurrentDocument(document)),
+    deleteDocument: (document, documentUrl) =>
+      dispatch(deleteDocument(document, documentUrl)),
   };
 };
 
@@ -143,7 +140,8 @@ DocumentCard.propTypes = {
   deleteDocument: PropTypes.func.isRequired,
   changeCurrentDocument: PropTypes.func.isRequired,
   currentUser: PropTypes.object.isRequired,
+  limit: PropTypes.number.isRequired,
+  offset: PropTypes.number.isRequired,
 };
 
-// Use connect to put them together
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentCard);

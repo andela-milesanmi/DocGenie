@@ -78,13 +78,15 @@ export const updateProfile = (user, id) => {
       });
   };
 };
-export const viewAllUsers = (page = '') => {
+export const viewAllUsers = (paginationMetadata) => {
   const token = localStorage.getItem('token');
   const config = {
     headers: { authorization: token }
   };
+  const { limit, offset } = paginationMetadata;
+
   return (dispatch) => {
-    return axios.get(`/api/users/?page=${page}`, config)
+    return axios.get(`/api/users/?limit=${limit}&offset=${offset}`, config)
       .then((response) => {
         dispatch({ type: VIEW_USERS,
           users: response.data.users,
@@ -96,13 +98,16 @@ export const viewAllUsers = (page = '') => {
   };
 };
 
-export const searchForUsers = (searchKey) => {
+export const searchForUsers = (searchData) => {
   const token = localStorage.getItem('token');
   const config = {
     headers: { authorization: token }
   };
+  const { searchKey, limit, offset } = searchData;
+  const url =
+   `/api/search/users/?searchKey=${searchKey}&limit=${limit}&offset=${offset}`;
   return (dispatch) => {
-    return axios.get(`/api/search/users/${searchKey}`, config)
+    return axios.get(url, config)
       .then((response) => {
         dispatch({ type: SEARCH_USERS,
           users: response.data.users || [],

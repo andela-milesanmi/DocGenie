@@ -63,7 +63,8 @@ module.exports = {
       });
     }).catch((error) => {
       const errorMessage = error.message || error;
-      const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+      const customError =
+        errorHandler.filterSequelizeErrorMessage(errorMessage);
       response.status(400).send(customError);
     });
   },
@@ -95,14 +96,16 @@ module.exports = {
       });
     }).catch((error) => {
       const errorMessage = error.message || error;
-      const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+      const customError =
+        errorHandler.filterSequelizeErrorMessage(errorMessage);
       response.status(400).send(customError);
     });
   },
+
+  // list all users
   listAllUsers(request, response) {
-    const limit = request.query.limit || '6';
-    const offset = request.query.page ?
-      (Number(request.query.page - 1) * limit) : 0;
+    const limit = request.query.limit || LIMIT;
+    const offset = request.query.offset || OFFSET;
     const { userId } = request.decoded;
     return User
       .findAndCountAll({
@@ -133,10 +136,12 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   },
+
   // find a particular user
   findAUser(request, response) {
     return User
@@ -149,10 +154,12 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   },
+
   // update user attributes
   updateAUser(request, response) {
     return User
@@ -216,15 +223,13 @@ module.exports = {
       }).then(() => response.status(200).send('User deleted successfully'))
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   },
   // find all a user's documents
   findUserDocuments(request, response) {
-    // const limit = request.query.limit || '6';
-    // const offset =
-    //  request.query.page ? (Number(request.query.page - 1) * limit) : 0;
     const limit = request.query.limit || LIMIT;
     const offset = request.query.offset || OFFSET;
     const { userId, roleId } = request.decoded;
@@ -279,27 +284,28 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   },
   // search for users
   searchForUser(request, response) {
-    const limit = request.query.limit || '6';
-    const offset = request.query.page ?
-      (Number(request.query.page - 1) * limit) : 0;
+    const limit = request.query.limit || LIMIT;
+    const offset = request.query.offset || OFFSET;
+
     return User
       .findAndCountAll({
         where: {
           $or: [
             {
               username: {
-                $iLike: `%${request.params.searchKey}%`
+                $iLike: `%${request.query.searchKey}%`
               }
             },
             {
               fullname: {
-                $iLike: `%${request.params.searchKey}%`
+                $iLike: `%${request.query.searchKey}%`
               }
             }
           ]
@@ -324,7 +330,8 @@ module.exports = {
       })
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
+        const customError =
+          errorHandler.filterSequelizeErrorMessage(errorMessage);
         response.status(400).send(customError);
       });
   },

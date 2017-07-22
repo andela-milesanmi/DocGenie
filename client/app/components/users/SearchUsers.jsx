@@ -12,7 +12,8 @@ export const SearchUsers = (props) => {
   const handleChange = (event) => {
     event.preventDefault();
     const searchKey = event.target.value;
-    if (searchKey) props.searchForUsers(searchKey);
+    const { limit, offset } = props;
+    if (searchKey) props.searchForUsers({ searchKey, limit, offset });
   };
   return (
     <div className="row search-docs">
@@ -28,8 +29,7 @@ export const SearchUsers = (props) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-  // You can now say this.props.searchForDocuments
-    searchForUsers: searchKey => dispatch(searchForUsers(searchKey)),
+    searchForUsers: searchData => dispatch(searchForUsers(searchData)),
   };
 };
 

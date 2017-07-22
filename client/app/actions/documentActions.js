@@ -4,8 +4,7 @@ import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
   CREATE_DOCUMENT_ERROR, CHANGE_CURRENT_DOCUMENT, EDIT_DOCUMENT,
   EDIT_DOCUMENT_ERROR, DELETE_DOCUMENT, DELETE_DOCUMENT_ERROR,
   SEARCH_DOCUMENT, SEARCH_DOCUMENT_ERROR, VIEW_ONE_DOCUMENT,
-  VIEW_ONE_DOCUMENT_ERROR,
-  VIEW_OWN_DOCUMENTS, VIEW_OWN_DOCUMENTS_ERROR } from '../actionTypes';
+  VIEW_ONE_DOCUMENT_ERROR } from '../actionTypes';
 
 let errorMessage;
 
@@ -121,13 +120,16 @@ export const deleteDocument = (document, paginationMetadata) => {
   };
 };
 
-export const searchForDocuments = (searchKey) => {
+export const searchForDocuments = (searchData) => {
   const token = localStorage.getItem('token');
   const config = {
     headers: { authorization: token }
   };
+  const { searchKey, limit, offset } = searchData;
+  const url =
+  `/api/search/documents/?searchKey=${searchKey}&limit=${limit}&offset=${offset}`;
   return (dispatch) => {
-    return axios.get(`/api/search/documents/${searchKey}`, config)
+    return axios.get(url, config)
       .then((response) => {
         dispatch({ type: SEARCH_DOCUMENT,
           documents: response.data.documents || [],
