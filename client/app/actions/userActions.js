@@ -6,6 +6,8 @@ import { CREATE_USER, SIGNIN_USER, LOGOUT_USER, VIEW_USERS, SEARCH_USERS,
   SEARCH_USERS_ERROR, VIEW_USERS_ERROR, CREATE_USER_ERROR, SIGNIN_USER_ERROR,
   UPDATE_USER, UPDATE_USER_ERROR } from '../actionTypes';
 
+let errorMessage;
+
 export const createUser = (user) => {
   return (dispatch) => {
     return axios.post('/auth/api/users', user)
@@ -14,8 +16,8 @@ export const createUser = (user) => {
         dispatch({ type: CREATE_USER, user: response.data.user });
         browserHistory.push('/dashboard/documents/all');
       }).catch((error) => {
-        dispatch({ type: CREATE_USER_ERROR,
-          errorMessage: error.response.data.message || error.response.data });
+        errorMessage = error.response.data.message || error.response.data;
+        dispatch({ type: CREATE_USER_ERROR, errorMessage });
         return Promise.reject(error);
       });
   };
@@ -28,8 +30,8 @@ export const signInUser = (user) => {
         dispatch({ type: SIGNIN_USER, user: response.data.user });
         browserHistory.push('/dashboard/documents/all');
       }).catch((error) => {
-        dispatch({ type: SIGNIN_USER_ERROR,
-          errorMessage: error.response.data.message || error.response.data });
+        errorMessage = error.response.data.message || error.response.data;
+        dispatch({ type: SIGNIN_USER_ERROR, errorMessage });
         return Promise.reject(error);
       });
   };
@@ -45,8 +47,8 @@ export const getUser = () => {
       .then((response) => {
         dispatch({ type: CREATE_USER, user: response.data });
       }).catch((error) => {
-        dispatch({ type: CREATE_USER_ERROR,
-          errorMessage: error.response.data.message || error.response.data });
+        errorMessage = error.response.data.message || error.response.data;
+        dispatch({ type: CREATE_USER_ERROR, errorMessage });
         throw new Error('UserInvalidToken');
       });
   };
@@ -70,11 +72,11 @@ export const updateProfile = (user, id) => {
     return axios.put(`/api/users/${userId}`, user, config)
       .then((response) => {
         dispatch({ type: UPDATE_USER, user: response.data });
-        return response.data;
+        toastr.success('Profile updated successfully!');
       }).catch((error) => {
-        dispatch({ type: UPDATE_USER_ERROR,
-          errorMessage: error.response.data.message || error.response.data });
-        return Promise.reject();
+        errorMessage = error.response.data.message || error.response.data;
+        dispatch({ type: UPDATE_USER_ERROR, errorMessage });
+        return Promise.reject(toastr.error(errorMessage));
       });
   };
 };
@@ -92,8 +94,8 @@ export const viewAllUsers = (paginationMetadata) => {
           users: response.data.users,
           pagination: response.data.pagination });
       }).catch((error) => {
-        dispatch({ type: VIEW_USERS_ERROR,
-          errorMessage: error.response.data.message || error.response.data });
+        errorMessage = error.response.data.message || error.response.data;
+        dispatch({ type: VIEW_USERS_ERROR, errorMessage });
       });
   };
 };
@@ -113,8 +115,8 @@ export const searchForUsers = (searchData) => {
           users: response.data.users || [],
           pagination: response.data.pagination });
       }).catch((error) => {
-        dispatch({ type: SEARCH_USERS_ERROR,
-          errorMessage: error.response.data.message || error.response.data });
+        errorMessage = error.response.data.message || error.response.data;
+        dispatch({ type: SEARCH_USERS_ERROR, errorMessage });
       });
   };
 };
