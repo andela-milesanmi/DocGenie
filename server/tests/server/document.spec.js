@@ -14,7 +14,7 @@ const getUserToken = (data) => {
       .send(data)
       .end((error, response) => {
         if (error) {
-          return reject(error);
+          return reject({ message: error });
         }
         return resolve(response.body.token);
       });
@@ -201,7 +201,7 @@ describe('Documents Controller', () => {
         expect(response.body).to.be.an('object');
         expect(response.body).to.not.have.property('id');
         expect(response.body).to.not.have.property('userId');
-        expect(response.text).to.equal('Document Not Found');
+        expect(response.body).to.eql({ message: 'Document Not Found' });
         done();
       });
   });
@@ -211,7 +211,7 @@ describe('Documents Controller', () => {
       .set('authorization', adminToken)
       .end((error, response) => {
         expect(response).to.have.status(200);
-        expect(response.text).to.eql('Document deleted successfully');
+        expect(response.body).to.eql({ message: 'Document deleted successfully' });
         done();
       });
   });
@@ -324,7 +324,7 @@ describe('Documents Controller', () => {
         expect(response.body).to.be.an('object');
         expect(response.body).to.not.have.property('id');
         expect(response.body).to.not.have.property('userId');
-        expect(response.text).to.equal('Document Not Found');
+        expect(response.body).to.eql({ message: 'Document Not Found' });
         done();
       });
   });

@@ -145,10 +145,7 @@ export class Profile extends React.Component {
       oldPassword,
       password,
       confirmPassword }).then(() => {
-      toastr.success('Profile Updated!');
       this.toggle('isEdit');
-    }).catch((error) => {
-      toastr.error(error);
     });
   }
 

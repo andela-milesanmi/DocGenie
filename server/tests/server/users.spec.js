@@ -72,8 +72,8 @@ describe('Users', () => {
       .set('Accept', 'application/json')
       .send({ email, password })
       .end((error, response) => {
-        expect(response).to.have.status(400);
-        expect(response.text).to.equal('Not an existing user');
+        expect(response).to.have.status(404);
+        expect(response.body).to.eql({ message: 'Not an existing user' });
         done();
       });
   });
@@ -107,7 +107,6 @@ describe('Users', () => {
       .get('/api/users/2/documents')
       .set('authorization', userToken)
       .end((error, response) => {
-        console.log(response.body, 'response.bodayy')
         expect(response).to.have.status(200);
         expect(response.body.documents).to.be.an('array');
         expect(response.body).to.be.an('object').that.has.all.keys('documents', 'pagination');
@@ -136,7 +135,7 @@ describe('Users', () => {
       .set('authorization', userToken)
       .end((error, response) => {
         expect(response).to.have.status(200);
-        expect(response.text).to.eql('User deleted successfully');
+        expect(response.body).to.eql({ message: 'User deleted successfully' });
         done();
       });
   });
