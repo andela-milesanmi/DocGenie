@@ -8,26 +8,32 @@ const LIMIT = 6;
 const OFFSET = 0;
 
 module.exports = {
-  // create new user on sign up
+
+  /**
+  * @description - Creates a new user
+  * @param {object} request - request object received from the client
+  * @param {object} response - response object served to the client
+  * @returns {promise} user - new user created
+  */
   createNewUser(request, response) {
     const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
     if (!emailRegex.test(request.body.email)) {
-      return response.status(401).send({
+      return response.status(400).json({
         message: 'Email is not rightly formatted',
       });
     }
     if (!request.body.fullname || !request.body.email || !request.body.password
       || !request.body.username) {
-      return response.status(401).send({
+      return response.status(400).json({
         message: 'Please fill all the fields'
       });
     }
     if (request.body.password !== request.body.confirmPassword) {
-      return response.status(401).send({ message: 'Password does not match' });
+      return response.status(400).json({ message: 'Password does not match' });
     }
-    if (request.decoded && (Number(request.body.roleId) === 1
-    && Number(request.decoded.roleId) !== 1)) {
-      return response.status(400).json({
+    if (Number(request.body.roleId) === 1
+    && request.decoded.roleId && Number(request.decoded.roleId) !== 1) {
+      return response.status(403).json({
         message: 'You are not allowed to create an admin user',
       });
     }
@@ -44,7 +50,8 @@ module.exports = {
       },
     }).then((existingUser) => {
       if (existingUser.length > 0) {
-        throw new Error('Username or email already exists');
+        return response.status(400).json({ message:
+           'Username or email already exists' });
       }
       return User
         .create({
@@ -65,13 +72,19 @@ module.exports = {
       const errorMessage = error.message || error;
       const customError =
         errorHandler.filterSequelizeErrorMessage(errorMessage);
-      response.status(400).send(customError);
+      return response.status(400).json({ message: customError });
     });
   },
-  // sign in a user
+
+  /**
+  * @description - signs in a new user
+  * @param {object} request - request object received from the client
+  * @param {object} response - response object served to the client
+  * @returns {json} user - user details
+  */
   signIn(request, response) {
     if (!request.body.email || !request.body.password) {
-      return response.status(401).send({
+      return response.status(400).json({
         message: 'Enter all required fields'
       });
     }
@@ -81,15 +94,15 @@ module.exports = {
       }
     }).then((user) => {
       if (!user) {
-        throw new Error('Not an existing user');
+        return response.status(404).json({ message: 'Not an existing user' });
       } else if (!user.validatePassword(request.body.password, user)) {
-        throw new Error('Invalid password');
+        return response.status(400).json({ message: 'Invalid password' });
       }
       // if user is found and password is right,
       // create a token
       const token = authentication.generateToken(user);
 
-      return response.status(200).send({
+      return response.status(200).json({
         message: 'Signed in successfully',
         user: user.filterUserDetails(),
         token,
@@ -98,11 +111,16 @@ module.exports = {
       const errorMessage = error.message || error;
       const customError =
         errorHandler.filterSequelizeErrorMessage(errorMessage);
-      response.status(400).send(customError);
+      return response.status(400).json({ message: customError });
     });
   },
 
-  // list all users
+  /**
+  * @description - Fetches all users
+  * @param {object} request - request object received from the client
+  * @param {object} response - response object served to the client
+  * @returns {promise} users - users fetched
+  */
   listAllUsers(request, response) {
     const limit = request.query.limit || LIMIT;
     const offset = request.query.offset || OFFSET;
@@ -120,7 +138,7 @@ module.exports = {
       })
       .then((users) => {
         if (!users) {
-          throw new Error('No user found');
+          return response.status(404).json({ message: 'User Not Found' });
         }
         const pagination = {
           totalCount: users.count,
@@ -129,7 +147,7 @@ module.exports = {
           pageSize: users.rows.length,
         };
 
-        return response.status(200).send({
+        return response.status(200).json({
           users: users.rows.map(user => user.filterUserDetails()),
           pagination,
         });
@@ -138,50 +156,63 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        response.status(400).send(customError);
+        return response.status(400).json({ message: customError });
       });
   },
 
-  // find a particular user
+  /**
+  * @description - Fetches a user
+  * @param {object} request - request object received from the client
+  * @param {object} response - response object served to the client
+  * @returns {json} user - fetched user
+  */
   findAUser(request, response) {
     return User
       .findById(request.params.id)
       .then((user) => {
         if (!user) {
-          throw new Error('User Not Found');
+          return response.status(404).json({ message: 'User Not Found' });
         }
-        return response.status(200).send(user.filterUserDetails());
+        return response.status(200).json(user.filterUserDetails());
       })
       .catch((error) => {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        response.status(400).send(customError);
+        return response.status(400).json({ message: customError });
       });
   },
 
-  // update user attributes
+  /**
+  * @description - Updates user details
+  * @param {object} request - request object received from the client
+  * @param {object} response - response object served to the client
+  * @returns {json} user - updated user details
+  */
   updateAUser(request, response) {
     return User
       .findById(request.params.id)
       .then((user) => {
         if (!user) {
-          throw new Error('User Not Found');
+          return response.status(404).json({ message: 'User Not Found' });
         }
 
         // validating user password, confirming if old password is correct
         if (request.body.oldPassword || request.body.password
          || request.body.confirmPassword) {
           if (!bcrypt.compareSync(request.body.oldPassword, user.password)) {
-            throw new Error('Old password is incorrect');
+            return response.status(400).json({ message:
+               'Old password is incorrect' });
           }
           // checking if password and confirmPassword fields match
           if (request.body.password &&
           (request.body.password !== request.body.confirmPassword)) {
-            throw new Error('Passwords do not match');
+            return response.status(400).json({ message:
+               'Passwords do not match' });
           }
           if (request.body.oldPassword === request.body.password) {
-            throw new Error('Please change your password');
+            return response.status(400).json({ message:
+               'Please change your password' });
           }
         }
         let userDetails;
@@ -194,42 +225,57 @@ module.exports = {
           const { roleId } = request.body;
           userDetails = { roleId };
         } else {
-          throw new Error('Sorry, you are not authorized for this action');
+          return response.status(403).json({ message:
+             'Sorry, you are not authorized for this action' });
         }
         return user
           .update(userDetails);
-      }).then(user => response.status(200).send(user.filterUserDetails()))
+      }).then(user => response.status(200).json(user.filterUserDetails()))
       .catch((error) => {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        response.status(400).send(customError);
+        return response.status(400).json({ message: customError });
       });
   },
-  // delete a user
+
+  /**
+  * @description - Deletes a user
+  * @param {object} request - request object received from the client
+  * @param {object} response - response object served to the client
+  * @returns {promise} document - new document created
+  */
   deleteAUser(request, response) {
     const { userId, roleId } = request.decoded;
     return User
       .findById(request.params.id)
       .then((user) => {
         if (!user) {
-          throw new Error('User not found');
+          return response.status(404).json({ message: 'User not found' });
         }
         // checking if a non-admin is trying to delete another user's account
         if (userId !== user.id && Number(roleId) !== 1) {
-          throw new Error('You\'re not authorized to delete another user');
+          return response.status(403).json({ message:
+             'You\'re not authorized to delete another user' });
         }
         return user
           .destroy();
-      }).then(() => response.status(200).send('User deleted successfully'))
+      }).then(() => response.status(200).json({ message:
+         'User deleted successfully' }))
       .catch((error) => {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        response.status(400).send(customError);
+        return response.status(400).json({ message: customError });
       });
   },
-  // find all a user's documents
+
+  /**
+  * @description - Fetches a particular user's document(s)
+  * @param {object} request - request object received from the client
+  * @param {object} response - response object served to the client
+  * @returns {promise} documents - fetched documents
+  */
   findUserDocuments(request, response) {
     const limit = request.query.limit || LIMIT;
     const offset = request.query.offset || OFFSET;
@@ -258,7 +304,7 @@ module.exports = {
       })
       .then((documents) => {
         if (!documents) {
-          throw new Error('Document(s) Not Found');
+          return response.status(404).json({ message: 'Document(s) Not Found' });
         }
         const pagination = {
           totalCount: documents.count,
@@ -266,7 +312,7 @@ module.exports = {
           currentPage: Math.floor(offset / limit) + 1,
           pageSize: documents.rows.length,
         };
-        return response.status(200).send({
+        return response.status(200).json({
           documents: documents.rows.map(({
             user, id, access, title, content,
             userId, createdAt, updatedAt }) => {
@@ -287,10 +333,16 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        response.status(400).send(customError);
+        return response.status(400).json({ message: customError });
       });
   },
-  // search for users
+
+  /**
+  * @description - Fetches searched users
+  * @param {object} request - request object received from the client
+  * @param {object} response - response object served to the client
+  * @returns {json} users - fetched users
+  */
   searchForUser(request, response) {
     const limit = request.query.limit || LIMIT;
     const offset = request.query.offset || OFFSET;
@@ -316,7 +368,7 @@ module.exports = {
         order: '"createdAt" DESC',
       }).then((users) => {
         if (!users) {
-          throw new Error('No user(s) found');
+          return response.status(404).json({ message: 'No user(s) found' });
         }
         const pagination = {
           totalCount: users.count,
@@ -324,7 +376,7 @@ module.exports = {
           currentPage: Math.floor(offset / limit) + 1,
           pageSize: users.rows.length,
         };
-        return response.status(200).send({
+        return response.status(200).json({
           users: users.rows.map(user => user.filterUserDetails()),
           pagination
         });
@@ -333,11 +385,17 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        response.status(400).send(customError);
+        return response.status(400).json({ message: customError });
       });
   },
-  // logout user
+
+  /**
+  * @description - signs out a logged in user
+  * @param {object} request - request object received from the client
+  * @param {object} response - response object served to the client
+  * @returns {json} message - message response returned
+  */
   signOut(request, response) {
-    return response.status(200).send({ message: 'Successfully logged out' });
+    return response.status(200).json({ message: 'Successfully logged out' });
   },
 };

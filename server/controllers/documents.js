@@ -7,11 +7,11 @@ const OFFSET = 0;
 
 module.exports = {
   /**
-   * Creates a new document
+  * @description - Creates a new document
   * @param {object} request - request object received from the client
-   * @param {object} response - response object served to the client
-   * @returns {promise} document - new document created
-   */
+  * @param {object} response - response object served to the client
+  * @returns {promise} document - new document created
+  */
   createADocument(request, response) {
     return Document
       .create({
@@ -20,22 +20,21 @@ module.exports = {
         access: request.body.access,
         content: request.body.content
       })
-      .then(document => response.status(201).send(document))
+      .then(document => response.status(201).json(document))
       .catch((error) => {
         const errorMessage = error.message || error;
-        const customError = errorHandler.filterSequelizeErrorMessage(errorMessage);
-        response.status(400).send(customError);
+        const customError =
+         errorHandler.filterSequelizeErrorMessage(errorMessage);
+        return response.status(400).json({ message: customError });
       });
   },
 
-
   /**
-   * Fetches all documents which the current user has access to view
+  * @description - Fetches all documents which the current user has access to view
   * @param {object} request - request object received from the client
-   * @param {object} response - response object served to the client
-   * @returns {promise} documents - all documents fetched
-   */
-
+  * @param {object} response - response object served to the client
+  * @returns {promise} documents - all documents fetched
+  */
   listAllDocuments(request, response) {
     const limit = request.query.limit || LIMIT;
     const offset = request.query.offset || OFFSET;
@@ -63,7 +62,7 @@ module.exports = {
       })
       .then((documents) => {
         if (!documents) {
-          throw new Error('No documents found');
+          return response.status(404).json({ message: 'No documents found' });
         }
         const pagination = {
           totalCount: documents.count,
@@ -72,7 +71,7 @@ module.exports = {
           pageSize: documents.rows.length,
         };
 
-        return response.status(200).send({
+        return response.status(200).json({
           documents: documents.rows,
           pagination,
         });
@@ -81,10 +80,16 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        response.status(400).send(customError);
+        return response.status(400).json({ message: customError });
       });
   },
-  // fetch a particular document
+
+ /**
+  * @description - Fetches a documents if the current user has access to view it
+  * @param {object} request - request object received from the client
+  * @param {object} response - response object served to the client
+  * @returns {promise} document - the document fetched
+  */
   findADocument(request, response) {
     const { roleId, userId } = request.decoded;
     return Document
@@ -108,27 +113,34 @@ module.exports = {
       })
       .then((document) => {
         if (!document) {
-          throw new Error('Document Not Found');
+          return response.status(404).json({ message: 'Document Not Found' });
         }
-        return response.status(200).send(document);
+        return response.status(200).json(document);
       })
       .catch((error) => {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        response.status(404).send(customError);
+        return response.status(400).json({ message: customError });
       });
   },
-  // update document attributes
+
+ /**
+  * @description - Updates a document and returns the edited document
+  * @param {object} request - request object received from the client
+  * @param {object} response - response object served to the client
+  * @returns {promise} document - the edited document
+  */
   updateADocument(request, response) {
     return Document
       .findById(request.params.id)
       .then((document) => {
         if (!document) {
-          throw new Error('Document Not Found');
+          return response.status(404).json({ message: 'Document Not Found' });
         }
         if (request.decoded.userId !== document.userId) {
-          throw new Error('You are not allowed to update this document');
+          return response.status(403).json({
+            message: 'You are not allowed to update this document' });
         }
         return document
           .update({
@@ -138,40 +150,54 @@ module.exports = {
             content: request.body.content || document.content,
           });
       }).then((updatedDocument) => {
-        response.status(200).send(updatedDocument);
+        return response.status(200).json(updatedDocument);
       })
       .catch((error) => {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        response.status(400).send(customError);
+        return response.status(400).json({ message: customError });
       });
   },
-  // delete a document
+
+  /**
+  * @description - Deletes a document
+  * @param {object} request - request object received from the client
+  * @param {object} response - response object served to the client
+  * @returns {json} message, response or error
+  */
   deleteADocument(request, response) {
     return Document
       .findById(request.params.id)
       .then((document) => {
         if (!document) {
-          throw new Error('Document Not Found');
+          return response.status(404).json({ message: 'Document Not Found' });
         }
         if (request.decoded.userId !== document.userId) {
-          throw new Error('You are not allowed to delete this document');
+          return response.status(403).json({ message:
+             'You are not allowed to delete this document' });
         }
         return document
           .destroy()
           .then(() => {
-            response.status(200).send('Document deleted successfully');
+            return response.status(200).json({ message:
+              'Document deleted successfully' });
           });
       })
       .catch((error) => {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        response.status(400).send(customError);
+        return response.status(400).json({ message: customError });
       });
   },
-  // search for particular documents
+
+  /**
+  * @description - Search for particular document(s)
+  * @param {object} request - request object received from the client
+  * @param {object} response - response object served to the client
+  * @returns {promise} document - the fetched document
+  */
   searchForDocument(request, response) {
     const { roleId, userId } = request.decoded;
     const limit = request.query.limit || LIMIT;
@@ -208,7 +234,8 @@ module.exports = {
         order: '"createdAt" DESC',
       }).then((documents) => {
         if (!documents) {
-          throw new Error('Document(s) Not Found');
+          return response.status(404).json({ message:
+             'Document(s) Not Found' });
         }
         const pagination = {
           totalCount: documents.count,
@@ -216,7 +243,7 @@ module.exports = {
           currentPage: Math.floor(offset / limit) + 1,
           pageSize: documents.rows.length,
         };
-        return response.status(200).send({
+        return response.status(200).json({
           documents: documents.rows,
           pagination
         });
@@ -225,7 +252,7 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        response.status(400).send(customError);
+        return response.status(400).json({ message: customError });
       });
   }
 };
