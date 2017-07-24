@@ -29,6 +29,4 @@ module.exports = {
       options: { limit: 25000 },}
       ]
   },
-  plugins: [
-  ]
 };
