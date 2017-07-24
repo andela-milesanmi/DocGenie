@@ -1,4 +1,5 @@
 const Role = require('../models').Role;
+const errorHandler = require('../helpers/errorHandler');
 
 module.exports = {
   createNewRole(request, response) {
@@ -11,29 +12,44 @@ module.exports = {
       .create({
         title: request.body.title,
       })
-      .then(role => response.status(201).send(role))
-      .catch(error => response.status(400).send(error));
+      .then(role => response.status(201).json(role))
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        const customError =
+        errorHandler.filterSequelizeErrorMessage(errorMessage);
+        return response.status(400).json({ message: customError });
+      });
   },
   listAllRoles(request, response) {
     return Role
       .all()
-      .then(roles => response.status(200).send(roles))
-      .catch(error => response.status(400).send(error));
+      .then(roles => response.status(200).json(roles))
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        const customError =
+        errorHandler.filterSequelizeErrorMessage(errorMessage);
+        return response.status(400).json({ message: customError });
+      });
   },
   destroyARole(request, response) {
     return Role
       .findById(request.params.id)
       .then((role) => {
         if (!role) {
-          return response.status(404).send({
+          return response.status(404).json({
             message: 'Role Not Found',
           });
         }
         return role
           .destroy()
-          .then(() => response.status(204).send())
-          .catch(error => response.status(400).send(error));
+          .then(() => response.status(200).json({
+            message: 'Role deleted successfully' }));
       })
-      .catch(error => response.status(400).send(error));
+      .catch((error) => {
+        const errorMessage = error.message || error;
+        const customError =
+        errorHandler.filterSequelizeErrorMessage(errorMessage);
+        return response.status(400).json({ message: customError });
+      });
   },
 };

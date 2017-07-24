@@ -78,7 +78,8 @@ $ npm test
 
 ##### API Documentation
 
-The API has routes, each dedicated to a single task that uses HTTP response codes to indicate API status and errors.
+The API has routes, each dedicated to a single task that uses HTTP response codes to indicate API status and error messages.
+You can find the full API documentation here: ```https://andela-mharuna.github.io/slate```
 
 ##### Authentication
 
