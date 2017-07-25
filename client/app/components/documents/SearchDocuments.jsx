@@ -15,7 +15,7 @@ export const SearchDocuments = (props) => {
     if (searchKey) props.searchForDocuments({ searchKey, limit, offset });
   };
   return (
-    <div className="row search-docs">
+    <div id="search-docs" className="row search-docs">
       <div className="col s10">
         <input name="searchKey" id="searchKey" type="text"
           className="validate" placeholder="Search for documents here..."

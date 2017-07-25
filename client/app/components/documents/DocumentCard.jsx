@@ -90,7 +90,7 @@ export class DocumentCard extends React.Component {
             <p><b>Author:</b> {document.user.fullname}</p>
             <p><b>Date:</b> {document.createdAt.slice(0, 10)}</p>
           </div>
-          <div className="card-action form-card-action">
+          <div id="form-card-action" className="card-action form-card-action">
             { currentUser.id === document.userId &&
               <span>
                 <a id="edit" href="#create-form"
@@ -102,8 +102,8 @@ export class DocumentCard extends React.Component {
               </span>
             }
             {!this.state.showMore &&
-            <a href="#" onClick={() => {
-              browserHistory.replace(`/dashboard/documents/view/${document.id}`);
+            <a id="show-more" href="#" onClick={() => {
+              browserHistory.push(`/dashboard/documents/${document.id}`);
             }}>
               VIEW MORE
             </a>

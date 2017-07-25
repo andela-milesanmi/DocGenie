@@ -24,7 +24,7 @@ describe('Header Component', () => {
     expect(component.find(Link).length).to.equal(2);
   });
   it('simulates click event, logoutUser', () => {
-    sinon.stub(browserHistory, 'replace', () => null);
+    sinon.stub(browserHistory, 'push', () => null);
     component.find('#logoutLink').first().simulate('click');
     expect(props.logoutUser).to.have.property('callCount', 1);
   });

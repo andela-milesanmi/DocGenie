@@ -78,7 +78,7 @@ module.exports = {
       .click('#signup-button')
       .waitForElementVisible('div[id="main-dash"]', 5000)
       .assert.containsText('h4', 'ALL DOCUMENTS')
-      .assert.urlEquals(`${'http://localhost:5000/dashboard/documents/all'}`)
+      .assert.urlEquals(`${'http://localhost:5000/dashboard'}`)
       .end();
   }
 };

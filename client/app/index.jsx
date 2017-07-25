@@ -29,11 +29,11 @@ const Root = () => (
     <Router history={browserHistory}>
       <Route path="/" component={App} onEnter={requireAuth(store)}>
         <IndexRoute component={Home} />
-        <Route path="dashboard/documents/all(/:page)" component={AllDocuments} />
-        <Route path="dashboard/documents(/:page)" component={MyDocuments} />
-        <Route path="dashboard/documents/view/:id" component={ViewOneDocument} />
         <Route path="dashboard/profile" component={Profile} />
         <Route path="dashboard/users(/:page)" component={AllUsers} />
+        <Route path="dashboard/mydocuments(/:page)" component={MyDocuments} />
+        <Route path="dashboard/documents/:id" component={ViewOneDocument} />
+        <Route path="dashboard(/:page)" component={AllDocuments} />
       </Route>
     </Router>
   </Provider>

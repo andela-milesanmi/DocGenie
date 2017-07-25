@@ -5,12 +5,14 @@ const requireAuth = (store) => {
     const token = localStorage.getItem('token');
     const { user: { currentProfile: { id } = {} } = {} } = store.getState();
     if (token && id && !nextState.location.pathname.includes('dashboard')) {
-      replace('/dashboard/documents/all');
+      replace('/dashboard');
       return callback();
     }
     if (token && !id) {
       return store.dispatch(getUser()).then(() => {
-        if (!nextState.location.pathname.includes('dashboard')) replace('/dashboard/documents/all');
+        if (!nextState.location.pathname.includes('dashboard')) {
+          replace('/dashboard');
+        }
         return callback();
       }, (error) => {
         if (error.message === 'UserInvalidToken') {

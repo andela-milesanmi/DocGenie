@@ -16,7 +16,7 @@ export const SearchUsers = (props) => {
     if (searchKey) props.searchForUsers({ searchKey, limit, offset });
   };
   return (
-    <div className="row search-docs">
+    <div id="search-users" className="row search-docs">
       <div className="col s12">
         <input name="searchKey" id="searchKey" type="text"
           className="validate" placeholder="Search for a user here..."

@@ -54,7 +54,7 @@ export class AllUsers extends React.Component {
    */
   render() {
     return (
-      <div className="container">
+      <div id="all-users" className="container">
         <h4 className="center-align">ALL USERS</h4>
         <SearchUsers limit={this.state.limit} offset={this.state.offset}/>
         <div className="col s12 all-users">
