@@ -6,11 +6,11 @@ import { connect } from 'react-redux';
 import { logoutUser } from '../actions/userActions';
 
 const displayAllDocuments = () => {
-  browserHistory.replace('/dashboard/documents/all');
+  browserHistory.push('/dashboard');
 };
 
 const displayOwnDocuments = () => {
-  browserHistory.replace('/dashboard/documents');
+  browserHistory.push('/dashboard/mydocuments');
 };
 /**
  * pure function Header, renders the navigation bar
@@ -26,7 +26,7 @@ export const Header = (props) => {
         className="navbar-item">My Documents</NavItem>}
       {user.id && <NavItem className="chip chip-style">
         Welcome, @{user.username}</NavItem>}
-      {user.id && <Dropdown
+      {user.id && <Dropdown id="dropdown-options"
         className="col s4 nav-dropdown-content"
         trigger={
           <NavItem id="more_vert" href="#!">
@@ -41,7 +41,7 @@ export const Header = (props) => {
             </Link>
           </ul>
           {(user.roleId === 1) && <ul className="nav-dropdown-list">
-            <Link to="/dashboard/users" style={{ color: '#000' }}>
+            <Link id="manage-users" to="/dashboard/users" style={{ color: '#000' }}>
               Manage Users
             </Link>
           </ul>}
@@ -49,7 +49,7 @@ export const Header = (props) => {
             <Link className="logout" id="logoutLink" to="#" onClick={() => {
               props.logoutUser();
               localStorage.removeItem('token');
-              browserHistory.replace('/');
+              browserHistory.push('/');
             }}>LOGOUT
             </Link>
           </ul>

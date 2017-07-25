@@ -1,6 +1,5 @@
 import React from 'react';
 import renderHtml from 'react-render-html';
-import { browserHistory } from 'react-router';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { findADocument } from '../../actions/documentActions';

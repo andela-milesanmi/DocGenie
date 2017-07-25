@@ -27,14 +27,4 @@ describe('Profile Component', () => {
     expect(component.find('.switch').length).to.equal(1);
     expect(component.find('input').length).to.equal(7);
   });
-  xit('simulates click events', () => {
-    component.setState({ isEdit: true, isChecked: true });
-    component.find('form').simulate('submit', { target: { fullname: { value: 'test test' },
-      username: { value: 'test12' },
-      email: { value: 'test@yahoo.com' },
-      oldPassword: { value: 'testing' },
-      password: { value: 'testing12' },
-      confirmPassword: { value: 'testing12' } } });
-    expect(props.updateProfile).to.have.property('callCount', 1);
-  });
 });

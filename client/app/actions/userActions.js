@@ -14,7 +14,10 @@ export const createUser = (user) => {
       .then((response) => {
         localStorage.setItem('token', response.data.token);
         dispatch({ type: CREATE_USER, user: response.data.user });
-        browserHistory.push('/dashboard/documents/all');
+        browserHistory.push('/dashboard');
+      }, (error) => {
+        dispatch({ type: CREATE_USER_ERROR,
+          errorMessage: error.response.data.message });
       }).catch((error) => {
         errorMessage = error.response.data.message || error.response.data;
         dispatch({ type: CREATE_USER_ERROR, errorMessage });
@@ -28,7 +31,10 @@ export const signInUser = (user) => {
       .then((response) => {
         localStorage.setItem('token', response.data.token);
         dispatch({ type: SIGNIN_USER, user: response.data.user });
-        browserHistory.push('/dashboard/documents/all');
+        browserHistory.push('/dashboard');
+      }, (error) => {
+        dispatch({ type: SIGNIN_USER_ERROR,
+          errorMessage: error.response.data.message });
       }).catch((error) => {
         errorMessage = error.response.data.message || error.response.data;
         dispatch({ type: SIGNIN_USER_ERROR, errorMessage });
