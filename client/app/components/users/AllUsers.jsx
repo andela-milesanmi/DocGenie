@@ -7,7 +7,7 @@ import UserRow from './UserRow.jsx';
 import { viewAllUsers } from '../../actions/userActions';
 
 /**
- * AllUsers component, renders all registered users for an admin user
+ * @description - This component renders all registered users for an admin user
  * @export
  * @class AllUsers
  * @extends {React.Component}
@@ -24,7 +24,7 @@ export class AllUsers extends React.Component {
   }
 
   /**
-   * componentDidMount, React lifecyle method which is invoked once the
+   * @description - React lifecyle method which is invoked once the
    * component mounts
    * @memberOf AllUsers
    */
@@ -34,7 +34,7 @@ export class AllUsers extends React.Component {
   }
 
   /**
-  * @description Allows user navigate pages by changing limit and offset
+  * @description - Allows user navigate pages by changing limit and offset
   * @param  {object} page
   * @return {void}
   */
@@ -48,7 +48,7 @@ export class AllUsers extends React.Component {
   }
 
   /**
-   * render, React lifecycle method
+   * @description - React lifecycle method invoked on component mount
    * @returns a DOM element
    * @memberOf AllUsers
    */

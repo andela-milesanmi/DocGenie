@@ -5,11 +5,9 @@ import { connect } from 'react-redux';
 import { updateProfile } from '../../actions/userActions';
 
 /**
- * Pure function, UserRow
+ * @description - Pure function, UserRow, displays individual user information
  * @param {object} props
  */
-// let role;
-
 export class UserRow extends React.Component {
   constructor(props) {
     super(props);
@@ -24,32 +22,61 @@ export class UserRow extends React.Component {
     this.renderRoleOption = this.renderRoleOption.bind(this);
   }
 
+  /**
+   * @description - React lifecyle method which is invoked before the
+   * component mounts
+   * @memberOf UserRow
+   */
   componentWillMount() {
     const { user: { roleId } } = this.props;
     const roleObject = { 1: 'admin', 2: 'user' };
     this.setState({ role: roleObject[roleId] });
   }
 
+  /**
+   * @description - React lifecyle method which is invoked once the
+   * component receives next props
+   * @memberOf UserRow
+   */
   componentWillReceiveProps(nextProps) {
     const { user: { roleId } } = nextProps;
     const roleObject = { 1: 'admin', 2: 'user' };
     this.setState({ role: roleObject[roleId] });
   }
 
+  /**
+   * @description - toggles between edit state and default display state
+   * @param {null}
+   * @return {void}
+   * @memberOf AllUsers
+   */
   toggleIsEdit() {
     this.setState({ isEdit: !this.state.isEdit });
   }
 
+  /**
+  * @description - handles form submit
+  * @param {event} event - triggered event
+  * @return {void}
+  * @memberOf UserRow
+  */
   handleSubmit(event) {
     event.preventDefault();
     const roleId = event.target.role.value;
     this.props.updateProfile({ roleId }, this.props.user.id).then(() => {
       toastr.success('User Role Updated!');
       this.toggleIsEdit();
-    }).catch((error) => {
+    }).catch(() => {
       toastr.error('Could not update profile');
     });
   }
+
+  /**
+  * @description - renders the edit user role form
+  * @param {null}
+  * @return {void}
+  * @memberOf UserRow
+  */
   renderRoleOption() {
     if (this.state.isEdit) {
       return (<form onSubmit={this.handleSubmit}>
@@ -67,6 +94,12 @@ export class UserRow extends React.Component {
     return this.state.role;
   }
 
+  /**
+  * @description - React lifecyle method returns a DOM element
+  * @returns {void}
+  * @param {null}
+  * @memberOf AllUsers
+  */
   render() {
     const { index, user } = this.props;
     return (
@@ -91,7 +124,6 @@ export class UserRow extends React.Component {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-  // You can now say this.props.searchForDocuments
     updateProfile: (user, id) => dispatch(updateProfile(user, id))
   };
 };

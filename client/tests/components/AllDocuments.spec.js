@@ -7,8 +7,6 @@ import thunk from 'redux-thunk';
 import CreateDocument from '../../app/components/documents/CreateDocument.jsx';
 import DocumentCard from '../../app/components/documents/DocumentCard.jsx';
 import { AllDocuments } from '../../app/components/documents/AllDocuments.jsx';
-// import mockData from '../../../server/tests/mockData/mockData';
-
 
 describe('AllDocuments component', () => {
   const mockStore = configureStore([thunk]);

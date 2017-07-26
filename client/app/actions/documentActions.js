@@ -8,6 +8,11 @@ import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
 
 let errorMessage;
 
+/**
+* @description - Allows the user view all documents available
+* @param {object} paginationMetadata - limit, offset
+* @returns {function} dispatch - redux dispatch function
+*/
 export const viewAllDocuments = (paginationMetadata) => {
   const token = localStorage.getItem('token');
   const config = {
@@ -29,6 +34,11 @@ export const viewAllDocuments = (paginationMetadata) => {
   };
 };
 
+/**
+* @description - allows a user view their personal documents
+* @param {object} paginationMetadata - limit, offset
+* @returns {function} dispatch - redux dispatch function
+*/
 export const viewOwnDocuments = (paginationMetadata) => {
   const token = localStorage.getItem('token');
   const config = {
@@ -51,6 +61,12 @@ export const viewOwnDocuments = (paginationMetadata) => {
   };
 };
 
+/**
+* @description - Allows the user create a new document
+* @param {object} document - title, access, content, userId
+* @param {object} paginationMetadata - limit, offset
+* @returns {function} dispatch - redux dispatch function
+*/
 export const createDocument = (document, paginationMetadata) => {
   const token = localStorage.getItem('token');
   const config = {
@@ -73,15 +89,24 @@ export const createDocument = (document, paginationMetadata) => {
       });
   };
 };
+
+/**
+* @description - Toggles between edit and delete actions
+* @param {object} user - user details
+* @returns {object} action - redux action object
+*/
 export const changeCurrentDocument = (document) => {
-  // Return action
   return {
-    // Unique identifier
     type: CHANGE_CURRENT_DOCUMENT,
-    // Payload
     document
   };
 };
+
+/**
+* @description - updates selected document
+* @param {object} document - title, access, content
+* @returns {function} dispatch - redux dispatch function
+*/
 export const editDocument = (document) => {
   const token = localStorage.getItem('token');
   const config = {
@@ -103,6 +128,13 @@ export const editDocument = (document) => {
       });
   };
 };
+
+/**
+* @description - deletes a document
+* @param {object} document - contains document id
+* @param {object} paginationMetedata - limit, offset
+* @returns {function} dispatch - redux dispatch function
+*/
 export const deleteDocument = (document, paginationMetadata) => {
   const token = localStorage.getItem('token');
   const config = {
@@ -110,7 +142,7 @@ export const deleteDocument = (document, paginationMetadata) => {
   };
   return (dispatch) => {
     return axios.delete(`/api/documents/${document.id}`, config)
-      .then((response) => {
+      .then(() => {
         dispatch({ type: DELETE_DOCUMENT, document });
         dispatch(viewAllDocuments(paginationMetadata));
       }).catch((error) => {
@@ -120,6 +152,11 @@ export const deleteDocument = (document, paginationMetadata) => {
   };
 };
 
+/**
+* @description - searches for documents
+* @param {object} searchData - searchKey: search query, limit, offset
+* @returns {function} dispatch - redux dispatch function
+*/
 export const searchForDocuments = (searchData) => {
   const token = localStorage.getItem('token');
   const config = {
@@ -141,6 +178,11 @@ export const searchForDocuments = (searchData) => {
   };
 };
 
+/**
+* @description - find a particular document
+* @param {number} id - document id
+* @returns {function} dispatch - redux dispatch function
+*/
 export const findADocument = (id) => {
   const token = localStorage.getItem('token');
   const config = {

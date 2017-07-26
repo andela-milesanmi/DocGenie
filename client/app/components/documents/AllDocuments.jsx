@@ -27,7 +27,7 @@ export class AllDocuments extends React.Component {
   }
 
   /**
-  * editDocument method, triggers changeCurrentDocument action
+  * @description - triggers changeCurrentDocument action
   * @param {object} document
   * @memberOf AllDocuments
   */
@@ -36,7 +36,7 @@ export class AllDocuments extends React.Component {
   }
 
   /**
-  * componentDidMount, react lifecycle method which is invoked immediately the
+  * @description - react lifecycle method which is invoked immediately the
   * component mounts
   * @memberOf AllDocuments
   */
@@ -46,7 +46,7 @@ export class AllDocuments extends React.Component {
   }
 
   /**
-  * @description Allows user navigate pages by changing limit and offset
+  * @description - Allows user navigate pages by changing limit and offset
   * @param  {object} page
   * @return {void}
   */
@@ -60,7 +60,7 @@ export class AllDocuments extends React.Component {
   }
 
   /**
-   * render, react lifecyle method
+   * @description - react lifecyle method
    * @returns a DOM element
    * @memberOf AllDocuments
    */

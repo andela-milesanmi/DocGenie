@@ -7,13 +7,14 @@ import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
   CHANGE_CURRENT_DOCUMENT, DELETE_DOCUMENT,
   SEARCH_DOCUMENT, EDIT_DOCUMENT } from '../../app/actionTypes';
 
-import { viewAllDocuments, changeCurrentDocument, deleteDocument, createDocument,
-  searchForDocuments, editDocument } from '../../app/actions/documentActions';
+import { viewAllDocuments, changeCurrentDocument, deleteDocument,
+  createDocument, searchForDocuments, editDocument }
+  from '../../app/actions/documentActions';
 
 const mockStore = configureMockStore([thunk]);
 
 
-describe('Document Action', () => {
+describe('Document Actions', () => {
   let store,
     axiosGetStub,
     axiosPostStub,

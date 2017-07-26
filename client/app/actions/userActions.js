@@ -8,6 +8,12 @@ import { CREATE_USER, SIGNIN_USER, LOGOUT_USER, VIEW_USERS, SEARCH_USERS,
 
 let errorMessage;
 
+/**
+* @description - User signup action:
+* It creates the new user account and sets token in localStorage
+* @param {object} user - user details
+* @returns {function} dispatch - redux dispatch function
+*/
 export const createUser = (user) => {
   return (dispatch) => {
     return axios.post('/auth/api/users', user)
@@ -25,6 +31,13 @@ export const createUser = (user) => {
       });
   };
 };
+
+/**
+ * @description - User Login action:
+ * It logs in the user and sets user token in localStorage
+ * @param {object} user - user Details
+ * @returns {function} dispatch - redux dispatch function
+ */
 export const signInUser = (user) => {
   return (dispatch) => {
     return axios.post('/auth/api/users/login', user)
@@ -42,6 +55,11 @@ export const signInUser = (user) => {
       });
   };
 };
+
+/**
+* @description - fetches user details and populates the store.
+* @returns {function} dispatch - redux dispatch function
+*/
 export const getUser = () => {
   const token = localStorage.getItem('token');
   const userId = jwt(token).userId;
@@ -60,13 +78,23 @@ export const getUser = () => {
   };
 };
 
+/**
+* @description - User signup action:
+* It creates the new user account and sets token in localStorage
+* @returns {object} action - redux action object
+*/
 export const logoutUser = () => {
-  // Return action
   return {
     type: LOGOUT_USER,
   };
 };
 
+/**
+* @description - allows admin or a user update their profile
+* @param {object} user - fullname, username, email, password
+* @param {number} id - userId
+* @returns {function} dispatch - redux dispatch function
+*/
 export const updateProfile = (user, id) => {
   const token = localStorage.getItem('token');
   const userId = id || jwt(token).userId;
@@ -86,6 +114,12 @@ export const updateProfile = (user, id) => {
       });
   };
 };
+
+/**
+* @description - allows admin view all users
+* @param {object} paginationMetadata - limit, offset
+* @returns {function} dispatch - redux dispatch function
+*/
 export const viewAllUsers = (paginationMetadata) => {
   const token = localStorage.getItem('token');
   const config = {
@@ -106,6 +140,11 @@ export const viewAllUsers = (paginationMetadata) => {
   };
 };
 
+/**
+* @description - allows admin search for a particular user
+* @param {object} searchData - searchKey, limit, offset
+* @returns {function} dispatch - redux dispatch function
+*/
 export const searchForUsers = (searchData) => {
   const token = localStorage.getItem('token');
   const config = {

@@ -176,7 +176,7 @@ describe('Documents Controller', () => {
         done();
       });
   });
-  it('should allow an admin user to update their own document successfully', (done) => {
+  it('should allow an admin user update their own document successfully', (done) => {
     chai.request(server)
       .put('/api/documents/8')
       .set('authorization', adminToken)
@@ -205,7 +205,7 @@ describe('Documents Controller', () => {
         done();
       });
   });
-  it('should delete a document and return a message', (done) => {
+  it('should allow a user delete a document and return a message to the user', (done) => {
     chai.request(server)
       .delete('/api/documents/2')
       .set('authorization', adminToken)
@@ -315,7 +315,7 @@ describe('Documents Controller', () => {
         done();
       });
   });
-  it('should return an error if a regular tries to retrieve a non-existing document', (done) => {
+  it('should return an error if a regular user tries to retrieve a non-existing document', (done) => {
     chai.request(server)
       .get('/api/documents/16')
       .set('authorization', userToken)

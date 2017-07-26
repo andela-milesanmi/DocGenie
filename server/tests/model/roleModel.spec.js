@@ -17,7 +17,7 @@ describe('Roles table', () => {
         done();
       });
   });
-  it('should have expected fields on creating admin role', (done) => {
+  it('should have expected fields on creating user role', (done) => {
     models.Role.create(mockData.userRole)
       .then((roleData) => {
         expect(roleData.dataValues.title).to.equal(mockData.userRole.title);

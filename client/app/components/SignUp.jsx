@@ -4,12 +4,11 @@ import { connect } from 'react-redux';
 import { createUser } from '../actions/userActions';
 
 /**
- *
- * SignUp component
- * @export
- * @class SignUp
- * @extends {React.Component}
- */
+* @description - SignUp component, signs up a user into the app
+* @export
+* @class SignUp
+* @extends {React.Component}
+*/
 export class SignUp extends React.Component {
   constructor() {
     super();
@@ -17,10 +16,10 @@ export class SignUp extends React.Component {
   }
 
   /**
-   * OnSubmit function handles form submission
-   * @param {object} e, event
-   * @memberOf SignUp
-   */
+  * @description - OnSubmit function handles signup form submission
+  * @param {object} e - submit event data
+  * @memberOf SignUp
+  */
   onSubmit(e) {
     e.preventDefault();
     const fullname = e.target.fullname.value;
@@ -32,15 +31,16 @@ export class SignUp extends React.Component {
   }
 
   /**
-   * React lifecycle method
-   * @returns a DOM element
-   * @memberOf SignUp
-   */
+  * @description - React lifecycle method  which renders react element
+  * @returns a DOM element
+  * @memberOf SignUp
+  */
   render() {
     return (
       <div className="container">
         <div className="row">
-          <form id="signup-form" className="signup-form" onSubmit={this.onSubmit} action="#">
+          <form id="signup-form" className="signup-form"
+            onSubmit={this.onSubmit} action="#">
             <div className="error-message">{this.props.user.error}</div>
             <div className="row">
               <div className="input-field col s6">
@@ -72,12 +72,14 @@ export class SignUp extends React.Component {
               </div>
             </div>
             <div>
-              <button id="signup-button" type="submit" className="btn btn-large create-doc
+              <button id="signup-button" type="submit"
+                className="btn btn-large create-doc
                signup-button">SUBMIT</button>
             </div>
 
             <div>
-              <p id="signup-text" className="center-align">Already have an account?
+              <p id="signup-text" className="center-align">
+                Already have an account?
                 <a style={{ color: '#EE6352' }}
                   onClick={this.props.changeScreen}>Sign In</a>
               </p>
@@ -92,7 +94,6 @@ export class SignUp extends React.Component {
 // Maps state from store to props
 const mapStateToProps = (state) => {
   return {
-    // You can now say this.props.user
     user: state.user || {}
   };
 };

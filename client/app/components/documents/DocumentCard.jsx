@@ -15,7 +15,6 @@ import { changeCurrentDocument, deleteDocument }
  */
 export class DocumentCard extends React.Component {
   constructor(props) {
-  // Pass props back to parent
     super(props);
     this.state = {
       showMore: false,
@@ -26,7 +25,7 @@ export class DocumentCard extends React.Component {
   }
 
   /**
-  * editDocument method triggers changeCurrentDocument action
+  * @description - editDocument method triggers changeCurrentDocument action
   * @param {object} document
   * @memberOf DocumentCard
   */

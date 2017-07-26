@@ -18,6 +18,7 @@ import configureStore from './store/configureStore';
 
 const store = configureStore();
 
+// allows access to store from browser console
 window.clientStore = store;
 
 // solves react-materialize error: '$() is not a function'

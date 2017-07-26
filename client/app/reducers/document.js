@@ -9,7 +9,11 @@ export default (state = {}, action) => {
   case VIEW_DOCUMENTS:
   case SEARCH_DOCUMENT: {
     const newDocuments = action.documents;
-    return { ...state, documents: newDocuments, ...action.pagination, error: '' };
+    return {
+      ...state,
+      documents: newDocuments,
+      ...action.pagination,
+      error: '' };
   }
   case VIEW_ONE_DOCUMENT: {
     return { ...state, document: action.document, error: '' };
@@ -26,7 +30,10 @@ export default (state = {}, action) => {
     const { documents = [] } = state;
     const filteredDocuments =
     documents.filter(document => action.document.id !== document.id);
-    return { ...state, documents: [action.document, ...filteredDocuments], error: '' };
+    return {
+      ...state,
+      documents: [action.document, ...filteredDocuments],
+      error: '' };
   }
   case EDIT_DOCUMENT_ERROR:
   case DELETE_DOCUMENT_ERROR:

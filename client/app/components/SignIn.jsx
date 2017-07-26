@@ -5,11 +5,11 @@ import { signInUser } from '../actions/userActions';
 
 
 /**
- * SignIn component
- * @export
- * @class SignIn
- * @extends {React.Component}
- */
+* @description - SignIn component, signs in a user
+* @export
+* @class SignIn
+* @extends {React.Component}
+*/
 export class SignIn extends React.Component {
   constructor(props) {
     super(props);
@@ -17,10 +17,10 @@ export class SignIn extends React.Component {
   }
 
   /**
-   * OnSubmit function handles form-submit event
-   * @param {any} event
-   * @memberOf SignIn
-   */
+  * @description - OnSubmit function handles form-submit event
+  * @param {any} event
+  * @memberOf SignIn
+  */
   onSubmit(event) {
     event.preventDefault();
     const email = event.target.email.value;
@@ -29,10 +29,10 @@ export class SignIn extends React.Component {
   }
 
   /**
-   * React lifecycle method
-   * @returns a DOM element
-   * @memberOf SignUp
-   */
+  * @description - React lifecycle method, renders the react element
+  * @returns a DOM element
+  * @memberOf SignUp
+  */
   render() {
     return (
       <div className="container">
@@ -53,7 +53,8 @@ export class SignIn extends React.Component {
               </div>
             </div>
             <div>
-              <button type="submit" id="signin-button" className="btn btn-large create-doc
+              <button type="submit" id="signin-button"
+                className="btn btn-large create-doc
                 signup-button">SUBMIT</button>
             </div>
             <div>
@@ -72,7 +73,6 @@ export class SignIn extends React.Component {
 // Maps state from store to props
 const mapStateToProps = (state) => {
   return {
-    // You can now say this.props.user
     user: state.user || {}
   };
 };

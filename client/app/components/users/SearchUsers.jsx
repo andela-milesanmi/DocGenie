@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { searchForUsers } from '../../actions/userActions';
 
 /**
- * Pure function, Search
+ * @description - Pure function, Search, displays all users
  * @param {object} props
  */
 export const SearchUsers = (props) => {
