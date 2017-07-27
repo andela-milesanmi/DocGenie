@@ -9,7 +9,7 @@ import SearchDocuments from './SearchDocuments.jsx';
 import DocumentCard from './DocumentCard.jsx';
 
 /**
-* @description -  maps through a user's own documents and renders
+* @description - This component maps through a user's own documents and renders
 * each document as a DocumentCard component
 * @export
 * @class MyDocuments
@@ -133,7 +133,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     viewOwnDocuments: paginationMetadata =>
       dispatch(viewOwnDocuments(paginationMetadata)),
-    changeCurrentDocument: document => dispatch(changeCurrentDocument(document)),
+    changeCurrentDocument: document =>
+      dispatch(changeCurrentDocument(document)),
     deleteDocument: document => dispatch(deleteDocument(document)),
     showOwnDocuments: (id, page) => dispatch(showOwnDocuments(id, page)),
   };

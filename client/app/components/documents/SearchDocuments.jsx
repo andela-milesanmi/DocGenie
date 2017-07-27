@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { searchForDocuments } from '../../actions/documentActions';
 
 /**
- * Pure function, Search
+ * @description - displays search input which allows
+ * users search for documents
  * @param {object} props
  */
 export const SearchDocuments = (props) => {
@@ -28,7 +29,6 @@ export const SearchDocuments = (props) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-  // You can now say this.props.searchForDocuments
     searchForDocuments: searchData => dispatch(searchForDocuments(searchData)),
   };
 };

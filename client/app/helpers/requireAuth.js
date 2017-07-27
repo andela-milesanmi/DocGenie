@@ -1,9 +1,8 @@
 import { getUser } from '../actions/userActions';
 
 /**
- * @description - requireAuth function:
- * It validates the routes, checks if the user is authorized and then fetches
- * user via getUser action
+ * @description - validates the routes, checks if the user is authorized
+ * then fetches user details from server via getUser action
  * @param {object} store - redux store
  * @returns {function} callback - react-router callback function which
  * blocks route transitioning until it is invoked.

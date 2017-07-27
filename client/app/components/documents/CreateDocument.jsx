@@ -61,11 +61,11 @@ export class CreateDocument extends React.Component {
 
   /**
   * @description - onChange method is triggered once form-input changes
-  * @param {object} e, event
+  * @param {object} event - form data: title, content, access
   * @memberOf CreateDocument
   */
-  onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
+  onChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
   }
   onContentChange(content) {
     this.setState({ content });

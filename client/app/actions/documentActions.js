@@ -179,7 +179,7 @@ export const searchForDocuments = (searchData) => {
 };
 
 /**
-* @description - find a particular document
+* @description - finds a particular document
 * @param {number} id - document id
 * @returns {function} dispatch - redux dispatch function
 */

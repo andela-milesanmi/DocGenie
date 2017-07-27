@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { updateProfile } from '../actions/userActions';
 
 /**
- * User Profile component
+ * @description - displays the user's profile information
  * @export
  * @class Profile
  * @extends {React.Component}
@@ -25,17 +25,18 @@ export class Profile extends React.Component {
   }
 
   /**
-   * onChange method handles form-input change event
-   * @param {object} e, event
+   * @description - This method handles update profile form submission
+   * @param {object} event - username, fullname, email, password
    * @memberOf Profile
    */
-  onChange(e) {
-    const user = { ...this.state.user, [e.target.name]: e.target.value };
+  onChange(event) {
+    const user = { ...this.state.user,
+      [event.target.name]: event.target.value };
     this.setState({ user });
   }
 
   /**
-   * toggle method toggles state: isChecked and isEdit
+   * @description - toggles state: isChecked and isEdit
    * @param {string} field
    * @memberOf Profile
    */
@@ -44,7 +45,7 @@ export class Profile extends React.Component {
   }
 
   /**
-   * renderProfile method renders profile information or profile edit form
+   * @description This method renders profile information or profile edit form
    * @returns DOM element
    * @memberOf Profile
    */
@@ -70,7 +71,8 @@ export class Profile extends React.Component {
       <div className="">
         <h4>Edit Profile</h4>
         <hr/>
-        <form name="profile-edit" onSubmit={this.handleProfileUpdate} action="#">
+        <form name="profile-edit" onSubmit={this.handleProfileUpdate}
+          action="#">
           <div style={{ color: 'red' }}>
             {this.state.errorMessage || this.props.error}
           </div>
@@ -110,7 +112,8 @@ export class Profile extends React.Component {
               </p>
             </div>
           )}
-          <button type="submit" className="btn btn-large create-doc profile-save">
+          <button type="submit" className="btn btn-large create-doc
+            profile-save">
             Save</button>
           <button type="" className="btn btn-large create-doc profile-save"
             onClick={() => this.toggle('isEdit')}>Cancel</button>
@@ -120,8 +123,8 @@ export class Profile extends React.Component {
   }
 
   /**
-   * handleProfileUpdate dispatches an updateProfile action
-   * @param {object} event
+   * @description - This method dispatches an updateProfile action
+   * @param {object} event - fullname, username, email, password, oldPassword
    * @returns a DOM element
    * @memberOf Profile
    */
@@ -150,7 +153,7 @@ export class Profile extends React.Component {
   }
 
   /**
-   * render, React lifecycle method
+   * @description - React lifecycle method which renders the React element
    * @returns a DOM element
    * @memberOf Profile
    */
@@ -167,7 +170,6 @@ export class Profile extends React.Component {
 // Maps state from store to props
 const mapStateToProps = (state) => {
   return {
-    // You can now say this.props.user
     user: state.user.currentProfile,
     currentDocument: state.documents.currentDocument || {},
     error: state.user.error
@@ -177,7 +179,6 @@ const mapStateToProps = (state) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-  // You can now say this.props.updateProfile
     updateProfile: user => dispatch(updateProfile(user))
   };
 };

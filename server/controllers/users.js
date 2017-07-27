@@ -1,8 +1,9 @@
+const bcrypt = require('bcrypt-nodejs');
 const User = require('../models').User;
 const Document = require('../models').Document;
 const authentication = require('../middleware/authentication');
 const errorHandler = require('../helpers/errorHandler');
-const bcrypt = require('bcrypt-nodejs');
+const pagination = require('../helpers/pagination');
 
 const LIMIT = 6;
 const OFFSET = 0;
@@ -140,16 +141,10 @@ module.exports = {
         if (!users) {
           return response.status(404).json({ message: 'User Not Found' });
         }
-        const pagination = {
-          totalCount: users.count,
-          pages: Math.ceil(users.count / limit),
-          currentPage: Math.floor(offset / limit) + 1,
-          pageSize: users.rows.length,
-        };
 
         return response.status(200).json({
           users: users.rows.map(user => user.filterUserDetails()),
-          pagination,
+          pagination: pagination(users.count, users.rows, limit, offset)
         });
       })
       .catch((error) => {
@@ -304,14 +299,9 @@ module.exports = {
       })
       .then((documents) => {
         if (!documents) {
-          return response.status(404).json({ message: 'Document(s) Not Found' });
+          return response.status(404).json({
+            message: 'Document(s) Not Found' });
         }
-        const pagination = {
-          totalCount: documents.count,
-          pages: Math.ceil(documents.count / limit),
-          currentPage: Math.floor(offset / limit) + 1,
-          pageSize: documents.rows.length,
-        };
         return response.status(200).json({
           documents: documents.rows.map(({
             user, id, access, title, content,
@@ -326,7 +316,7 @@ module.exports = {
               updatedAt,
               user: user.filterUserDetails() };
           }),
-          pagination,
+          pagination: pagination(documents.count, documents.rows, limit, offset)
         });
       })
       .catch((error) => {
@@ -370,15 +360,10 @@ module.exports = {
         if (!users) {
           return response.status(404).json({ message: 'No user(s) found' });
         }
-        const pagination = {
-          totalCount: users.count,
-          pages: Math.ceil(users.count / limit),
-          currentPage: Math.floor(offset / limit) + 1,
-          pageSize: users.rows.length,
-        };
+
         return response.status(200).json({
           users: users.rows.map(user => user.filterUserDetails()),
-          pagination
+          pagination: pagination(users.count, users.rows, limit, offset)
         });
       })
       .catch((error) => {

@@ -11,7 +11,8 @@ import Home from '../../app/components/Home.jsx';
 describe('Home component', () => {
   const mockStore = configureStore([thunk]);
   let component;
-  const store = mockStore({ documents: {}, user: { currentProfile: { id: 10 } } });
+  const store = mockStore({ documents: {},
+    user: { currentProfile: { id: 10 } } });
 
   beforeEach(() => {
     component = mount(<Home />, {

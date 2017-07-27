@@ -9,9 +9,8 @@ import { CREATE_USER, SIGNIN_USER, LOGOUT_USER, VIEW_USERS, SEARCH_USERS,
 let errorMessage;
 
 /**
-* @description - User signup action:
-* It creates the new user account and sets token in localStorage
-* @param {object} user - user details
+* @description - Creates a new user account and sets token in localStorage
+* @param {object} user - username, fullname, email, password, confirmPassword
 * @returns {function} dispatch - redux dispatch function
 */
 export const createUser = (user) => {
@@ -33,8 +32,7 @@ export const createUser = (user) => {
 };
 
 /**
- * @description - User Login action:
- * It logs in the user and sets user token in localStorage
+ * @description - Logs in the user and sets user token in localStorage
  * @param {object} user - user Details
  * @returns {function} dispatch - redux dispatch function
  */
@@ -79,8 +77,7 @@ export const getUser = () => {
 };
 
 /**
-* @description - User signup action:
-* It creates the new user account and sets token in localStorage
+* @description - logs out a user
 * @returns {object} action - redux action object
 */
 export const logoutUser = () => {

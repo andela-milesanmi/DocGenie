@@ -6,7 +6,7 @@ import { findADocument } from '../../actions/documentActions';
 
 
 /**
- * ViewOneDocument component, displays full content of one document when user
+ * @description - displays full content of one document when user
  * clicks on viewMore link in DocumentCard Component
  * @export
  * @class ViewOneDocument
@@ -14,7 +14,7 @@ import { findADocument } from '../../actions/documentActions';
  */
 export class ViewOneDocument extends React.Component {
   /**
-   * componentDidMount, react lifecycle method which is invoked immediately the
+   * @description - react lifecycle method which is invoked immediately the
    * component mounts
    * @memberOf ViewOneDocument
    */
@@ -23,7 +23,7 @@ export class ViewOneDocument extends React.Component {
   }
 
   /**
-   * render, react lifecyle method
+   * @description - render, react lifecyle method
    * @returns a DOM element
    * @memberOf ViewOneDocument
    */
@@ -86,5 +86,4 @@ ViewOneDocument.propTypes = {
   params: PropTypes.object.isRequired,
 };
 
-// Use connect to put them together
 export default connect(mapStateToProps, mapDispatchToProps)(ViewOneDocument);

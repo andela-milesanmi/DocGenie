@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { updateProfile } from '../../actions/userActions';
 
 /**
- * @description - Pure function, UserRow, displays individual user information
+ * @description - displays individual user information in a table
  * @param {object} props
  */
 export class UserRow extends React.Component {

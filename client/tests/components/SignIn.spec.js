@@ -28,8 +28,9 @@ describe('SignIn Component', () => {
     expect(component.find('input').length).to.equal(2);
   });
   it('simulates click events', () => {
-    component.find('form').simulate('submit', { target: { email: { value: 'test@yahoo.com' },
-      password: { value: 'testing' } } });
+    component.find('form').simulate('submit',
+      { target: { email: { value: 'test@yahoo.com' },
+        password: { value: 'testing' } } });
     expect(props.signInUser).to.have.property('callCount', 1);
   });
 });

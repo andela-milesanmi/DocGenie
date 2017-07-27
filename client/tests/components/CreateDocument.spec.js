@@ -5,13 +5,19 @@ import { shallow, mount } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import { Modal } from 'react-materialize';
 import thunk from 'redux-thunk';
-import { CreateDocument } from '../../app/components/documents/CreateDocument.jsx';
+import { CreateDocument } from
+  '../../app/components/documents/CreateDocument.jsx';
 
 
 describe('CreateDocument component', () => {
   let component;
   const props = {
-    currentDocument: { id: 2, title: 'A document', content: 'lorem ipsum', userId: 3, createdAt: '12-06-2017', user: { username: 'toodoo' } },
+    currentDocument: { id: 2,
+      title: 'A document',
+      content: 'lorem ipsum',
+      userId: 3,
+      createdAt: '12-06-2017',
+      user: { username: 'toodoo' } },
     createDocument: sinon.spy(),
     editDocument: sinon.spy(),
     user: { id: 3 },

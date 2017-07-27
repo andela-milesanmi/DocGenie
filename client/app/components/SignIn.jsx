@@ -5,7 +5,7 @@ import { signInUser } from '../actions/userActions';
 
 
 /**
-* @description - SignIn component, signs in a user
+* @description - This component displays the signin form
 * @export
 * @class SignIn
 * @extends {React.Component}
@@ -17,14 +17,14 @@ export class SignIn extends React.Component {
   }
 
   /**
-  * @description - OnSubmit function handles form-submit event
-  * @param {any} event
+  * @description - this handles signin form submission
+  * @param {object} event - event data: email, password
   * @memberOf SignIn
   */
   onSubmit(event) {
     event.preventDefault();
-    const email = event.target.email.value;
-    const password = event.target.password.value;
+    const { email: { value: email },
+      password: { value: password } } = event.target;
     this.props.signInUser({ email, password });
   }
 
@@ -39,7 +39,9 @@ export class SignIn extends React.Component {
         <div className="row">
           <form className="signup-form"
             onSubmit={this.onSubmit} action="#">
-            <div className="error-message">{this.props.user.error}</div>
+            <div id="error-message" className="error-message">
+              {this.props.user.error}
+            </div>
             <div className="row">
               <div className="input-field col s12">
                 <input name="email" id="email" type="text"

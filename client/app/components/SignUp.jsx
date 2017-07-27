@@ -16,22 +16,26 @@ export class SignUp extends React.Component {
   }
 
   /**
-  * @description - OnSubmit function handles signup form submission
-  * @param {object} e - submit event data
+  * @description - This handles signup form submission when a user signs up
+  * @param {object} event - event data: username, fullname, email, password
   * @memberOf SignUp
   */
-  onSubmit(e) {
-    e.preventDefault();
-    const fullname = e.target.fullname.value;
-    const email = e.target.email.value;
-    const username = e.target.username.value;
-    const password = e.target.password.value;
-    const confirmPassword = e.target.confirmPassword.value;
-    this.props.createUser({ username, fullname, email, password, confirmPassword });
+  onSubmit(event) {
+    event.preventDefault();
+    const { fullname: { value: fullname },
+      username: { value: username },
+      email: { value: email },
+      password: { value: password },
+      confirmPassword: { value: confirmPassword } } = event.target;
+    this.props.createUser({ username,
+      fullname,
+      email,
+      password,
+      confirmPassword });
   }
 
   /**
-  * @description - React lifecycle method  which renders react element
+  * @description - React lifecycle method which renders react element
   * @returns a DOM element
   * @memberOf SignUp
   */

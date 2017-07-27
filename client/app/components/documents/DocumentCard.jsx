@@ -8,7 +8,7 @@ import { changeCurrentDocument, deleteDocument }
   from '../../actions/documentActions';
 
 /**
- * DocumentCard component renders each document
+ * @description - DocumentCard component renders each document
  * @export
  * @class DocumentCard
  * @extends {React.Component}
@@ -26,7 +26,7 @@ export class DocumentCard extends React.Component {
 
   /**
   * @description - editDocument method triggers changeCurrentDocument action
-  * @param {object} document
+  * @param {object} document - document to be edited
   * @memberOf DocumentCard
   */
   editDocument(document) {
@@ -34,8 +34,8 @@ export class DocumentCard extends React.Component {
   }
 
   /**
-  * deleteDocument method triggers deleteDocument action
-  * @param {object} document
+  * @description - deleteDocument method triggers deleteDocument action
+  * @param {object} document - document to be deleted
   * @memberOf DocumentCard
   */
   deleteDocument(document) {
@@ -64,7 +64,7 @@ export class DocumentCard extends React.Component {
   }
 
   /**
-  * handleShowMore method toggles state property, showMore
+  * @description - handleShowMore method toggles showMore state
   * @memberOf DocumentCard
   */
   handleShowMore() {
@@ -72,7 +72,7 @@ export class DocumentCard extends React.Component {
   }
 
   /**
-  * render, React lifecycle method
+  * @description - render, React lifecycle method
   * @returns a DOM element
   * @memberOf DocumentCard
   */
