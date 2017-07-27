@@ -54,9 +54,10 @@ export class MyDocuments extends React.Component {
   handlePageChange(page) {
     const { limit } = this.state;
     const selected = page.selected;
+    const { id: userId } = this.props.user;
     const offset = Math.ceil(selected * this.state.limit);
     this.setState({ offset }, () => {
-      this.props.viewOwnDocuments({ limit, offset });
+      this.props.viewOwnDocuments({ limit, offset, userId });
     });
   }
 
