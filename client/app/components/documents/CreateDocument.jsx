@@ -183,9 +183,10 @@ const mapStateToProps = (state) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    createDocument: (document, documentUrl) =>
-      dispatch(createDocument(document, documentUrl)),
-    editDocument: document => dispatch(editDocument(document)),
+    createDocument: (document, paginationMetadata) =>
+      dispatch(createDocument(document, paginationMetadata)),
+    editDocument: (document, paginationMetadata) =>
+      dispatch(editDocument(document, paginationMetadata)),
     changeCurrentDocument: document =>
       dispatch(changeCurrentDocument(document)),
   };

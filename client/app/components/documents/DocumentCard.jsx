@@ -127,8 +127,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     changeCurrentDocument: document =>
       dispatch(changeCurrentDocument(document)),
-    deleteDocument: (document, documentUrl) =>
-      dispatch(deleteDocument(document, documentUrl)),
+    deleteDocument: (document, paginationMetadata) =>
+      dispatch(deleteDocument(document, paginationMetadata)),
   };
 };
 

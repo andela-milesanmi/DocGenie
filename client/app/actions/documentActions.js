@@ -25,7 +25,7 @@ export const viewAllDocuments = (paginationMetadata) => {
         dispatch({ type: VIEW_DOCUMENTS,
           documents: response.data.documents,
           pagination: response.data.pagination });
-      }, () => {}).catch((error) => {
+      }).catch((error) => {
         errorMessage = error.response.data.message || error.response.data || '';
         dispatch({ type: VIEW_DOCUMENTS_ERROR,
           errorMessage });
@@ -107,7 +107,7 @@ export const changeCurrentDocument = (document) => {
 * @param {object} document - title, access, content
 * @returns {function} dispatch - redux dispatch function
 */
-export const editDocument = (document) => {
+export const editDocument = (document, paginationMetadata) => {
   const token = localStorage.getItem('token');
   const config = {
     headers: { authorization: token }
@@ -116,10 +116,11 @@ export const editDocument = (document) => {
     return axios.put(`/api/documents/${document.id}`,
       document, config)
       .then((response) => {
-        toastr.success('Document edited!');
         dispatch({ type: EDIT_DOCUMENT,
           document: { ...document, ...response.data } });
         $('#create-form').modal('close');
+        toastr.success('Document edited!');
+        dispatch(viewAllDocuments(paginationMetadata));
       }).catch((error) => {
         errorMessage = error.response.data.message || error.response.data;
         dispatch({ type: EDIT_DOCUMENT_ERROR,
@@ -143,7 +144,7 @@ export const deleteDocument = (document, paginationMetadata) => {
   return (dispatch) => {
     return axios.delete(`/api/documents/${document.id}`, config)
       .then(() => {
-        dispatch({ type: DELETE_DOCUMENT, document });
+        // dispatch({ type: DELETE_DOCUMENT, document });
         dispatch(viewAllDocuments(paginationMetadata));
       }).catch((error) => {
         dispatch({ type: DELETE_DOCUMENT_ERROR,
