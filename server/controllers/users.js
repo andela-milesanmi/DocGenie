@@ -3,7 +3,7 @@ const User = require('../models').User;
 const Document = require('../models').Document;
 const authentication = require('../middleware/authentication');
 const errorHandler = require('../helpers/errorHandler');
-const pagination = require('../helpers/pagination');
+const pagination = require('../helpers/pagination').pagination;
 
 const LIMIT = 6;
 const OFFSET = 0;

@@ -1,7 +1,8 @@
 const Document = require('../models').Document;
 const User = require('../models').User;
 const errorHandler = require('../helpers/errorHandler');
-const pagination = require('../helpers/pagination');
+const pagination = require('../helpers/pagination').pagination;
+
 
 const LIMIT = 6;
 const OFFSET = 0;
@@ -65,7 +66,7 @@ module.exports = {
         if (!documents) {
           return response.status(404).json({ message: 'No documents found' });
         }
-
+        console.log(pagination(documents.count, documents.rows, limit, offset), 'pagination')
         return response.status(200).json({
           documents: documents.rows,
           pagination: pagination(documents.count, documents.rows, limit, offset)

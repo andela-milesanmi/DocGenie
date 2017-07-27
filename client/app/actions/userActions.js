@@ -61,11 +61,8 @@ export const signInUser = (user) => {
 export const getUser = () => {
   const token = localStorage.getItem('token');
   const userId = jwt(token).userId;
-  const config = {
-    headers: { authorization: token }
-  };
   return (dispatch) => {
-    return axios.get(`/api/users/${userId}`, config)
+    return axios.get(`/api/users/${userId}`)
       .then((response) => {
         dispatch({ type: CREATE_USER, user: response.data });
       }).catch((error) => {
@@ -95,12 +92,9 @@ export const logoutUser = () => {
 export const updateProfile = (user, id) => {
   const token = localStorage.getItem('token');
   const userId = id || jwt(token).userId;
-  const config = {
-    headers: { authorization: token }
-  };
 
   return (dispatch) => {
-    return axios.put(`/api/users/${userId}`, user, config)
+    return axios.put(`/api/users/${userId}`, user)
       .then((response) => {
         dispatch({ type: UPDATE_USER, user: response.data });
         toastr.success('Profile updated successfully!');
@@ -118,14 +112,10 @@ export const updateProfile = (user, id) => {
 * @returns {function} dispatch - redux dispatch function
 */
 export const viewAllUsers = (paginationMetadata) => {
-  const token = localStorage.getItem('token');
-  const config = {
-    headers: { authorization: token }
-  };
   const { limit, offset } = paginationMetadata;
 
   return (dispatch) => {
-    return axios.get(`/api/users/?limit=${limit}&offset=${offset}`, config)
+    return axios.get(`/api/users/?limit=${limit}&offset=${offset}`)
       .then((response) => {
         dispatch({ type: VIEW_USERS,
           users: response.data.users,
@@ -143,15 +133,11 @@ export const viewAllUsers = (paginationMetadata) => {
 * @returns {function} dispatch - redux dispatch function
 */
 export const searchForUsers = (searchData) => {
-  const token = localStorage.getItem('token');
-  const config = {
-    headers: { authorization: token }
-  };
   const { searchKey, limit, offset } = searchData;
   const url =
    `/api/search/users/?searchKey=${searchKey}&limit=${limit}&offset=${offset}`;
   return (dispatch) => {
-    return axios.get(url, config)
+    return axios.get(url)
       .then((response) => {
         dispatch({ type: SEARCH_USERS,
           users: response.data.users || [],

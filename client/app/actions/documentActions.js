@@ -14,13 +14,9 @@ let errorMessage;
 * @returns {function} dispatch - redux dispatch function
 */
 export const viewAllDocuments = (paginationMetadata) => {
-  const token = localStorage.getItem('token');
-  const config = {
-    headers: { authorization: token }
-  };
   const { limit, offset } = paginationMetadata;
   return (dispatch) => {
-    return axios.get(`/api/documents/?limit=${limit}&offset=${offset}`, config)
+    return axios.get(`/api/documents/?limit=${limit}&offset=${offset}`)
       .then((response) => {
         dispatch({ type: VIEW_DOCUMENTS,
           documents: response.data.documents,
@@ -40,14 +36,10 @@ export const viewAllDocuments = (paginationMetadata) => {
 * @returns {function} dispatch - redux dispatch function
 */
 export const viewOwnDocuments = (paginationMetadata) => {
-  const token = localStorage.getItem('token');
-  const config = {
-    headers: { authorization: token }
-  };
   const { limit, offset, userId } = paginationMetadata;
   const url = `/api/users/${userId}/documents/?limit=${limit}&offset=${offset}`;
   return (dispatch) => {
-    return axios.get(url, config)
+    return axios.get(url)
       .then((response) => {
         dispatch({ type: VIEW_DOCUMENTS,
           documents: response.data.documents,
@@ -68,12 +60,8 @@ export const viewOwnDocuments = (paginationMetadata) => {
 * @returns {function} dispatch - redux dispatch function
 */
 export const createDocument = (document, paginationMetadata) => {
-  const token = localStorage.getItem('token');
-  const config = {
-    headers: { authorization: token }
-  };
   return (dispatch) => {
-    return axios.post('/api/documents', document, config)
+    return axios.post('/api/documents', document)
       .then((response) => {
         toastr.success('Document created!');
         dispatch({ type: CREATE_DOCUMENT,
@@ -108,13 +96,9 @@ export const changeCurrentDocument = (document) => {
 * @returns {function} dispatch - redux dispatch function
 */
 export const editDocument = (document, paginationMetadata) => {
-  const token = localStorage.getItem('token');
-  const config = {
-    headers: { authorization: token }
-  };
   return (dispatch) => {
     return axios.put(`/api/documents/${document.id}`,
-      document, config)
+      document)
       .then((response) => {
         dispatch({ type: EDIT_DOCUMENT,
           document: { ...document, ...response.data } });
@@ -133,16 +117,12 @@ export const editDocument = (document, paginationMetadata) => {
 /**
 * @description - deletes a document
 * @param {object} document - contains document id
-* @param {object} paginationMetedata - limit, offset
+* @param {object} paginationMetadata - limit, offset
 * @returns {function} dispatch - redux dispatch function
 */
 export const deleteDocument = (document, paginationMetadata) => {
-  const token = localStorage.getItem('token');
-  const config = {
-    headers: { authorization: token }
-  };
   return (dispatch) => {
-    return axios.delete(`/api/documents/${document.id}`, config)
+    return axios.delete(`/api/documents/${document.id}`)
       .then(() => {
         // dispatch({ type: DELETE_DOCUMENT, document });
         dispatch(viewAllDocuments(paginationMetadata));
@@ -159,15 +139,11 @@ export const deleteDocument = (document, paginationMetadata) => {
 * @returns {function} dispatch - redux dispatch function
 */
 export const searchForDocuments = (searchData) => {
-  const token = localStorage.getItem('token');
-  const config = {
-    headers: { authorization: token }
-  };
   const { searchKey, limit, offset } = searchData;
   const url =
   `/api/search/documents/?searchKey=${searchKey}&limit=${limit}&offset=${offset}`;
   return (dispatch) => {
-    return axios.get(url, config)
+    return axios.get(url)
       .then((response) => {
         dispatch({ type: SEARCH_DOCUMENT,
           documents: response.data.documents || [],
@@ -185,12 +161,8 @@ export const searchForDocuments = (searchData) => {
 * @returns {function} dispatch - redux dispatch function
 */
 export const findADocument = (id) => {
-  const token = localStorage.getItem('token');
-  const config = {
-    headers: { authorization: token }
-  };
   return (dispatch) => {
-    return axios.get(`/api/documents/${id}`, config)
+    return axios.get(`/api/documents/${id}`)
       .then((response) => {
         dispatch({ type: VIEW_ONE_DOCUMENT, document: { ...response.data } });
       }).catch((error) => {
