@@ -94,7 +94,7 @@ module.exports = {
       }
     }).then((user) => {
       if (!user) {
-        return response.status(404).json({ message: 'Not an existing user' });
+        return response.status(401).json({ message: 'Not an existing user' });
       } else if (!user.validatePassword(request.body.password, user)) {
         return response.status(400).json({ message: 'Invalid password' });
       }

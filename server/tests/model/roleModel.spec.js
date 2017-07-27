@@ -14,6 +14,9 @@ describe('Roles table', () => {
         expect(roleData.dataValues).to.have.property('id');
         expect(roleData.dataValues).to.have.property('createdAt');
         expect(roleData.dataValues).to.have.property('updatedAt');
+        expect(roleData.dataValues.id).to.not.be.null;
+        expect(roleData.dataValues.createdAt).to.not.be.null;
+        expect(roleData.dataValues.updatedAt).to.not.be.null;
         done();
       });
   });
@@ -24,6 +27,9 @@ describe('Roles table', () => {
         expect(roleData.dataValues).to.have.property('id');
         expect(roleData.dataValues).to.have.property('createdAt');
         expect(roleData.dataValues).to.have.property('createdAt');
+        expect(roleData.dataValues.id).to.not.be.null;
+        expect(roleData.dataValues.createdAt).to.not.be.null;
+        expect(roleData.dataValues.updatedAt).to.not.be.null;
         done();
       });
   });

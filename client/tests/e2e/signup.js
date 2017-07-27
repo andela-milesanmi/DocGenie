@@ -1,5 +1,6 @@
 /* eslint func-names: "off"*/
 /* eslint no-unused-vars: "off"*/
+const faker = require('faker');
 
 module.exports = {
   'User sign up without credentials': (browser) => {
@@ -70,9 +71,9 @@ module.exports = {
       .waitForElementVisible('#signup-form', 5000)
       .assert.containsText('#signup-text', 'Already have an account?Sign In')
       .pause(1000)
-      .setValue('input[name=username]', 'username')
-      .setValue('input[name=fullname]', 'fullname')
-      .setValue('input[name=email]', 'user123@gmail.com')
+      .setValue('input[name=username]', faker.internet.userName())
+      .setValue('input[name=fullname]', faker.name.findName())
+      .setValue('input[name=email]', faker.internet.email())
       .setValue('input[name=password]', 'password')
       .setValue('input[name=confirmPassword]', 'password')
       .click('#signup-button')

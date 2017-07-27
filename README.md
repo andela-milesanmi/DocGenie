@@ -71,7 +71,7 @@ $ npm test
 ```
 
 ##### How to use
-* Visit ```http://docgenie.herokuapp.com/``` to use this app online.
+* Visit http://docgenie.herokuapp.com/ to use this app online.
 
 ##### Run in Postman
 
@@ -80,7 +80,7 @@ $ npm test
 ##### API Documentation
 
 The API has routes, each dedicated to a single task that uses HTTP response codes to indicate API status and error messages.
-You can find the full API documentation here: ```https://andela-mharuna.github.io/slate```
+You can find the full API documentation here: https://andela-mharuna.github.io/slate
 
 ##### Authentication
 
@@ -105,96 +105,6 @@ You can find the full API documentation here: ```https://andela-mharuna.github.i
  - GET /api/search/users/:key :	Gets all users whose names match the search-key
  - GET /api/search/documents/:term	Get all documents with title and content matching the search-key
 
-###### The following are some sample response from the API.
-
-####### Endpoints for Roles API:
-- Create Roles
-
-* Endpoint: POST: /api/roles
-* Request:
-```
-{
-  "title": "admin"
-}
-```
-
-* Response:
-```
-Status: 200: OK
-{
-  "id": 1,
-  "title": "admin",
-  "createdAt": "2016-12-06T06:44:54.792Z",
-  "updatedAt": "2016-12-06T06:44:54.792Z"
-}
-```
-
-####### Endpoint for Users API.
-
-- Create User
-
-Endpoint: POST: api/users
-Request:
-```
-{
-  "username": "memuna",
-  "fullname": "memuna h",
-  "email": "memuna@gmail.com",
-  "roleId": 2,
-  "password": "password",
-  "confirmPassword": "password"
-}
-```
-* Response
-```
-Status: 201: OK
-Body (application/json)
-{
-  "user": {
-    "id": 141,
-    "username": "memuna",
-    "fullname": "memuna h",
-    "email": "memuna@gmail.com",
-    "roleId": 2,
-    "password": "@a39chc.sduc*#ka82.te638w7qd"
-    "createdAt": "2017-02-19T17:34:19.992Z",
-    "updatedAt": "2017-02-19T17:34:19.992Z"
-  },
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjE0MSwiUm9sZUlkIjoxLCJpYXQiOjE0ODc1MjU2NjAsImV4cCI6MTQ4NzY5ODQ2MH0.ddCQXZB2_woJ32xZNHqPBhNXfjBRg6T3ZsSmF8GCplA"
-}
-```
-
-###### Endpoint for document API.
-
-- Get All Documents
-
-* Request:
-- Endpoint: GET: /documents
-- Requires: Authentication by Admin
-
-- Response:
-```
-Status: 200: OK
-Body (application/json)
-[{
-    "id": 10,
-    "title": "A document",
-    "content": "Test document",
-    "access": "Public",
-    "userId": 2,
-    "createdAt": "2017-02-17T17:40:45.146Z",
-    "updatedAt": "2017-02-17T17:40:45.146Z"
-  },
-  {
-    "id": 3,
-    "title": "Okay",
-    "content": "What do we have here?",
-    "access": "1",
-    "userId": 1,
-    "createdAt": "2017-02-06T22:55:43.747Z",
-    "updatedAt": "2017-02-06T22:55:43.747Z"
-  }]
-```
 
 ###### Limitations:
 
