@@ -2,7 +2,7 @@ import axios from 'axios';
 import toastr from 'toastr';
 import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
   CREATE_DOCUMENT_ERROR, CHANGE_CURRENT_DOCUMENT, EDIT_DOCUMENT,
-  EDIT_DOCUMENT_ERROR, DELETE_DOCUMENT, DELETE_DOCUMENT_ERROR,
+  EDIT_DOCUMENT_ERROR, DELETE_DOCUMENT_ERROR,
   SEARCH_DOCUMENT, SEARCH_DOCUMENT_ERROR, VIEW_ONE_DOCUMENT,
   VIEW_ONE_DOCUMENT_ERROR } from '../actionTypes';
 
@@ -124,7 +124,6 @@ export const deleteDocument = (document, paginationMetadata) => {
   return (dispatch) => {
     return axios.delete(`/api/documents/${document.id}`)
       .then(() => {
-        // dispatch({ type: DELETE_DOCUMENT, document });
         dispatch(viewAllDocuments(paginationMetadata));
       }).catch((error) => {
         dispatch({ type: DELETE_DOCUMENT_ERROR,

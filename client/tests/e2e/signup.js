@@ -1,28 +1,7 @@
-/* eslint func-names: "off"*/
-/* eslint no-unused-vars: "off"*/
 const faker = require('faker');
 
 module.exports = {
-  'User sign up without credentials': (browser) => {
-    browser
-      .url('http://localhost:5000')
-      .waitForElementVisible('body', 5000)
-      .setValue('input[name=email]', '')
-      .setValue('input[name=password]', '')
-      .click('#show-signup')
-      .waitForElementVisible('#signup-form', 5000)
-      .assert.containsText('#signup-text', 'Already have an account?Sign In')
-      .setValue('input[name=username]', '')
-      .setValue('input[name=fullname]', '')
-      .setValue('input[name=email]', '')
-      .setValue('input[name=password]', '')
-      .setValue('input[name=confirmPassword]', '')
-      .click('#signup-button')
-      .pause(1000)
-      .waitForElementVisible('h2', 5000)
-      .assert.containsText('h2', 'Welcome to DocGenie');
-  },
-  'User sign up with wrong email': (browser) => {
+  'Users should not be able to sign up with incorrect email': (browser) => {
     browser
       .url('http://localhost:5000')
       .waitForElementVisible('body', 5000)
@@ -37,11 +16,12 @@ module.exports = {
       .setValue('input[name=password]', 'password')
       .setValue('input[name=confirmPassword]', 'password')
       .click('#signup-button')
-      .pause(1000)
-      .waitForElementVisible('h2', 5000)
-      .assert.containsText('h2', 'Welcome to DocGenie');
+      .waitForElementVisible('.error-message', 5000)
+      .assert.containsText('.error-message', 'Email is not rightly formatted')
+      .pause(1000);
   },
-  'User sign up with non-matching password': (browser) => {
+  'Users should not be able to sign up if passwords do not match':
+  (browser) => {
     browser
       .url('http://localhost:5000')
       .waitForElementVisible('body', 5000)
@@ -57,11 +37,12 @@ module.exports = {
       .setValue('input[name=password]', 'password')
       .setValue('input[name=confirmPassword]', 'confirmPassword')
       .click('#signup-button')
-      .pause(1000)
-      .waitForElementVisible('h2', 5000)
-      .assert.containsText('h2', 'Welcome to DocGenie');
+      .waitForElementVisible('.error-message', 5000)
+      .assert.containsText('.error-message', 'Password does not match')
+      .pause(1000);
   },
-  'User sign up successfully': (browser) => {
+  'Users should be able to sign up successfully with correct details':
+  (browser) => {
     browser
       .url('http://localhost:5000')
       .waitForElementVisible('body', 5000)

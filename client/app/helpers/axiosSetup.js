@@ -7,5 +7,5 @@ const setAxiosHeader = (token) => {
     delete axios.defaults.headers.common.authorizaton;
   }
 };
-
+window.axios = axios;
 export default setAxiosHeader;

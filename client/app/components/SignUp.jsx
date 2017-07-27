@@ -45,7 +45,9 @@ export class SignUp extends React.Component {
         <div className="row">
           <form id="signup-form" className="signup-form"
             onSubmit={this.onSubmit} action="#">
-            <div className="error-message">{this.props.user.error}</div>
+            <div id="error-message" className="error-message">
+              {this.props.user.error}
+            </div>
             <div className="row">
               <div className="input-field col s6">
                 <input name="username" id="username" type="text"

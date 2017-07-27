@@ -83,7 +83,7 @@ export class DocumentCard extends React.Component {
       <div className="col s4 darken-1">
         <div className="card document-card">
           <div className="card-content">
-            <span className="card-title document-card-title">
+            <span id="doc-title" className="card-title document-card-title">
               { document.title }
             </span>
             <p><b>Author:</b> {document.user.fullname}</p>

@@ -14,7 +14,12 @@ import { createUser,
 const mockStore = configureMockStore([thunk]);
 
 describe('User Actions', () => {
-  let store, axiosGetStub, axiosPostStub, axiosPutStub, axiosDeleteStub, browserHistorySpy;
+  let store,
+    axiosGetStub,
+    axiosPostStub,
+    axiosPutStub,
+    axiosDeleteStub,
+    browserHistorySpy;
   const response = { data: {
     user: { fullname: 'one user' },
     users: [{ id: 1, userId: 34, fullname: 'two users' }],
@@ -30,16 +35,20 @@ describe('User Actions', () => {
     store = mockStore({ user: {} });
     browserHistorySpy = sinon.stub(browserHistory, 'push', () => null);
     axiosGetStub = sinon.stub(axios, 'get', (url) => {
-      return url.indexOf('api') > -1 ? Promise.resolve(response) : Promise.reject(error);
+      return url.indexOf('api') > -1 ? Promise.resolve(response) :
+        Promise.reject(error);
     });
     axiosPostStub = sinon.stub(axios, 'post', (url) => {
-      return url.indexOf('api') > -1 ? Promise.resolve(response) : Promise.reject(error);
+      return url.indexOf('api') > -1 ? Promise.resolve(response) :
+        Promise.reject(error);
     });
     axiosPutStub = sinon.stub(axios, 'put', (url) => {
-      return url.indexOf('api') > -1 ? Promise.resolve(response) : Promise.reject(error);
+      return url.indexOf('api') > -1 ? Promise.resolve(response) :
+        Promise.reject(error);
     });
     axiosDeleteStub = sinon.stub(axios, 'delete', (url) => {
-      return url.indexOf('api') > -1 ? Promise.resolve(response) : Promise.reject(error);
+      return url.indexOf('api') > -1 ? Promise.resolve(response) :
+        Promise.reject(error);
     });
   });
   afterEach(() => {
@@ -52,13 +61,15 @@ describe('User Actions', () => {
   it('should dispatch appropriate actions on createUser', () => {
     const user = { id: 23, roleId: 2, username: 'tada' };
     return store.dispatch(createUser(user)).then(() => {
-      expect(store.getActions()).to.deep.equal([{ type: CREATE_USER, user: response.data.user }]);
+      expect(store.getActions())
+        .to.deep.equal([{ type: CREATE_USER, user: response.data.user }]);
     });
   });
   it('should dispatch appropriate actions on signInUser', () => {
     const user = { id: 23, roleId: 2, username: 'tada' };
     return store.dispatch(signInUser(user)).then(() => {
-      expect(store.getActions()).to.deep.equal([{ type: SIGNIN_USER, user: response.data.user }]);
+      expect(store.getActions())
+        .to.deep.equal([{ type: SIGNIN_USER, user: response.data.user }]);
     });
   });
   it('should dispatch appropriate actions on logoutUser', () => {
@@ -66,13 +77,15 @@ describe('User Actions', () => {
   });
   it('should dispatch appropriate actions on getUser', () => {
     return store.dispatch(getUser()).then(() => {
-      expect(store.getActions()).to.deep.equal([{ type: CREATE_USER, user: response.data }]);
+      expect(store.getActions())
+        .to.deep.equal([{ type: CREATE_USER, user: response.data }]);
     });
   });
   it('should dispatch appropriate actions on updateProfile', () => {
     const user = { id: 23, roleId: 2, username: 'tada' };
     return store.dispatch(updateProfile(user)).then(() => {
-      expect(store.getActions()).to.deep.equal([{ type: UPDATE_USER, user: response.data }]);
+      expect(store.getActions())
+        .to.deep.equal([{ type: UPDATE_USER, user: response.data }]);
     });
   });
   it('should dispatch appropriate actions on viewAllUsers', () => {

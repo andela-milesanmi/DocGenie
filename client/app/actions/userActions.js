@@ -2,6 +2,7 @@ import axios from 'axios';
 import jwt from 'jwt-decode';
 import { browserHistory } from 'react-router';
 import toastr from 'toastr';
+import setAxiosHeader from '../helpers/axiosSetup';
 import { CREATE_USER, SIGNIN_USER, LOGOUT_USER, VIEW_USERS, SEARCH_USERS,
   SEARCH_USERS_ERROR, VIEW_USERS_ERROR, CREATE_USER_ERROR, SIGNIN_USER_ERROR,
   UPDATE_USER, UPDATE_USER_ERROR } from '../actionTypes';
@@ -19,6 +20,7 @@ export const createUser = (user) => {
       .then((response) => {
         localStorage.setItem('token', response.data.token);
         dispatch({ type: CREATE_USER, user: response.data.user });
+        setAxiosHeader(localStorage.token);
         browserHistory.push('/dashboard');
       }, (error) => {
         dispatch({ type: CREATE_USER_ERROR,
@@ -42,6 +44,7 @@ export const signInUser = (user) => {
       .then((response) => {
         localStorage.setItem('token', response.data.token);
         dispatch({ type: SIGNIN_USER, user: response.data.user });
+        setAxiosHeader(localStorage.token);
         browserHistory.push('/dashboard');
       }, (error) => {
         dispatch({ type: SIGNIN_USER_ERROR,

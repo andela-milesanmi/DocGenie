@@ -32,16 +32,20 @@ describe('Document Actions', () => {
   beforeEach(() => {
     store = mockStore({ documents: [] });
     axiosGetStub = sinon.stub(axios, 'get', (url) => {
-      return url.indexOf('api') > -1 ? Promise.resolve(response) : Promise.reject(error);
+      return url.indexOf('api') > -1 ?
+        Promise.resolve(response) : Promise.reject(error);
     });
     axiosPostStub = sinon.stub(axios, 'post', (url) => {
-      return url.indexOf('api') > -1 ? Promise.resolve(response) : Promise.reject(error);
+      return url.indexOf('api') > -1 ? Promise.resolve(response) :
+        Promise.reject(error);
     });
     axiosPutStub = sinon.stub(axios, 'put', (url) => {
-      return url.indexOf('api') > -1 ? Promise.resolve(response) : Promise.reject(error);
+      return url.indexOf('api') > -1 ? Promise.resolve(response) :
+        Promise.reject(error);
     });
     axiosDeleteStub = sinon.stub(axios, 'delete', (url) => {
-      return url.indexOf('api') > -1 ? Promise.resolve(response) : Promise.reject(error);
+      return url.indexOf('api') > -1 ? Promise.resolve(response) :
+        Promise.reject(error);
     });
   });
   afterEach(() => {
@@ -50,55 +54,77 @@ describe('Document Actions', () => {
     axiosPutStub.restore();
     axiosDeleteStub.restore();
   });
-  it('should dispatch appropriate actions when viewAllDocuments action is triggered', () => {
-    return store.dispatch(viewAllDocuments('good-url/?limit=3')).then(() => {
-      expect(store.getActions()).to.deep.equal([{
-        type: VIEW_DOCUMENTS,
-        documents: response.data.documents,
-        pagination: response.data.pagination
-      }]);
+  it('should dispatch an action when viewAllDocuments action is triggered',
+    () => {
+      return store.dispatch(viewAllDocuments('good-url/?limit=3')).then(() => {
+        expect(store.getActions()).to.deep.equal([{
+          type: VIEW_DOCUMENTS,
+          documents: response.data.documents,
+          pagination: response.data.pagination
+        }]);
+      });
     });
-  });
-  it('should fail and dispatch error on failed viewAllDocuments request', () => {
-    const errorMessage = error.response.data;
-    return store.dispatch(viewAllDocuments('error-url')).catch((error) => {
-      expect(store.getActions()).to.deep.equal([{
-        type: VIEW_DOCUMENTS_ERROR,
-        errorMessage }]);
+  it('should fail and dispatch error on failed viewAllDocuments request',
+    () => {
+      return store.dispatch(viewAllDocuments('error-url')).catch(() => {
+        const errorMessage = error.response.data;
+        expect(store.getActions()).to.deep.equal([{
+          type: VIEW_DOCUMENTS_ERROR,
+          errorMessage }]);
+      });
     });
-  });
   it('should dispatch appropriate actions on createDocument', () => {
-    const document = { id: 23, userId: 45, title: 'A good life', content: 'A good life by Marion Bennet' };
+    const document = { id: 23,
+      userId: 45,
+      title: 'A good life',
+      content: 'A good life by Marion Bennet' };
     return store.dispatch(createDocument(document, 'good-url')).then(() => {
-      expect(store.getActions().map(action => action.type)).to.deep.equal([CREATE_DOCUMENT, VIEW_DOCUMENTS]);
+      expect(store.getActions().map(action => action.type))
+        .to.deep.equal([CREATE_DOCUMENT, VIEW_DOCUMENTS]);
     });
   });
   it('should dispatch appropriate actions on changeCurrentDocument', () => {
-    const document = { id: 23, userId: 45, title: 'A good life', content: 'A good life by Marion Bennet' };
+    const document = { id: 23,
+      userId: 45,
+      title: 'A good life',
+      content: 'A good life by Marion Bennet' };
     expect(changeCurrentDocument(document)).to.deep.equal({
       type: CHANGE_CURRENT_DOCUMENT,
       document
     });
   });
   it('should dispatch appropriate actions on editDocument', () => {
-    const document = { id: 23, userId: 45, title: 'A good life', content: 'A good life by Marion Bennet' };
-    return store.dispatch(editDocument(document)).then(() => {
-      expect(store.getActions()).to.deep.equal([{ type: EDIT_DOCUMENT,
-        document: { ...document, ...response.data } }]);
+    const document = { id: 23,
+      userId: 45,
+      title: 'A good life',
+      content: 'A good life by Marion Bennet' };
+    return store.dispatch(editDocument(document, 'good-url')).then(() => {
+      expect(store.getActions().map(action => action.type))
+        .to.deep.equal([EDIT_DOCUMENT, VIEW_DOCUMENTS]);
     });
   });
   it('should dispatch appropriate actions on deleteDocument', () => {
-    const document = { id: 23, userId: 45, title: 'A good life', content: 'A good life by Marion Bennet' };
+    const document = { id: 23,
+      userId: 45,
+      title: 'A good life',
+      content: 'A good life by Marion Bennet' };
     return store.dispatch(deleteDocument(document, 'good-url')).then(() => {
-      expect(store.getActions().map(action => action.type)).to.deep.equal([DELETE_DOCUMENT, VIEW_DOCUMENTS]);
+      expect(store.getActions())
+        .to.deep.equal([{
+          type: VIEW_DOCUMENTS,
+          documents: response.data.documents,
+          pagination: response.data.pagination
+        }]);
     });
   });
   it('should dispatch appropriate actions on searchForDocuments', () => {
     const searchKey = 'doc';
-    return store.dispatch(searchForDocuments(`good-url/?searchKey=${searchKey}`)).then(() => {
-      expect(store.getActions()).to.deep.equal([{ type: SEARCH_DOCUMENT,
-        documents: response.data.documents || [],
-        pagination: response.data.pagination }]);
-    });
+    return store
+      .dispatch(searchForDocuments(`good-url/?searchKey=${searchKey}`))
+      .then(() => {
+        expect(store.getActions()).to.deep.equal([{ type: SEARCH_DOCUMENT,
+          documents: response.data.documents || [],
+          pagination: response.data.pagination }]);
+      });
   });
 });

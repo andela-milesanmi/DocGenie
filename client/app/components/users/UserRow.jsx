@@ -104,10 +104,10 @@ export class UserRow extends React.Component {
     const { index, user } = this.props;
     return (
       <tr>
-        <td>{index + 1}</td>
-        <td>{user.fullname}</td>
-        <td>{user.username}</td>
-        <td>{user.email}</td>
+        <td id="index">{index + 1}</td>
+        <td id="fullname">{user.fullname}</td>
+        <td id="username">{user.username}</td>
+        <td id="email">{user.email}</td>
         <td>{this.renderRoleOption()}</td>
         <td>
           <button
