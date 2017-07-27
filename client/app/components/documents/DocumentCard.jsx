@@ -8,14 +8,13 @@ import { changeCurrentDocument, deleteDocument }
   from '../../actions/documentActions';
 
 /**
- * DocumentCard component renders each document
+ * @description - DocumentCard component renders each document
  * @export
  * @class DocumentCard
  * @extends {React.Component}
  */
 export class DocumentCard extends React.Component {
   constructor(props) {
-  // Pass props back to parent
     super(props);
     this.state = {
       showMore: false,
@@ -26,8 +25,8 @@ export class DocumentCard extends React.Component {
   }
 
   /**
-  * editDocument method triggers changeCurrentDocument action
-  * @param {object} document
+  * @description - editDocument method triggers changeCurrentDocument action
+  * @param {object} document - document to be edited
   * @memberOf DocumentCard
   */
   editDocument(document) {
@@ -35,8 +34,8 @@ export class DocumentCard extends React.Component {
   }
 
   /**
-  * deleteDocument method triggers deleteDocument action
-  * @param {object} document
+  * @description - deleteDocument method triggers deleteDocument action
+  * @param {object} document - document to be deleted
   * @memberOf DocumentCard
   */
   deleteDocument(document) {
@@ -65,7 +64,7 @@ export class DocumentCard extends React.Component {
   }
 
   /**
-  * handleShowMore method toggles state property, showMore
+  * @description - handleShowMore method toggles showMore state
   * @memberOf DocumentCard
   */
   handleShowMore() {
@@ -73,7 +72,7 @@ export class DocumentCard extends React.Component {
   }
 
   /**
-  * render, React lifecycle method
+  * @description - render, React lifecycle method
   * @returns a DOM element
   * @memberOf DocumentCard
   */
@@ -84,7 +83,7 @@ export class DocumentCard extends React.Component {
       <div className="col s4 darken-1">
         <div className="card document-card">
           <div className="card-content">
-            <span className="card-title document-card-title">
+            <span id="doc-title" className="card-title document-card-title">
               { document.title }
             </span>
             <p><b>Author:</b> {document.user.fullname}</p>
@@ -128,8 +127,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     changeCurrentDocument: document =>
       dispatch(changeCurrentDocument(document)),
-    deleteDocument: (document, documentUrl) =>
-      dispatch(deleteDocument(document, documentUrl)),
+    deleteDocument: (document, paginationMetadata) =>
+      dispatch(deleteDocument(document, paginationMetadata)),
   };
 };
 

@@ -21,8 +21,9 @@ const getUserToken = (data) => {
   });
 };
 
-describe('Roles', () => {
-  let adminToken, userToken, testToken, adminRoleId, userRoleId;
+describe('Roles Controller', () => {
+  let adminToken,
+    userToken;
 
   before(() => {
     return models.Role.create(mockData.adminRole)
@@ -49,33 +50,90 @@ describe('Roles', () => {
     return models.Role.sequelize.sync({ force: true });
   });
 
-  it('should validate that a regular user cannot create a new role', (done) => {
-    chai.request(server)
-      .get('/api/roles')
-      .set('authorization', userToken)
-      .end((error, response) => {
-        expect(response).to.have.status(401);
-        done();
-      });
-  });
+  it('should validate that a regular user cannot create a new role',
+    (done) => {
+      chai.request(server)
+        .get('/api/roles')
+        .set('authorization', userToken)
+        .end((error, response) => {
+          expect(response).to.have.status(401);
+          done();
+        });
+    });
 
-  it('should validate that a regular user cannot delete a role', (done) => {
-    chai.request(server)
-      .delete('/api/roles/1')
-      .set('authorization', userToken)
-      .end((error, response) => {
-        expect(response).to.have.status(401);
-        done();
-      });
-  });
-  it('should validate that a role that already exists cannot be re-created', (done) => {
-    chai.request(server)
-      .post('/api/roles/')
-      .set('authorization', userToken)
-      .send({ title: 'admin' })
-      .end((error, response) => {
-        expect(response).to.have.status(401);
-        done();
-      });
-  });
+  it('should validate that a regular user cannot delete a role',
+    (done) => {
+      chai.request(server)
+        .delete('/api/roles/1')
+        .set('authorization', userToken)
+        .end((error, response) => {
+          expect(response).to.have.status(401);
+          done();
+        });
+    });
+  it('should validate that a role that already exists cannot be re-created',
+    (done) => {
+      chai.request(server)
+        .post('/api/roles/')
+        .set('authorization', userToken)
+        .send({ title: 'admin' })
+        .end((error, response) => {
+          expect(response).to.have.status(401);
+          done();
+        });
+    });
+  it('should validate that an admin user can create a new role',
+    (done) => {
+      chai.request(server)
+        .post('/api/roles')
+        .set('authorization', adminToken)
+        .send({ title: 'guest' })
+        .end((error, response) => {
+          expect(response).to.have.status(201);
+          expect(response.body).to.have.property('id');
+          expect(response.body).to.have.property('title');
+          expect(response.body.title).to.equal('guest');
+          done();
+        });
+    });
+  it('should validate that an admin user can view all available roles',
+    (done) => {
+      chai.request(server)
+        .get('/api/roles')
+        .set('authorization', adminToken)
+        .end((error, response) => {
+          expect(response).to.have.status(200);
+          expect(response.body).to.be.an('array');
+          expect(response.body[0].id).to.equal(1);
+          expect(response.body[0].title).to.equal('admin');
+          expect(response.body[1].id).to.equal(2);
+          expect(response.body[1].title).to.equal('user');
+          expect(response.body[2].id).to.equal(3);
+          expect(response.body[2].title).to.equal('guest');
+          done();
+        });
+    });
+  it('should validate that an admin user can delete a role',
+    (done) => {
+      chai.request(server)
+        .delete('/api/roles/3')
+        .set('authorization', adminToken)
+        .end((error, response) => {
+          expect(response).to.have.status(200);
+          expect(response.body).to.eql({ message:
+             'Role deleted successfully' });
+          done();
+        });
+    });
+  it('should validate that an admin user cannot delete a non-existent role',
+    (done) => {
+      chai.request(server)
+        .delete('/api/roles/5')
+        .set('authorization', adminToken)
+        .end((error, response) => {
+          expect(response).to.have.status(404);
+          expect(response.body).to.eql({ message: 'Role Not Found' });
+          done();
+        });
+    });
 });

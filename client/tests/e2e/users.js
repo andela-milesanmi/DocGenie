@@ -28,9 +28,9 @@ module.exports = {
       .assert.containsText('h4', 'ALL USERS')
       .waitForElementVisible('div[id="search-users"]', 5000)
       .setValue('input[name=searchKey]', 'muna2')
-      .pause(3000)
-      .setValue('input[name=searchKey]', '')
-      .pause(3000)
+      .pause(2000)
+      .assert.containsText('#username', 'muna2')
+      .pause(1000)
       .end();
   },
 };

@@ -2,7 +2,8 @@ import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import { mount } from 'enzyme';
-import { SearchDocuments } from '../../app/components/documents/SearchDocuments.jsx';
+import { SearchDocuments } from
+  '../../app/components/documents/SearchDocuments.jsx';
 
 describe('Search Component', () => {
   let component;

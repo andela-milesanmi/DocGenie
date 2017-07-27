@@ -10,6 +10,7 @@ import ViewOneDocument from './components/documents/ViewOneDocument.jsx';
 import Profile from './components/Profile.jsx';
 import AllUsers from './components/users/AllUsers.jsx';
 import requireAuth from './helpers/requireAuth';
+import setAxiosHeader from './helpers/axiosSetup';
 import './styles/app.scss';
 import '../../node_modules/froala-editor/css/froala_style.min.css';
 import '../../node_modules/froala-editor/css/froala_editor.pkgd.min.css';
@@ -18,11 +19,15 @@ import configureStore from './store/configureStore';
 
 const store = configureStore();
 
+// allows access to store from browser console
 window.clientStore = store;
 
 // solves react-materialize error: '$() is not a function'
 window.jQuery = window.$ = jQuery;
 
+if (localStorage.token) {
+  setAxiosHeader(localStorage.token);
+}
 
 const Root = () => (
   <Provider store={store}>

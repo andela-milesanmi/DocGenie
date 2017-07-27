@@ -4,11 +4,15 @@ import { connect } from 'react-redux';
 import { searchForUsers } from '../../actions/userActions';
 
 /**
- * Pure function, Search
+ * @description - displays all users for admin users
  * @param {object} props
  */
 export const SearchUsers = (props) => {
-  // handleChange function triggers searchForUsers action on input change
+/**
+ * @description - handleChange function triggers searchForUsers action
+ * @returns {void}
+ * @memberOf SearchUsers
+ */
   const handleChange = (event) => {
     event.preventDefault();
     const searchKey = event.target.value;

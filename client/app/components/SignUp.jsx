@@ -4,12 +4,11 @@ import { connect } from 'react-redux';
 import { createUser } from '../actions/userActions';
 
 /**
- *
- * SignUp component
- * @export
- * @class SignUp
- * @extends {React.Component}
- */
+* @description - SignUp component, signs up a user into the app
+* @export
+* @class SignUp
+* @extends {React.Component}
+*/
 export class SignUp extends React.Component {
   constructor() {
     super();
@@ -17,31 +16,38 @@ export class SignUp extends React.Component {
   }
 
   /**
-   * OnSubmit function handles form submission
-   * @param {object} e, event
-   * @memberOf SignUp
-   */
-  onSubmit(e) {
-    e.preventDefault();
-    const fullname = e.target.fullname.value;
-    const email = e.target.email.value;
-    const username = e.target.username.value;
-    const password = e.target.password.value;
-    const confirmPassword = e.target.confirmPassword.value;
-    this.props.createUser({ username, fullname, email, password, confirmPassword });
+  * @description - This handles signup form submission when a user signs up
+  * @param {object} event - event data: username, fullname, email, password
+  * @memberOf SignUp
+  */
+  onSubmit(event) {
+    event.preventDefault();
+    const { fullname: { value: fullname },
+      username: { value: username },
+      email: { value: email },
+      password: { value: password },
+      confirmPassword: { value: confirmPassword } } = event.target;
+    this.props.createUser({ username,
+      fullname,
+      email,
+      password,
+      confirmPassword });
   }
 
   /**
-   * React lifecycle method
-   * @returns a DOM element
-   * @memberOf SignUp
-   */
+  * @description - React lifecycle method which renders react element
+  * @returns a DOM element
+  * @memberOf SignUp
+  */
   render() {
     return (
       <div className="container">
         <div className="row">
-          <form id="signup-form" className="signup-form" onSubmit={this.onSubmit} action="#">
-            <div className="error-message">{this.props.user.error}</div>
+          <form id="signup-form" className="signup-form"
+            onSubmit={this.onSubmit} action="#">
+            <div id="error-message" className="error-message">
+              {this.props.user.error}
+            </div>
             <div className="row">
               <div className="input-field col s6">
                 <input name="username" id="username" type="text"
@@ -72,12 +78,14 @@ export class SignUp extends React.Component {
               </div>
             </div>
             <div>
-              <button id="signup-button" type="submit" className="btn btn-large create-doc
+              <button id="signup-button" type="submit"
+                className="btn btn-large create-doc
                signup-button">SUBMIT</button>
             </div>
 
             <div>
-              <p id="signup-text" className="center-align">Already have an account?
+              <p id="signup-text" className="center-align">
+                Already have an account?
                 <a style={{ color: '#EE6352' }}
                   onClick={this.props.changeScreen}>Sign In</a>
               </p>
@@ -92,7 +100,6 @@ export class SignUp extends React.Component {
 // Maps state from store to props
 const mapStateToProps = (state) => {
   return {
-    // You can now say this.props.user
     user: state.user || {}
   };
 };

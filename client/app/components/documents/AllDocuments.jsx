@@ -9,8 +9,8 @@ import SearchDocuments from './SearchDocuments.jsx';
 import DocumentCard from './DocumentCard.jsx';
 
 /**
- * AllDocuments component, maps through all documents and renders DocumentCard
- * component
+ * @description - This component maps through all documents and renders
+ * DocumentCard component
  * @export
  * @class AllDocuments
  * @extends {React.Component}
@@ -27,7 +27,7 @@ export class AllDocuments extends React.Component {
   }
 
   /**
-  * editDocument method, triggers changeCurrentDocument action
+  * @description - this method triggers changeCurrentDocument action
   * @param {object} document
   * @memberOf AllDocuments
   */
@@ -36,7 +36,7 @@ export class AllDocuments extends React.Component {
   }
 
   /**
-  * componentDidMount, react lifecycle method which is invoked immediately the
+  * @description - react lifecycle method which is invoked immediately the
   * component mounts
   * @memberOf AllDocuments
   */
@@ -46,7 +46,7 @@ export class AllDocuments extends React.Component {
   }
 
   /**
-  * @description Allows user navigate pages by changing limit and offset
+  * @description - Allows user navigate pages by changing limit and offset
   * @param  {object} page
   * @return {void}
   */
@@ -60,7 +60,7 @@ export class AllDocuments extends React.Component {
   }
 
   /**
-   * render, react lifecyle method
+   * @description - react lifecyle method which renders a React element
    * @returns a DOM element
    * @memberOf AllDocuments
    */
@@ -85,7 +85,7 @@ export class AllDocuments extends React.Component {
           </div>
         </div>
         <div className="col s12">
-          <div className="row" style={{ fontSize: '15px' }}>
+          <div className="row">
             <div className="col s10 offset-s1">
               {this.props.documents && this.props.documents.map((document, i) =>
                 (
@@ -96,7 +96,8 @@ export class AllDocuments extends React.Component {
               )}
               {this.props.documents && this.props.documents.length === 0 &&
               <div className="center-align">
-                <h5>Aww shucks...No documents found
+                <h5>
+                  Aww shucks...No documents found
                 </h5>
               </div>}
             </div>
@@ -140,7 +141,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     viewAllDocuments: paginationMetadata =>
       dispatch(viewAllDocuments(paginationMetadata)),
-    changeCurrentDocument: document => dispatch(changeCurrentDocument(document)),
+    changeCurrentDocument: document =>
+      dispatch(changeCurrentDocument(document)),
   };
 };
 

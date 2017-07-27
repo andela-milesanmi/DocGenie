@@ -1,5 +1,12 @@
 import { getUser } from '../actions/userActions';
 
+/**
+ * @description - validates the routes, checks if the user is authorized
+ * then fetches user details from server via getUser action
+ * @param {object} store - redux store
+ * @returns {function} callback - react-router callback function which
+ * blocks route transitioning until it is invoked.
+ */
 const requireAuth = (store) => {
   return (nextState, replace, callback) => {
     const token = localStorage.getItem('token');

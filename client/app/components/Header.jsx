@@ -5,17 +5,28 @@ import { Navbar, Dropdown, NavItem, Icon } from 'react-materialize';
 import { connect } from 'react-redux';
 import { logoutUser } from '../actions/userActions';
 
+/**
+* @description - Navigates to /dashboard route and displays all documents
+* @returns {void}
+*/
 const displayAllDocuments = () => {
   browserHistory.push('/dashboard');
 };
 
+/**
+* @description - navigates to /dashboard/mydocuments route and displays a user's
+* personal documents.
+* @returns {void}
+*/
 const displayOwnDocuments = () => {
   browserHistory.push('/dashboard/mydocuments');
 };
+
 /**
- * pure function Header, renders the navigation bar
- * @params {object} props
- */
+* @description - pure function Header, renders the navigation bar
+* @param {object} props
+* @returns {void}
+*/
 export const Header = (props) => {
   const { user } = props;
   return (
@@ -41,7 +52,8 @@ export const Header = (props) => {
             </Link>
           </ul>
           {(user.roleId === 1) && <ul className="nav-dropdown-list">
-            <Link id="manage-users" to="/dashboard/users" style={{ color: '#000' }}>
+            <Link id="manage-users" to="/dashboard/users"
+              style={{ color: '#000' }}>
               Manage Users
             </Link>
           </ul>}
@@ -63,7 +75,6 @@ export const Header = (props) => {
 // Maps state from store to props
 const mapStateToProps = (state) => {
   return {
-    // You can now say this.props.user
     user: state.user.currentProfile || {}
   };
 };
@@ -71,7 +82,6 @@ const mapStateToProps = (state) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-  // You can now say this.props.logoutUser
     logoutUser: () => dispatch(logoutUser())
   };
 };
@@ -81,5 +91,4 @@ Header.propTypes = {
   user: PropTypes.object.isRequired,
 };
 
-// Use connect to put them together
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

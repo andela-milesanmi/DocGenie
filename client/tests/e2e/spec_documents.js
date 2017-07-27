@@ -1,8 +1,5 @@
-/* eslint func-names: "off"*/
-/* eslint no-unused-vars: "off"*/
-
 module.exports = {
-  'User sign in and create document': (browser) => {
+  'Users should be able to sign in and create a new document': (browser) => {
     browser
       .url('http://localhost:5000')
       .waitForElementVisible('body', 5000)
@@ -23,9 +20,12 @@ module.exports = {
       .waitForElementVisible('.fr-view', 3000)
       .setValue('div.fr-element', 'froala content here')
       .click('#save-doc')
+      .pause(2000)
+      .waitForElementVisible('.toast-message', 3000)
+      .assert.containsText('.toast-message', 'Document created!')
       .pause(1000);
   },
-  'Edit document': (browser) => {
+  'Signed in user should be able to edit their document': (browser) => {
     browser
       .url('http://localhost:5000')
       .waitForElementVisible('body', 5000)
@@ -38,15 +38,18 @@ module.exports = {
       .click('#edit')
       .pause(1000)
       .waitForElementVisible('.fr-box', 5000)
-      .setValue('input[name=title]', 'e2e test doc edited')
+      .setValue('input[name=title]', ' edited')
       .setValue('select[name=access]', 'Private')
       .waitForElementVisible('.fr-element', 3000)
       .waitForElementVisible('.fr-view', 3000)
       .setValue('div.fr-element', 'froala content edited')
       .click('#save-doc')
+      .pause(2000)
+      .waitForElementVisible('.toast-message', 3000)
+      .assert.containsText('.toast-message', 'Document edited!')
       .pause(1000);
   },
-  'View a document': (browser) => {
+  'Signed in user should be able to view documents': (browser) => {
     browser
       .url('http://localhost:5000')
       .waitForElementVisible('body', 5000)
@@ -58,10 +61,11 @@ module.exports = {
       .waitForElementVisible('#show-more', 5000)
       .click('#show-more')
       .pause(1000)
-      .waitForElementVisible('.viewOneDocument', 5000)
+      .waitForElementVisible('.viewOneDocument', 2000)
+      .assert.containsText('h4', 'e2e test doc edited')
       .pause(1000);
   },
-  'Delete document': (browser) => {
+  'Signed in user should be able to delete their document': (browser) => {
     browser
       .url('http://localhost:5000')
       .waitForElementVisible('body', 5000)
@@ -78,19 +82,20 @@ module.exports = {
       .click('.confirm')
       .pause(1000);
   },
-  'Search document': (browser) => {
-    browser
-      .url('http://localhost:5000')
-      .waitForElementVisible('body', 5000)
-      .pause(1000)
-      .waitForElementVisible('div[id="main-dash"]', 5000)
-      .assert.containsText('h4', 'ALL DOCUMENTS')
-      .assert.urlEquals(`${'http://localhost:5000/dashboard'}`)
-      .waitForElementVisible('div[id="search-docs"]', 5000)
-      .setValue('input[name=searchKey]', 'e2e test doc')
-      .pause(3000)
-      .setValue('input[name=searchKey]', '')
-      .pause(3000)
-      .end();
-  },
+  'Signed in user should be able to search for already created document(s)':
+   (browser) => {
+     browser
+       .url('http://localhost:5000')
+       .waitForElementVisible('body', 5000)
+       .pause(1000)
+       .waitForElementVisible('div[id="main-dash"]', 5000)
+       .assert.containsText('h4', 'ALL DOCUMENTS')
+       .assert.urlEquals(`${'http://localhost:5000/dashboard'}`)
+       .waitForElementVisible('div[id="search-docs"]', 5000)
+       .setValue('input[name=searchKey]', 'e2e test doc')
+       .pause(2000)
+       .assert.containsText('#doc-title', 'e2e test doc edited')
+       .pause(2000)
+       .end();
+   },
 };

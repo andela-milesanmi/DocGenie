@@ -1,7 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 import { SignUp } from '../../app/components/SignUp.jsx';
 
 describe('SignUp Component', () => {
@@ -28,11 +28,12 @@ describe('SignUp Component', () => {
     expect(component.find('input').length).to.equal(5);
   });
   it('simulates click events', () => {
-    component.find('form').simulate('submit', { target: { fullname: { value: 'test user' },
-      email: { value: 'test@yahoo.com' },
-      username: { value: 'test12' },
-      password: { value: 'testing' },
-      confirmPassword: { value: 'test@yahoo.com' } } });
+    component.find('form').simulate('submit',
+      { target: { fullname: { value: 'test user' },
+        email: { value: 'test@yahoo.com' },
+        username: { value: 'test12' },
+        password: { value: 'testing' },
+        confirmPassword: { value: 'test@yahoo.com' } } });
     expect(props.createUser).to.have.property('callCount', 1);
   });
 });

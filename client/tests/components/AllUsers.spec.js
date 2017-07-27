@@ -11,7 +11,8 @@ import { AllUsers } from '../../app/components/users/AllUsers.jsx';
 describe('AllUsers component', () => {
   const mockStore = configureStore([thunk]);
   let component;
-  const store = mockStore({ documents: {}, user: { currentProfile: { id: 10 } } });
+  const store = mockStore({ documents: {},
+    user: { currentProfile: { id: 10 } } });
 
   const props = {
     params: {
@@ -34,8 +35,9 @@ describe('AllUsers component', () => {
   afterEach(() => {
     props.viewAllUsers.reset();
   });
-  it('should call the neccessary methods on mount', () => {
-    const componentDidMountSpy = sinon.spy(AllUsers.prototype, 'componentDidMount');
+  it('should mount with necessary props', () => {
+    const componentDidMountSpy =
+      sinon.spy(AllUsers.prototype, 'componentDidMount');
     mount(<AllUsers {...props}/>, {
       context: { store },
       childContextTypes: {

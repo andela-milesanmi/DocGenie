@@ -5,11 +5,11 @@ import { signInUser } from '../actions/userActions';
 
 
 /**
- * SignIn component
- * @export
- * @class SignIn
- * @extends {React.Component}
- */
+* @description - This component displays the signin form
+* @export
+* @class SignIn
+* @extends {React.Component}
+*/
 export class SignIn extends React.Component {
   constructor(props) {
     super(props);
@@ -17,29 +17,31 @@ export class SignIn extends React.Component {
   }
 
   /**
-   * OnSubmit function handles form-submit event
-   * @param {any} event
-   * @memberOf SignIn
-   */
+  * @description - this handles signin form submission
+  * @param {object} event - event data: email, password
+  * @memberOf SignIn
+  */
   onSubmit(event) {
     event.preventDefault();
-    const email = event.target.email.value;
-    const password = event.target.password.value;
+    const { email: { value: email },
+      password: { value: password } } = event.target;
     this.props.signInUser({ email, password });
   }
 
   /**
-   * React lifecycle method
-   * @returns a DOM element
-   * @memberOf SignUp
-   */
+  * @description - React lifecycle method, renders the react element
+  * @returns a DOM element
+  * @memberOf SignUp
+  */
   render() {
     return (
       <div className="container">
         <div className="row">
           <form className="signup-form"
             onSubmit={this.onSubmit} action="#">
-            <div className="error-message">{this.props.user.error}</div>
+            <div id="error-message" className="error-message">
+              {this.props.user.error}
+            </div>
             <div className="row">
               <div className="input-field col s12">
                 <input name="email" id="email" type="text"
@@ -53,7 +55,8 @@ export class SignIn extends React.Component {
               </div>
             </div>
             <div>
-              <button type="submit" id="signin-button" className="btn btn-large create-doc
+              <button type="submit" id="signin-button"
+                className="btn btn-large create-doc
                 signup-button">SUBMIT</button>
             </div>
             <div>
@@ -72,7 +75,6 @@ export class SignIn extends React.Component {
 // Maps state from store to props
 const mapStateToProps = (state) => {
   return {
-    // You can now say this.props.user
     user: state.user || {}
   };
 };

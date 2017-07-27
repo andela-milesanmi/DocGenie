@@ -10,7 +10,8 @@ import App from '../../app/components/App.jsx';
 describe('App Component', () => {
   let component;
   const mockStore = configureStore([thunk]);
-  const store = mockStore({ documents: {}, user: { currentProfile: { id: 10 } } });
+  const store = mockStore({ documents: {},
+    user: { currentProfile: { id: 10 } } });
 
   beforeEach(() => {
     component = shallow(<App> we are App's children' </App>, {

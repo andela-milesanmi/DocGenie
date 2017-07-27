@@ -6,7 +6,7 @@ import { Modal } from 'react-materialize';
 import { createDocument, editDocument, changeCurrentDocument }
   from '../../actions/documentActions';
 
-// Require Editor JS files.
+// Froala Editor JS files.
 require('../../../../node_modules/froala-editor/js/froala_editor.pkgd.min');
 
 const editorConfig = {
@@ -45,14 +45,13 @@ const editorConfig = {
 };
 
 /**
- * CreateDocument component which renders the modal for creating documents
- * @export
- * @class CreateDocument
- * @extends {React.Component}
- */
+* @description - renders the modal for creating documents
+* @export
+* @class CreateDocument
+* @extends {React.Component}
+*/
 export class CreateDocument extends React.Component {
   constructor(props) {
-  // Pass props back to parent
     super(props);
     this.state = { ...props.currentDocument };
     this.handleCreateDocument = this.handleCreateDocument.bind(this);
@@ -61,18 +60,18 @@ export class CreateDocument extends React.Component {
   }
 
   /**
-   * onChange method is triggered once form-input changes
-   * @param {object} e, event
-   * @memberOf CreateDocument
-   */
-  onChange(e) {
-    this.setState({ [e.target.name]: e.target.value });
+  * @description - onChange method is triggered once form-input changes
+  * @param {object} event - form data: title, content, access
+  * @memberOf CreateDocument
+  */
+  onChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
   }
   onContentChange(content) {
     this.setState({ content });
   }
   /**
-   * componentWillReceiveProps, React lifecyle method, triggered once the
+   * @description - React lifecyle method, triggered once the
    * component receives next props
    * @param {object} nextProps
    * @returns nextState
@@ -83,10 +82,11 @@ export class CreateDocument extends React.Component {
   }
 
   /**
-   * handleCreateDocument method is invoked on create-document form submit
-   * @param {object} event
-   * @memberOf CreateDocument
-   */
+  * @description - handleCreateDocument method is
+  * invoked on create-document form submit
+  * @param {object} event
+  * @memberOf CreateDocument
+  */
   handleCreateDocument(event) {
     event.preventDefault();
     const { limit, offset } = this.props;
@@ -107,7 +107,7 @@ export class CreateDocument extends React.Component {
   }
 
   /**
-   * render, React lifecycle method
+   * @description - render, React lifecycle method
    * @returns a DOM element
    * @memberOf CreateDocument
    */
@@ -126,7 +126,8 @@ export class CreateDocument extends React.Component {
         header={!currentDocument.title ? 'Create Document' :
           `Edit: ${currentDocument.title}`} id="create-form">
         <div className="row">
-          <form className="col s12 doc-form" onSubmit={this.handleCreateDocument}
+          <form className="col s12 doc-form"
+            onSubmit={this.handleCreateDocument}
             action="#" id="created-new-document">
             <div className="error-message">{documentError}</div>
             <div className="row">
@@ -158,7 +159,8 @@ export class CreateDocument extends React.Component {
                 <label htmlFor="content" />
               </div>
             </div>
-            <button id="save-doc" type="submit" className="btn btn-large create-doc right">
+            <button id="save-doc" type="submit"
+              className="btn btn-large create-doc right">
               SAVE
             </button>
           </form>
@@ -181,9 +183,12 @@ const mapStateToProps = (state) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    createDocument: (document, documentUrl) => dispatch(createDocument(document, documentUrl)),
-    editDocument: document => dispatch(editDocument(document)),
-    changeCurrentDocument: document => dispatch(changeCurrentDocument(document)),
+    createDocument: (document, paginationMetadata) =>
+      dispatch(createDocument(document, paginationMetadata)),
+    editDocument: (document, paginationMetadata) =>
+      dispatch(editDocument(document, paginationMetadata)),
+    changeCurrentDocument: document =>
+      dispatch(changeCurrentDocument(document)),
   };
 };
 
@@ -196,5 +201,5 @@ CreateDocument.propTypes = {
   user: PropTypes.object.isRequired,
   documentError: PropTypes.string,
 };
-// Use connect to put them together
+
 export default connect(mapStateToProps, mapDispatchToProps)(CreateDocument);

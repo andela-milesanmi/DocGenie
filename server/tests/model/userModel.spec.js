@@ -9,6 +9,7 @@ describe('User table', () => {
 
   it('should have expected fields on creating a user', (done) => {
     let roleData;
+    const { username, fullname, email } = mockData.firstUser;
     models.Role.create(mockData.adminRole)
       .then((roleTempData) => {
         roleData = { ...roleTempData };
@@ -16,13 +17,13 @@ describe('User table', () => {
       })
       .then(() => {
         models.User.create(mockData.firstUser)
-          .then((userData) => {
-            expect(userData.dataValues.username).to.equal(mockData.firstUser.username);
-            expect(userData.dataValues.fullname).to.equal(mockData.firstUser.fullname);
-            expect(userData.dataValues.email).to.equal(mockData.firstUser.email);
-            expect(userData.dataValues).to.have.property('roleId');
-            expect(userData.dataValues).to.have.property('password');
-            expect(userData.dataValues).to.have.property('createdAt');
+          .then((user) => {
+            expect(user.dataValues.username).to.equal(username);
+            expect(user.dataValues.fullname).to.equal(fullname);
+            expect(user.dataValues.email).to.equal(email);
+            expect(user.dataValues).to.have.property('roleId');
+            expect(user.dataValues).to.have.property('password');
+            expect(user.dataValues).to.have.property('createdAt');
           });
       });
     done();
