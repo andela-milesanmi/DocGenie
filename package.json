@@ -6,10 +6,10 @@
   "scripts": {
     "build": "webpack -p",
     "compile-dist": "rm -rf server-dist && NODE_ENV=production babel ./server/ -d ./server-dist -D",
-    "start:dev": "babel-node runMigrations.js && NODE_ENV=development webpack -p & nodemon server.js --exec babel-node",
+    "start:dev": "babel-node runMigrations.js && NODE_ENV=development & nodemon server.js --exec babel-node",
     "start": "NODE_ENV=production node runMigrations.js && NODE_ENV=production node server.js",
     "debug": "nodemon --inspect server.js",
-    "test": "NODE_ENV=test PORT=3333 nyc --reporter=html --reporter=text mocha -r mock-local-storage --compilers js:babel-core/register --colors ./server/tests/*/*.spec.js ./client/tests/*/*.spec.js --require ./server/tests/init.js",
+    "test": "NODE_ENV=test PORT=3333 nyc --reporter=html --reporter=text mocha -r mock-local-storage --compilers js:babel-core/register --colors ./server/tests/*/*.spec.js ./client/tests/*/*.spec.js --require ./server/tests/init.js --timeout 20000",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
@@ -85,7 +85,8 @@
     "toastr": "^2.1.2",
     "url-loader": "0.5.7",
     "webpack": "^2.2.1",
-    "webpack-dev-middleware": "1.6.1"
+    "webpack-dev-middleware": "^1.6.1",
+    "webpack-hot-middleware": "^2.18.2"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

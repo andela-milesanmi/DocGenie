@@ -8,16 +8,25 @@ module.exports = {
         message: 'You are not allowed to create a new role',
       });
     }
-    return Role
-      .create({
-        title: request.body.title,
-      })
-      .then(role => response.status(201).json(role))
+    return Role.findAll({
+      where: {
+        title: request.body.title
+      },
+    }).then((existingRole) => {
+      if (existingRole.length > 0) {
+        return response.status(400).json({ message:
+           'Role already exists' });
+      }
+      return Role
+        .create({
+          title: request.body.title,
+        });
+    }).then(role => response.status(201).json(role))
       .catch((error) => {
         const errorMessage = error.message || error;
         const customError =
         errorHandler.filterSequelizeErrorMessage(errorMessage);
-        return response.status(400).json({ message: customError });
+        return response.status(500).json({ message: customError });
       });
   },
   listAllRoles(request, response) {
@@ -28,7 +37,7 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
         errorHandler.filterSequelizeErrorMessage(errorMessage);
-        return response.status(400).json({ message: customError });
+        return response.status(500).json({ message: customError });
       });
   },
   destroyARole(request, response) {
@@ -49,7 +58,7 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
         errorHandler.filterSequelizeErrorMessage(errorMessage);
-        return response.status(400).json({ message: customError });
+        return response.status(500).json({ message: customError });
       });
   },
 };

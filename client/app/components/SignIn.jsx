@@ -83,7 +83,7 @@ SignIn.propTypes = {
   changeScreen: PropTypes.func.isRequired,
   signInUser: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  error: PropTypes.string.isRequired
+  error: PropTypes.string
 };
 
 export default connect(mapStateToProps, { signInUser })(SignIn);

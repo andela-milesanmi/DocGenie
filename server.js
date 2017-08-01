@@ -2,6 +2,20 @@ const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
+const webpack = require('webpack');
+const webpackConfigDev = require('./webpack.config');
+const webpackConfigProd = require('./webpack.config.prod.js');
+const webpackHotMiddleware = require('webpack-hot-middleware');
+const webpackMiddleware = require('webpack-dev-middleware');
+
+let webpackConfig;
+if (process.env.NODE_ENV === 'production') {
+  webpackConfig = webpackConfigProd;
+} else {
+  webpackConfig = webpackConfigDev;
+}
+
+const compiler = webpack(webpackConfig);
 
 // This kills all running nodemon processes before restarting.
 // To resolve the listen EADDRINUSE error
@@ -25,6 +39,15 @@ app.set('port', port);
 // Log requests to the console.
 app.use(logger('dev'));
 
+app.use(webpackMiddleware(compiler));
+app.use(
+  webpackHotMiddleware(compiler, {
+    hot: true,
+    publicPath: webpackConfig.output.path,
+    noInfo: true
+  })
+);
+
 // Parse incoming requests data (https://github.com/expressjs/body-parser)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -46,7 +69,7 @@ app.get('*', function (request, response) {
 });
 
 app.listen(port, () => {
-  console.log('\nApplication is running on port ', port);
+  console.log(`\nApplication is running in ${app.get('env')} on port ${port} `);
 });
 
 module.exports = app;

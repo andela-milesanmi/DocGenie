@@ -5,8 +5,7 @@ const BUILD_DIR = path.resolve(__dirname, 'public');
 const APP_DIR = path.resolve(__dirname, 'client/app');
 
 module.exports = {
-  watch: process.env.NODE_ENV === 'development',
-  devtool: 'eval',
+  devtool: 'source-map',
   entry: `${APP_DIR}/index.jsx`,
   output: {
     path: BUILD_DIR,
@@ -28,5 +27,5 @@ module.exports = {
       { test: /\.(jpg|png|svg|jpeg)$/, loader: 'url-loader',
       options: { limit: 25000 },}
       ]
-  },
+  }
 };
