@@ -73,7 +73,7 @@ module.exports = {
       const errorMessage = error.message || error;
       const customError =
         errorHandler.filterSequelizeErrorMessage(errorMessage);
-      return response.status(400).json({ message: customError });
+      return response.status(500).json({ message: customError });
     });
   },
 
@@ -112,7 +112,7 @@ module.exports = {
       const errorMessage = error.message || error;
       const customError =
         errorHandler.filterSequelizeErrorMessage(errorMessage);
-      return response.status(400).json({ message: customError });
+      return response.status(500).json({ message: customError });
     });
   },
 
@@ -151,7 +151,7 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        return response.status(400).json({ message: customError });
+        return response.status(500).json({ message: customError });
       });
   },
 
@@ -174,7 +174,7 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        return response.status(400).json({ message: customError });
+        return response.status(500).json({ message: customError });
       });
   },
 
@@ -230,7 +230,7 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        return response.status(400).json({ message: customError });
+        return response.status(500).json({ message: customError });
       });
   },
 
@@ -261,7 +261,7 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        return response.status(400).json({ message: customError });
+        return response.status(500).json({ message: customError });
       });
   },
 
@@ -323,7 +323,7 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        return response.status(400).json({ message: customError });
+        return response.status(500).json({ message: customError });
       });
   },
 
@@ -370,7 +370,7 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        return response.status(400).json({ message: customError });
+        return response.status(500).json({ message: customError });
       });
   },
 

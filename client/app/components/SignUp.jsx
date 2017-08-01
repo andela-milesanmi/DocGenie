@@ -108,7 +108,7 @@ SignUp.propTypes = {
   changeScreen: PropTypes.func.isRequired,
   createUser: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  error: PropTypes.string.isRequired
+  error: PropTypes.string
 };
 
 export default connect(mapStateToProps, { createUser })(SignUp);

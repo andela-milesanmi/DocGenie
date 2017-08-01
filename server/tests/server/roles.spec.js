@@ -75,10 +75,10 @@ describe('Roles Controller', () => {
     (done) => {
       chai.request(server)
         .post('/api/roles/')
-        .set('authorization', userToken)
+        .set('authorization', adminToken)
         .send({ title: 'admin' })
         .end((error, response) => {
-          expect(response).to.have.status(401);
+          expect(response).to.have.status(400);
           done();
         });
     });
@@ -89,6 +89,7 @@ describe('Roles Controller', () => {
         .set('authorization', adminToken)
         .send({ title: 'guest' })
         .end((error, response) => {
+          console.log(response, 'new error')
           expect(response).to.have.status(201);
           expect(response.body).to.have.property('id');
           expect(response.body).to.have.property('title');
@@ -102,6 +103,7 @@ describe('Roles Controller', () => {
         .get('/api/roles')
         .set('authorization', adminToken)
         .end((error, response) => {
+          console.log(response.body, 'response body')
           expect(response).to.have.status(200);
           expect(response.body).to.be.an('array');
           expect(response.body[0].id).to.equal(1);

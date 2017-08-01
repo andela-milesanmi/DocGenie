@@ -27,12 +27,12 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
          errorHandler.filterSequelizeErrorMessage(errorMessage);
-        return response.status(400).json({ message: customError });
+        return response.status(500).json({ message: customError });
       });
   },
 
   /**
-  * @description - Fetches all documents which the current user has access to view
+  * @description - Fetches all documents which the current user can view
   * @param {object} request - request object received from the client
   * @param {object} response - response object served to the client
   * @returns {promise} documents - all documents fetched
@@ -66,7 +66,6 @@ module.exports = {
         if (!documents) {
           return response.status(404).json({ message: 'No documents found' });
         }
-        console.log(pagination(documents.count, documents.rows, limit, offset), 'pagination')
         return response.status(200).json({
           documents: documents.rows,
           pagination: pagination(documents.count, documents.rows, limit, offset)
@@ -76,7 +75,7 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        return response.status(400).json({ message: customError });
+        return response.status(500).json({ message: customError });
       });
   },
 
@@ -117,7 +116,7 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        return response.status(400).json({ message: customError });
+        return response.status(500).json({ message: customError });
       });
   },
 
@@ -152,7 +151,7 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        return response.status(400).json({ message: customError });
+        return response.status(500).json({ message: customError });
       });
   },
 
@@ -184,7 +183,7 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        return response.status(400).json({ message: customError });
+        return response.status(500).json({ message: customError });
       });
   },
 
@@ -242,7 +241,7 @@ module.exports = {
         const errorMessage = error.message || error;
         const customError =
           errorHandler.filterSequelizeErrorMessage(errorMessage);
-        return response.status(400).json({ message: customError });
+        return response.status(500).json({ message: customError });
       });
   }
 };
