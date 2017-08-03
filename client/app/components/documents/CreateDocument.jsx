@@ -5,6 +5,7 @@ import FroalaEditor from 'react-froala-wysiwyg';
 import { Modal } from 'react-materialize';
 import { createDocument, editDocument, changeCurrentDocument }
   from '../../actions/documentActions';
+import InputField from '../InputField.jsx';
 
 // Froala Editor JS files.
 require('../../../../node_modules/froala-editor/js/froala_editor.pkgd.min');
@@ -89,7 +90,6 @@ export class CreateDocument extends React.Component {
   */
   handleCreateDocument(event) {
     event.preventDefault();
-    const { limit, offset } = this.props;
     const title = event.target.title.value;
     const content = this.state.content;
     const access = event.target.access.value;
@@ -101,7 +101,7 @@ export class CreateDocument extends React.Component {
       access,
       user: this.props.user,
       id: this.props.currentDocument.id,
-    }, { limit, offset }).then(() => {
+    }, this.props.url).then(() => {
       this.setState({ title: '', content: '', access: '' });
     });
   }
@@ -131,12 +131,12 @@ export class CreateDocument extends React.Component {
             action="#" id="created-new-document">
             <div className="error-message">{documentError}</div>
             <div className="row">
-              <div className="input-field col s6">
-                <input name="title" id="title" type="text" className="validate"
-                  placeholder="Title" value={title} onChange={this.onChange}
-                  required/>
-                <label htmlFor="title" />
-              </div>
+              <InputField divClass="input-field col s6" name="title"
+                id="title" type="text"
+                className="validate" placeholder="Enter title" value={title}
+                onChange={this.onChange}/>
+              <label htmlFor="title" />
+
               <div className="input-field col s6">
                 <select name="access" value={access} className="browser-default"
                   onChange={this.onChange}>
@@ -200,6 +200,7 @@ CreateDocument.propTypes = {
   createDocument: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   documentError: PropTypes.string,
+  url: PropTypes.string
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateDocument);

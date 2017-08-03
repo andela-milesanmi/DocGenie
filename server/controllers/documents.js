@@ -3,7 +3,6 @@ const User = require('../models').User;
 const errorHandler = require('../helpers/errorHandler');
 const pagination = require('../helpers/pagination').pagination;
 
-
 const LIMIT = 6;
 const OFFSET = 0;
 
@@ -15,7 +14,8 @@ module.exports = {
   * @returns {promise} document - new document created
   */
   createADocument(request, response) {
-    if (!request.body.title || !request.body.content || request.body.access === null) {
+    if (!request.body.title || !request.body.content ||
+    request.body.access === null) {
       return response.status(400).json({
         message: 'Please fill all fields' });
     }
@@ -91,7 +91,7 @@ module.exports = {
   },
 
   /**
-  * @description - Fetches a documents if the current user has access to view it
+  * @description - Fetches a documents if the current user has access to view
   * @param {object} request - request object received from the client
   * @param {object} response - response object served to the client
   * @returns {promise} document - the document fetched

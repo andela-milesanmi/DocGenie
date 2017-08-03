@@ -39,7 +39,7 @@ export class DocumentCard extends React.Component {
   * @memberOf DocumentCard
   */
   deleteDocument(document) {
-    const { limit, offset } = this.state;
+    const url = this.props.url;
     swal({
       title: 'Are you sure?',
       text: 'You will not be able to recover this document',
@@ -50,7 +50,7 @@ export class DocumentCard extends React.Component {
       closeOnConfirm: false
     }, (isConfirm) => {
       if (isConfirm) {
-        this.props.deleteDocument(document, { limit, offset })
+        this.props.deleteDocument(document, url)
           .then(() => {
             swal('Deleted!', 'The selected file has been deleted.', 'success');
           })

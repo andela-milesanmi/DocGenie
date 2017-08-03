@@ -23,8 +23,8 @@ const displayOwnDocuments = () => {
 };
 
 /**
-* @description - pure function Header, renders the navigation bar
-* @param {object} props
+* @description - renders the navigation bar at the top of the page
+* @param {object} props - user details received from parent component
 * @returns {void}
 */
 export const Header = (props) => {

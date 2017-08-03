@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { searchForUsers } from '../../actions/userActions';
-
+import InputField from '../InputField.jsx';
 /**
  * @description - displays all users for admin users
  * @param {object} props
@@ -21,11 +21,9 @@ export const SearchUsers = (props) => {
   };
   return (
     <div id="search-users" className="row search-docs">
-      <div className="col s12">
-        <input name="searchKey" id="searchKey" type="text"
-          className="validate" placeholder="Search for a user here..."
-          onChange={handleChange}/>
-      </div>
+      <InputField type="text" name="searchKey" id="searchKey"
+        className="validate" placeholder="Search for a user here..."
+        onChange={handleChange} divClass="col s12" />
     </div>
   );
 };

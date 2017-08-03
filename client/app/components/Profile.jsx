@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import toastr from 'toastr';
 import { connect } from 'react-redux';
 import { updateProfile } from '../actions/userActions';
+import InputField from './InputField.jsx';
 
 /**
  * @description - displays the user's profile information
@@ -76,16 +76,28 @@ export class Profile extends React.Component {
           <div style={{ color: 'red' }}>
             {this.state.errorMessage || this.props.error}
           </div>
-          <p><b>Fullname: </b> <input type="text" name="fullname"
-            value={this.state.user.fullname} onChange={this.onChange}/>
-          </p>
-          <p><b>Username: </b> <input type="text" name="username"
-            value={this.state.user.username} onChange={this.onChange}/>
-          </p>
-          <p><b>Email: </b> <input type="text" name="email"
-            value={this.state.user.email} onChange={this.onChange}/>
-          </p>
-          <p>
+          <div>
+            <b>Fullname:</b>
+            <InputField type="text" name="fullname"
+              value={this.state.user.fullname} onChange={this.onChange}
+              divClass="input-field col s12" placeholder="Fullname"
+              className="center-align"/>
+          </div>
+          <div>
+            <b>Username:</b>
+            <InputField type="text" name="username"
+              value={this.state.user.username} onChange={this.onChange}
+              divClass="input-field col s12" placeholder="Username"
+              className="center-align"/>
+          </div>
+          <div>
+            <b>Email:</b>
+            <InputField tyype="text" name="email"
+              value={this.state.user.email} onChange={this.onChange}
+              divClass="input-field col s12" placeholder="email"
+              className="center-align"/>
+          </div>
+          <div>
             <b>Change Password? </b>
             <div className="switch">
               <label>
@@ -97,23 +109,25 @@ export class Profile extends React.Component {
                 On
               </label>
             </div>
-          </p>
+          </div>
           {this.state.isChecked && (
             <div>
-              <p><b>Old Password: </b><input type="password" name="oldPassword"
-                onChange={this.onChange}/>
-              </p>
-              <p><b>New Password: </b><input type="password" name="password"
-                onChange={this.onChange}/>
-              </p>
-              <p><b>Confirm Password: </b><input type="password"
-                name="confirmPassword"
-                onChange={this.onChange} />
-              </p>
+              <div><b>Old Password: </b>
+                <InputField type="password" name="oldPassword"
+                  onChange={this.onChange} />
+              </div>
+              <div><b>New Password: </b>
+                <InputField type="password" name="password"
+                  onChange={this.onChange} />
+              </div>
+              <div><b>Confirm Password: </b>
+                <InputField type="password" name="confirmPassword"
+                  onChange={this.onChange} />
+              </div>
             </div>
           )}
-          <button type="submit" className="btn btn-large create-doc
-            profile-save">
+          <button type="submit"
+            className="btn btn-large create-doc profile-save">
             Save</button>
           <button type="" className="btn btn-large create-doc profile-save"
             onClick={() => this.toggle('isEdit')}>Cancel</button>

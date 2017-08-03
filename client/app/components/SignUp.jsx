@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createUser } from '../actions/userActions';
-
+import InputField from './InputField.jsx';
 /**
 * @description - SignUp component, signs up a user into the app
 * @export
@@ -49,33 +49,28 @@ export class SignUp extends React.Component {
               {this.props.user.error}
             </div>
             <div className="row">
-              <div className="input-field col s6">
-                <input name="username" id="username" type="text"
-                  className="validate" required/>
-                <label htmlFor="username">Username</label>
-              </div>
-              <div className="input-field col s6">
-                <input name="fullname" id="fullname" type="text"
-                  className="validate" required/>
-                <label htmlFor="fullname">Fullname</label>
-              </div>
-              <div className="input-field col s12">
-                <input name="email" id="email" type="text"
-                  className="validate" required/>
-                <label htmlFor="email">Email</label>
-              </div>
+              <InputField name="username" id="username" type="text"
+                className="validate center-align" divClass="input-field col s6"
+                placeholder="Username"/>
+
+              <InputField name="fullname" id="fullname" type="text"
+                className="validate center-align" divClass="input-field col s6"
+                placeholder="Fullname"/>
+
+              <InputField name="email" id="email" type="text"
+                className="validate center-align" divClass="input-field col s12"
+                placeholder="Email"/>
             </div>
+
             <div className="row">
-              <div className="input-field col s6">
-                <input name="password" id="password" type="password"
-                  className="validate" required/>
-                <label htmlFor="password">Password</label>
-              </div>
-              <div className="input-field col s6">
-                <input name="confirmPassword" id="confirmPassword"
-                  type="password" className="validate" required/>
-                <label htmlFor="email">Confirm password</label>
-              </div>
+              <InputField name="password" id="password" type="password"
+                className="validate center-align" divClass="input-field col s6"
+                placeholder="Password"/>
+
+              <InputField name="confirmPassword" id="confirmPassword"
+                type="text" className="validate center-align"
+                divClass="input-field col s6"
+                placeholder="Re-type Password"/>
             </div>
             <div>
               <button id="signup-button" type="submit"

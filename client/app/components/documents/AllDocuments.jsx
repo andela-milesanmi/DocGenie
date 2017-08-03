@@ -42,7 +42,8 @@ export class AllDocuments extends React.Component {
   */
   componentDidMount() {
     const { limit, offset } = this.state;
-    this.props.viewAllDocuments({ limit, offset });
+    const url = `/api/documents/?limit=${limit}&offset=${offset}`;
+    this.props.viewAllDocuments(url);
   }
 
   /**
@@ -55,7 +56,8 @@ export class AllDocuments extends React.Component {
     const selected = page.selected;
     const offset = Math.ceil(selected * this.state.limit);
     this.setState({ offset }, () => {
-      this.props.viewAllDocuments({ limit, offset });
+      const url = `/api/documents/?limit=${limit}&offset=${offset}`;
+      this.props.viewAllDocuments(url);
     });
   }
 
@@ -65,11 +67,14 @@ export class AllDocuments extends React.Component {
    * @memberOf AllDocuments
    */
   render() {
+    const url =
+     `/api/documents/?limit=${this.state.limit}&offset=${this.state.offset}`;
     return (
       <div id="main-dash" className="dashboard-container">
         <h4 className="center-align">ALL DOCUMENTS</h4>
         <div className="row">
-          <CreateDocument limit={this.state.limit} offset={this.state.offset}/>
+          <CreateDocument limit={this.state.limit} offset={this.state.offset}
+            url={url}/>
         </div>
         <div className="row">
           <div className="col s8 offset-s1">
@@ -77,8 +82,8 @@ export class AllDocuments extends React.Component {
               offset={this.state.offset} />
           </div>
           <div className="col s2">
-            <a id="create-doc-btn" href="#create-form" className="btn-floating
-             btn-large waves-effect waves-light red right"
+            <a id="create-doc-btn" href="#create-form"
+              className="btn-floating btn-large waves-effect red right"
               onClick={() => this.editDocument()}>
               <i className="material-icons">add</i>
             </a>
@@ -91,7 +96,7 @@ export class AllDocuments extends React.Component {
                 (
                 <DocumentCard index={i} document={document}
                   limit={this.state.limit} offset={this.state.offset}
-                  key={document.id} />
+                  key={document.id} url={url}/>
                 )
               )}
               {this.props.documents && this.props.documents.length === 0 &&
@@ -139,8 +144,8 @@ const mapStateToProps = (state) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    viewAllDocuments: paginationMetadata =>
-      dispatch(viewAllDocuments(paginationMetadata)),
+    viewAllDocuments: url =>
+      dispatch(viewAllDocuments(url)),
     changeCurrentDocument: document =>
       dispatch(changeCurrentDocument(document)),
   };

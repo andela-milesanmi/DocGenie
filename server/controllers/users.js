@@ -31,9 +31,9 @@ module.exports = {
         message: 'Email is not rightly formatted',
       });
     }
-    if (request.body.password.length < 6 && request.body.password.length > 20) {
+    if (request.body.password.length < 6) {
       return response.status(400).json({
-        message: 'Password length must be between 6 & 20 characters'
+        message: 'Password length must be more than 6 characters'
       });
     }
 
