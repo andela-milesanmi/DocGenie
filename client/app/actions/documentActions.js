@@ -20,7 +20,6 @@ export const viewAllDocuments = (url) => {
           documents: response.data.documents,
           pagination: response.data.pagination });
       }).catch((error) => {
-        console.log(error, 'error here');
         errorMessage = error.response.data.message || error.response.data || '';
         dispatch({ type: VIEW_DOCUMENTS_ERROR,
           errorMessage });

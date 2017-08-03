@@ -4,10 +4,9 @@ import thunk from 'redux-thunk';
 import axios from 'axios';
 import sinon from 'sinon';
 import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
-  CHANGE_CURRENT_DOCUMENT, DELETE_DOCUMENT,
-  SEARCH_DOCUMENT, EDIT_DOCUMENT } from '../../app/actionTypes';
+  CHANGE_CURRENT_DOCUMENT, EDIT_DOCUMENT } from '../../app/actionTypes';
 
-import { viewAllDocuments, changeCurrentDocument, deleteDocument,
+import { viewAllDocuments, changeCurrentDocument,
   createDocument, searchForDocuments, editDocument }
   from '../../app/actions/documentActions';
 
@@ -117,7 +116,7 @@ describe('Document Actions', () => {
     return store
       .dispatch(searchForDocuments('api'))
       .then(() => {
-       expect(store.getActions()).to.deep.equal([{
+        expect(store.getActions()).to.deep.equal([{
           type: VIEW_DOCUMENTS,
           documents: response.data.documents,
           pagination: response.data.pagination
