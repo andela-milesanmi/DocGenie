@@ -58,7 +58,7 @@ export class ViewOneDocument extends React.Component {
                 </p>
 
               </div>
-              {renderHtml(document.content)}
+              <span id="doc-content">{renderHtml(document.content)}</span>
             </div>}
         </div>
       </div>
@@ -80,9 +80,9 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 ViewOneDocument.propTypes = {
-  documents: PropTypes.array.isRequired,
+  documents: PropTypes.array,
   findADocument: PropTypes.func.isRequired,
-  document: PropTypes.object.isRequired,
+  document: PropTypes.object,
   params: PropTypes.object.isRequired,
 };
 
