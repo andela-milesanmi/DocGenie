@@ -2,8 +2,7 @@ import axios from 'axios';
 import toastr from 'toastr';
 import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
   CREATE_DOCUMENT_ERROR, CHANGE_CURRENT_DOCUMENT, EDIT_DOCUMENT,
-  EDIT_DOCUMENT_ERROR, DELETE_DOCUMENT_ERROR,
-  SEARCH_DOCUMENT, SEARCH_DOCUMENT_ERROR, VIEW_ONE_DOCUMENT,
+  EDIT_DOCUMENT_ERROR, DELETE_DOCUMENT_ERROR, VIEW_ONE_DOCUMENT,
   VIEW_ONE_DOCUMENT_ERROR } from '../actionTypes';
 
 let errorMessage;
@@ -21,6 +20,7 @@ export const viewAllDocuments = (url) => {
           documents: response.data.documents,
           pagination: response.data.pagination });
       }).catch((error) => {
+        console.log(error, 'error here');
         errorMessage = error.response.data.message || error.response.data || '';
         dispatch({ type: VIEW_DOCUMENTS_ERROR,
           errorMessage });
@@ -113,21 +113,8 @@ export const deleteDocument = (document, paginationMetadata) => {
 * @param {object} searchData - searchKey: search query, limit, offset
 * @returns {function} dispatch - redux dispatch function
 */
-export const searchForDocuments = (searchData) => {
-  const { searchKey, limit, offset } = searchData;
-  const url =
-  `/api/search/documents/?searchKey=${searchKey}&limit=${limit}&offset=${offset}`;
-  return (dispatch) => {
-    return axios.get(url)
-      .then((response) => {
-        dispatch({ type: SEARCH_DOCUMENT,
-          documents: response.data.documents || [],
-          pagination: response.data.pagination });
-      }).catch((error) => {
-        dispatch({ type: SEARCH_DOCUMENT_ERROR,
-          errorMessage: error.response.data.message || error.response.data });
-      });
-  };
+export const searchForDocuments = (url) => {
+  return dispatch => dispatch(viewAllDocuments(url));
 };
 
 /**

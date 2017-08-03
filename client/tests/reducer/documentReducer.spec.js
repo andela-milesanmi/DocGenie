@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { VIEW_DOCUMENTS, CREATE_DOCUMENT, CHANGE_CURRENT_DOCUMENT,
-  EDIT_DOCUMENT, CREATE_DOCUMENT_ERROR, SEARCH_DOCUMENT }
+  EDIT_DOCUMENT, CREATE_DOCUMENT_ERROR }
   from '../../app/actionTypes';
 import reducer from '../../app/reducers/document';
 import mockData from '../../../server/tests/mockData/mockData';
@@ -60,17 +60,6 @@ describe('Documents reducer', () => {
       })
     ).to.eql({
       documents: [mockData.publicDocument],
-      error: ''
-    });
-  });
-  it('should handle SEARCH_DOCUMENT', () => {
-    expect(
-      reducer({}, {
-        type: SEARCH_DOCUMENT,
-        documents: mockData.publicDocument
-      })
-    ).to.eql({
-      documents: mockData.publicDocument,
       error: ''
     });
   });

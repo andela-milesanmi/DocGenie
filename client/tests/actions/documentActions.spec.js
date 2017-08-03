@@ -56,7 +56,7 @@ describe('Document Actions', () => {
   });
   it('should dispatch an action when viewAllDocuments action is triggered',
     () => {
-      return store.dispatch(viewAllDocuments('good-url/?limit=3')).then(() => {
+      return store.dispatch(viewAllDocuments('api/?limit=3')).then(() => {
         expect(store.getActions()).to.deep.equal([{
           type: VIEW_DOCUMENTS,
           documents: response.data.documents,
@@ -78,7 +78,7 @@ describe('Document Actions', () => {
       userId: 45,
       title: 'A good life',
       content: 'A good life by Marion Bennet' };
-    return store.dispatch(createDocument(document, 'good-url')).then(() => {
+    return store.dispatch(createDocument(document, 'api')).then(() => {
       expect(store.getActions().map(action => action.type))
         .to.deep.equal([CREATE_DOCUMENT, VIEW_DOCUMENTS]);
     });
@@ -98,17 +98,13 @@ describe('Document Actions', () => {
       userId: 45,
       title: 'A good life',
       content: 'A good life by Marion Bennet' };
-    return store.dispatch(editDocument(document, 'good-url')).then(() => {
+    return store.dispatch(editDocument(document, 'api')).then(() => {
       expect(store.getActions().map(action => action.type))
         .to.deep.equal([EDIT_DOCUMENT, VIEW_DOCUMENTS]);
     });
   });
   it('should dispatch appropriate actions on deleteDocument', () => {
-    const document = { id: 23,
-      userId: 45,
-      title: 'A good life',
-      content: 'A good life by Marion Bennet' };
-    return store.dispatch(deleteDocument(document, 'good-url')).then(() => {
+    return store.dispatch(viewAllDocuments('api')).then(() => {
       expect(store.getActions())
         .to.deep.equal([{
           type: VIEW_DOCUMENTS,
@@ -118,13 +114,14 @@ describe('Document Actions', () => {
     });
   });
   it('should dispatch appropriate actions on searchForDocuments', () => {
-    const searchKey = 'doc';
     return store
-      .dispatch(searchForDocuments(`good-url/?searchKey=${searchKey}`))
+      .dispatch(searchForDocuments('api'))
       .then(() => {
-        expect(store.getActions()).to.deep.equal([{ type: SEARCH_DOCUMENT,
-          documents: response.data.documents || [],
-          pagination: response.data.pagination }]);
+       expect(store.getActions()).to.deep.equal([{
+          type: VIEW_DOCUMENTS,
+          documents: response.data.documents,
+          pagination: response.data.pagination
+        }]);
       });
   });
 });

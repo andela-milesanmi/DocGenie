@@ -79,7 +79,7 @@ export class AllDocuments extends React.Component {
         <div className="row">
           <div className="col s8 offset-s1">
             <SearchDocuments limit={this.state.limit}
-              offset={this.state.offset} />
+              offset={this.state.offset}/>
           </div>
           <div className="col s2">
             <a id="create-doc-btn" href="#create-form"

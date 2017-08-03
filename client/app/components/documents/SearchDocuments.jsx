@@ -14,12 +14,20 @@ export const SearchDocuments = (props) => {
     event.preventDefault();
     const searchKey = event.target.value;
     const { limit, offset } = props;
-    if (searchKey) props.searchForDocuments({ searchKey, limit, offset });
+    let url;
+    if (searchKey) {
+      url = `/api/search/documents/?searchKey=${searchKey}&limit=${limit}`;
+    } else {
+      url = `api/documents/?limit=${limit}&offset=${offset}`;
+    }
+    props.searchForDocuments(url);
   };
   return (
     <div id="search-docs" className="row search-docs">
-      <InputField name="searchKey" type="text" id="searchKey" className="validate"
-        placeholder="Search for documents here..." onChange={handleChange} divClass="col s10" />
+      <InputField name="searchKey" type="text" id="searchKey"
+        className="validate"
+        placeholder="Search for documents here..."
+        onChange={handleChange} divClass="col s10" />
     </div>
   );
 };
