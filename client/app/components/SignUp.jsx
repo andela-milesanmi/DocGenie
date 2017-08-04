@@ -68,7 +68,7 @@ export class SignUp extends React.Component {
                 placeholder="Password"/>
 
               <InputField name="confirmPassword" id="confirmPassword"
-                type="text" className="validate center-align"
+                type="password" className="validate center-align"
                 divClass="input-field col s6"
                 placeholder="Re-type Password"/>
             </div>

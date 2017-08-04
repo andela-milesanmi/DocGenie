@@ -94,7 +94,7 @@ export class Profile extends React.Component {
             <b>Email:</b>
             <InputField tyype="text" name="email"
               value={this.state.user.email} onChange={this.onChange}
-              divClass="input-field col s12" placeholder="email"
+              divClass="input-field col s12" placeholder="Email"
               className="center-align"/>
           </div>
           <div>
@@ -114,15 +114,15 @@ export class Profile extends React.Component {
             <div>
               <div><b>Old Password: </b>
                 <InputField type="password" name="oldPassword"
-                  onChange={this.onChange} />
+                  onChange={this.onChange} className="validate center-align"/>
               </div>
               <div><b>New Password: </b>
                 <InputField type="password" name="password"
-                  onChange={this.onChange} />
+                  onChange={this.onChange} className="validate center-align"/>
               </div>
               <div><b>Confirm Password: </b>
                 <InputField type="password" name="confirmPassword"
-                  onChange={this.onChange} />
+                  onChange={this.onChange} className="validate center-align"/>
               </div>
             </div>
           )}

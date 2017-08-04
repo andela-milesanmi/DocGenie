@@ -5,7 +5,6 @@ import ReactPaginate from 'react-paginate';
 import { viewAllDocuments, changeCurrentDocument, deleteDocument }
   from '../../actions/documentActions';
 import CreateDocument from './CreateDocument.jsx';
-import SearchDocuments from './SearchDocuments.jsx';
 import DocumentCard from './DocumentCard.jsx';
 
 /**

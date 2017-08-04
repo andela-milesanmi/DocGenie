@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { CREATE_USER, SIGNIN_USER, CREATE_USER_ERROR, SIGNIN_USER_ERROR,
-  LOGOUT_USER, VIEW_USERS, VIEW_USERS_ERROR } from '../../app/actionTypes';
+import { CREATE_USER, SIGNIN_USER, CREATE_USER_ERROR,
+  LOGOUT_USER, VIEW_USERS } from '../../app/actionTypes';
 import reducer from '../../app/reducers/user';
 import mockData from '../../../server/tests/mockData/mockData';
 

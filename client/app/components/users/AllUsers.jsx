@@ -35,7 +35,7 @@ export class AllUsers extends React.Component {
 
   /**
   * @description - Allows user navigate pages by changing limit and offset
-  * @param  {object} page
+  * @param {object} page - ReactPaginate page object
   * @return {void}
   */
   handlePageChange(page) {

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { findADocument } from '../../actions/documentActions';
 
-
 /**
  * @description - displays full content of one document when user
  * clicks on viewMore link in DocumentCard Component

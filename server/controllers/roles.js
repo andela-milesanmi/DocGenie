@@ -4,7 +4,7 @@ const errorHandler = require('../helpers/errorHandler');
 module.exports = {
   createNewRole(request, response) {
     if (request.decoded && Number(request.decoded.roleId) !== 1) {
-      return response.status(400).json({
+      return response.status(403).json({
         message: 'You are not allowed to create a new role',
       });
     }
