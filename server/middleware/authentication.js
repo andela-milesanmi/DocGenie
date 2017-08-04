@@ -34,8 +34,8 @@ module.exports = {
 
   /**
   * @description - Generates token for user authentication
-  * @param {Object} user - object containing user details
-  * @returns {Object} token - jwt token
+  * @param {object} user - object containing user details
+  * @returns {object} token - jwt token
   */
   generateToken(user) {
     return jwt.sign({

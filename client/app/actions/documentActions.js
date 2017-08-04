@@ -31,7 +31,8 @@ export const viewAllDocuments = (url) => {
 /**
 * @description - Allows the user create a new document
 * @param {object} document - title, access, content, userId
-* @param {object} paginationMetadata - limit, offset
+* @param {string} url - api endpoint to fetch all documents again after
+* creating a new document
 * @returns {function} dispatch - redux dispatch function
 */
 export const createDocument = (document, url) => {
@@ -55,7 +56,7 @@ export const createDocument = (document, url) => {
 
 /**
 * @description - Toggles between edit and delete actions
-* @param {object} user - user details
+* @param {object} document - document to be deleted or updated
 * @returns {object} action - redux action object
 */
 export const changeCurrentDocument = (document) => {
@@ -68,6 +69,7 @@ export const changeCurrentDocument = (document) => {
 /**
 * @description - updates selected document
 * @param {object} document - title, access, content
+* @param {string} url - endpoint to fetch all documents after editing
 * @returns {function} dispatch - redux dispatch function
 */
 export const editDocument = (document, url) => {
@@ -109,7 +111,7 @@ export const deleteDocument = (document, paginationMetadata) => {
 
 /**
 * @description - searches for documents
-* @param {object} searchData - searchKey: search query, limit, offset
+* @param {url} url - endpoint to fetch searched documents
 * @returns {function} dispatch - redux dispatch function
 */
 export const searchForDocuments = (url) => {

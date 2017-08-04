@@ -6,10 +6,12 @@ import InputField from '../InputField.jsx';
 /**
  * @description - displays all users for admin users
  * @param {object} props
+ * @returns {void}
  */
 export const SearchUsers = (props) => {
 /**
- * @description - handleChange function triggers searchForUsers action
+ * @description - triggers searchForUsers action
+ * @param {object} event - triggered event
  * @returns {void}
  * @memberOf SearchUsers
  */

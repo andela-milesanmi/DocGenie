@@ -8,6 +8,7 @@ import InputField from '../InputField.jsx';
  * @description - displays search input which allows
  * users search for documents
  * @param {object} props
+ * @returns {void}
  */
 export const SearchDocuments = (props) => {
   const handleChange = (event) => {

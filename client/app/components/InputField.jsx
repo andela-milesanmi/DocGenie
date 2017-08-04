@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /**
- * @description - displays the input text field
+ * @description - displays the input text field in all forms
  * @export
  * @class InputField
  * @extends {React.Component}
  */
 const InputField = ({
-  type, name, id, value, placeholder, onChange, className, divClass, checked }) => {
+  type, name, id, value, placeholder, onChange, className,
+  divClass }) => {
   return (
     <div className={divClass}>
       <input

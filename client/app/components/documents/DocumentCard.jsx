@@ -141,6 +141,7 @@ DocumentCard.propTypes = {
   currentUser: PropTypes.object.isRequired,
   limit: PropTypes.number.isRequired,
   offset: PropTypes.number.isRequired,
+  url: PropTypes.string.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DocumentCard);
