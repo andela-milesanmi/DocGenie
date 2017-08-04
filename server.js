@@ -48,7 +48,7 @@ app.use(
   })
 );
 
-// Parse incoming requests data (https://github.com/expressjs/body-parser)
+// Parse incoming request data (https://github.com/expressjs/body-parser)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 

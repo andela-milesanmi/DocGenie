@@ -136,9 +136,9 @@ export const viewAllUsers = (paginationMetadata) => {
 * @returns {function} dispatch - redux dispatch function
 */
 export const searchForUsers = (searchData) => {
-  const { searchKey, limit, offset } = searchData;
+  const { searchKey, limit } = searchData;
   const url =
-   `/api/search/users/?searchKey=${searchKey}&limit=${limit}&offset=${offset}`;
+   `/api/search/users/?searchKey=${searchKey}&limit=${limit}`;
   return (dispatch) => {
     return axios.get(url)
       .then((response) => {

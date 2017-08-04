@@ -18,15 +18,34 @@ module.exports = {
   */
   createNewUser(request, response) {
     const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+
+    if (!request.body.fullname || !request.body.username || !request.body.email
+    || !request.body.password || !request.body.confirmPassword) {
+      return response.status(400).json({
+        message: 'Please fill all the fields'
+      });
+    }
+
     if (!emailRegex.test(request.body.email)) {
       return response.status(400).json({
         message: 'Email is not rightly formatted',
       });
     }
-    if (!request.body.fullname || !request.body.email || !request.body.password
-      || !request.body.username) {
+    if (request.body.password.length < 6) {
       return response.status(400).json({
-        message: 'Please fill all the fields'
+        message: 'Password length must be more than 6 characters'
+      });
+    }
+
+    if (request.body.username.length < 2 && request.body.username.length > 30) {
+      return response.status(400).json({
+        message: 'Username length must be between 2 and 30 characters'
+      });
+    }
+
+    if (request.body.fullname.length < 3 || request.body.fullname.length > 40) {
+      return response.status(400).json({
+        message: 'Fullname length must be between 3 and 40 characters'
       });
     }
     if (request.body.password !== request.body.confirmPassword) {
@@ -51,7 +70,7 @@ module.exports = {
       },
     }).then((existingUser) => {
       if (existingUser.length > 0) {
-        return response.status(400).json({ message:
+        return response.status(409).json({ message:
            'Username or email already exists' });
       }
       return User

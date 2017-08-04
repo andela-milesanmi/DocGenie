@@ -91,7 +91,7 @@ describe('Documents Controller', () => {
       .set('authorization', adminToken)
       .send(mockData.invalidDocument)
       .end((error, response) => {
-        expect(response).to.have.status(500);
+        expect(response).to.have.status(400);
         expect(response.body).to.not.have.property('access');
         expect(response.body).to.not.have.property('content');
         done();
@@ -253,7 +253,7 @@ describe('Documents Controller', () => {
         .set('authorization', userToken)
         .send(mockData.invalidDocument)
         .end((error, response) => {
-          expect(response).to.have.status(500);
+          expect(response).to.have.status(400);
           expect(response.body).to.not.have.property('access');
           expect(response.body).to.not.have.property('content');
           done();

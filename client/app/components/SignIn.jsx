@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { signInUser } from '../actions/userActions';
-
+import InputField from './InputField.jsx';
 
 /**
 * @description - This component displays the signin form
@@ -43,16 +43,13 @@ export class SignIn extends React.Component {
               {this.props.user.error}
             </div>
             <div className="row">
-              <div className="input-field col s12">
-                <input name="email" id="email" type="text"
-                  className="validate" required/>
-                <label htmlFor="email">Email</label>
-              </div>
-              <div className="input-field col s12">
-                <input name="password" id="password" type="password"
-                  className="validate" required/>
-                <label htmlFor="password">Password</label>
-              </div>
+              <InputField name="email" id="email" type="text"
+                className="validate center-align" divClass="input-field col s12"
+                placeholder="Email"/>
+
+              <InputField name="password" id="password" type="password"
+                className="validate center-align" divClass="input-field col s12"
+                placeholder="Password"/>
             </div>
             <div>
               <button type="submit" id="signin-button"

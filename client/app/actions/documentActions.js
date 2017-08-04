@@ -2,21 +2,19 @@ import axios from 'axios';
 import toastr from 'toastr';
 import { VIEW_DOCUMENTS, VIEW_DOCUMENTS_ERROR, CREATE_DOCUMENT,
   CREATE_DOCUMENT_ERROR, CHANGE_CURRENT_DOCUMENT, EDIT_DOCUMENT,
-  EDIT_DOCUMENT_ERROR, DELETE_DOCUMENT_ERROR,
-  SEARCH_DOCUMENT, SEARCH_DOCUMENT_ERROR, VIEW_ONE_DOCUMENT,
+  EDIT_DOCUMENT_ERROR, DELETE_DOCUMENT_ERROR, VIEW_ONE_DOCUMENT,
   VIEW_ONE_DOCUMENT_ERROR } from '../actionTypes';
 
 let errorMessage;
 
 /**
 * @description - Allows the user view all documents available
-* @param {object} paginationMetadata - limit, offset
+* @param {object} url - api endpoints to fetch docuents from
 * @returns {function} dispatch - redux dispatch function
 */
-export const viewAllDocuments = (paginationMetadata) => {
-  const { limit, offset } = paginationMetadata;
+export const viewAllDocuments = (url) => {
   return (dispatch) => {
-    return axios.get(`/api/documents/?limit=${limit}&offset=${offset}`)
+    return axios.get(url)
       .then((response) => {
         dispatch({ type: VIEW_DOCUMENTS,
           documents: response.data.documents,
@@ -31,42 +29,19 @@ export const viewAllDocuments = (paginationMetadata) => {
 };
 
 /**
-* @description - allows a user view their personal documents
-* @param {object} paginationMetadata - limit, offset
-* @returns {function} dispatch - redux dispatch function
-*/
-export const viewOwnDocuments = (paginationMetadata) => {
-  const { limit, offset, userId } = paginationMetadata;
-  const url = `/api/users/${userId}/documents/?limit=${limit}&offset=${offset}`;
-  return (dispatch) => {
-    return axios.get(url)
-      .then((response) => {
-        dispatch({ type: VIEW_DOCUMENTS,
-          documents: response.data.documents,
-          pagination: response.data.pagination });
-      }, () => {}).catch((error) => {
-        errorMessage = error.response.data.message || error.response.data || '';
-        dispatch({ type: VIEW_DOCUMENTS_ERROR,
-          errorMessage });
-        return Promise.reject(errorMessage);
-      });
-  };
-};
-
-/**
 * @description - Allows the user create a new document
 * @param {object} document - title, access, content, userId
 * @param {object} paginationMetadata - limit, offset
 * @returns {function} dispatch - redux dispatch function
 */
-export const createDocument = (document, paginationMetadata) => {
+export const createDocument = (document, url) => {
   return (dispatch) => {
     return axios.post('/api/documents', document)
       .then((response) => {
         toastr.success('Document created!');
         dispatch({ type: CREATE_DOCUMENT,
           document: { ...document, ...response.data } });
-        dispatch(viewAllDocuments(paginationMetadata));
+        dispatch(viewAllDocuments(url));
         $('#create-form').modal('close');
       }).catch((error) => {
         errorMessage = error.response.data.message || error.response.data;
@@ -95,7 +70,7 @@ export const changeCurrentDocument = (document) => {
 * @param {object} document - title, access, content
 * @returns {function} dispatch - redux dispatch function
 */
-export const editDocument = (document, paginationMetadata) => {
+export const editDocument = (document, url) => {
   return (dispatch) => {
     return axios.put(`/api/documents/${document.id}`,
       document)
@@ -104,7 +79,7 @@ export const editDocument = (document, paginationMetadata) => {
           document: { ...document, ...response.data } });
         $('#create-form').modal('close');
         toastr.success('Document edited!');
-        dispatch(viewAllDocuments(paginationMetadata));
+        dispatch(viewAllDocuments(url));
       }).catch((error) => {
         errorMessage = error.response.data.message || error.response.data;
         dispatch({ type: EDIT_DOCUMENT_ERROR,
@@ -137,21 +112,8 @@ export const deleteDocument = (document, paginationMetadata) => {
 * @param {object} searchData - searchKey: search query, limit, offset
 * @returns {function} dispatch - redux dispatch function
 */
-export const searchForDocuments = (searchData) => {
-  const { searchKey, limit, offset } = searchData;
-  const url =
-  `/api/search/documents/?searchKey=${searchKey}&limit=${limit}&offset=${offset}`;
-  return (dispatch) => {
-    return axios.get(url)
-      .then((response) => {
-        dispatch({ type: SEARCH_DOCUMENT,
-          documents: response.data.documents || [],
-          pagination: response.data.pagination });
-      }).catch((error) => {
-        dispatch({ type: SEARCH_DOCUMENT_ERROR,
-          errorMessage: error.response.data.message || error.response.data });
-      });
-  };
+export const searchForDocuments = (url) => {
+  return dispatch => dispatch(viewAllDocuments(url));
 };
 
 /**

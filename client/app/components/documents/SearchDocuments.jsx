@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { searchForDocuments } from '../../actions/documentActions';
+import InputField from '../InputField.jsx';
 
 /**
  * @description - displays search input which allows
@@ -13,15 +14,20 @@ export const SearchDocuments = (props) => {
     event.preventDefault();
     const searchKey = event.target.value;
     const { limit, offset } = props;
-    if (searchKey) props.searchForDocuments({ searchKey, limit, offset });
+    let url;
+    if (searchKey) {
+      url = `/api/search/documents/?searchKey=${searchKey}&limit=${limit}`;
+    } else {
+      url = `api/documents/?limit=${limit}&offset=${offset}`;
+    }
+    props.searchForDocuments(url);
   };
   return (
     <div id="search-docs" className="row search-docs">
-      <div className="col s10">
-        <input name="searchKey" id="searchKey" type="text"
-          className="validate" placeholder="Search for documents here..."
-          onChange={handleChange}/>
-      </div>
+      <InputField name="searchKey" type="text" id="searchKey"
+        className="validate"
+        placeholder="Search for documents here..."
+        onChange={handleChange} divClass="col s10" />
     </div>
   );
 };

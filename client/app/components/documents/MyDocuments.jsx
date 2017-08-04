@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactPaginate from 'react-paginate';
-import { viewOwnDocuments, changeCurrentDocument, deleteDocument,
-  showOwnDocuments } from '../../actions/documentActions';
+import { viewAllDocuments, changeCurrentDocument, deleteDocument }
+  from '../../actions/documentActions';
 import CreateDocument from './CreateDocument.jsx';
 import SearchDocuments from './SearchDocuments.jsx';
 import DocumentCard from './DocumentCard.jsx';
@@ -34,7 +34,9 @@ export class MyDocuments extends React.Component {
   componentDidMount() {
     const { limit, offset } = this.state;
     const userId = this.props.user.id;
-    this.props.viewOwnDocuments({ limit, offset, userId });
+    const url =
+     `/api/users/${userId}/documents/?limit=${limit}&offset=${offset}`;
+    this.props.viewAllDocuments(url);
   }
 
   /**
@@ -57,7 +59,9 @@ export class MyDocuments extends React.Component {
     const { id: userId } = this.props.user;
     const offset = Math.ceil(selected * this.state.limit);
     this.setState({ offset }, () => {
-      this.props.viewOwnDocuments({ limit, offset, userId });
+      const url =
+      `/api/users/${userId}/documents/?limit=${limit}&offset=${offset}`;
+      this.props.viewAllDocuments(url);
     });
   }
 
@@ -67,18 +71,23 @@ export class MyDocuments extends React.Component {
   * @memberOf MyDocuments
   */
   render() {
+    const { id: userId } = this.props.user;
+    const url =
+     `/api/users/${userId}/documents/?
+     limit=${this.state.limit}&offset=${this.state.offset}`;
     return (
       <div className="dashboard-container">
         <div className="row my-documents">
           <h4 className="my-documents-text">MY DOCUMENTS</h4>
           <span className="col s2 my-documents-icon">
-            <a href="#create-form" className="btn-floating
-             btn-large waves-effect waves-light red right"
+            <a href="#create-form"
+              className="btn-floating btn-large waves-effect red right"
               onClick={() => this.editDocument()}>
               <i className="material-icons">add</i>
             </a>
           </span>
-          <CreateDocument limit={this.state.limit} offset={this.state.offset} />
+          <CreateDocument limit={this.state.limit} offset={this.state.offset}
+            url={url}/>
         </div>
         <div className="col s12">
           <div className="row" style={{ fontSize: '15px' }}>
@@ -86,7 +95,8 @@ export class MyDocuments extends React.Component {
               {this.props.documents && this.props.documents.map((document, i) =>
                 (
                 <DocumentCard index={i} document={document} key={document.id}
-                  limit={this.state.limit} offset={this.state.offset} />
+                  limit={this.state.limit}
+                  offset={this.state.offset} url={url}/>
                 )
               )}
               {this.props.documents && this.props.documents.length === 0 &&
@@ -132,12 +142,11 @@ const mapStateToProps = (state) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    viewOwnDocuments: paginationMetadata =>
-      dispatch(viewOwnDocuments(paginationMetadata)),
+    viewAllDocuments: url =>
+      dispatch(viewAllDocuments(url)),
     changeCurrentDocument: document =>
       dispatch(changeCurrentDocument(document)),
     deleteDocument: document => dispatch(deleteDocument(document)),
-    showOwnDocuments: (id, page) => dispatch(showOwnDocuments(id, page)),
   };
 };
 
@@ -147,7 +156,7 @@ MyDocuments.propTypes = {
   pages: PropTypes.number.isRequired,
   params: PropTypes.object.isRequired,
   changeCurrentDocument: PropTypes.func.isRequired,
-  viewOwnDocuments: PropTypes.func.isRequired,
+  viewAllDocuments: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
 };
 

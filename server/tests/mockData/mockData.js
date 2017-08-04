@@ -48,8 +48,8 @@ export default {
   publicDocument: {
     userId: 1,
     title: 'public document',
-    access: 0,
     content: 'public document created',
+    access: 0,
   },
   testPublicDocument: {
     id: 21,

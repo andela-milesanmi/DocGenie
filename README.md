@@ -3,7 +3,7 @@
 # DocGenie
 A document management system that allows users create documents, set access privileges for their documents, view other users' public and role-level documents, save private for-your-eyes-only documents and also edit or delete your saved documents.
 
-### About the Application
+### About the application
 
 #### API Features
 
@@ -46,32 +46,58 @@ The following features make up the Document Management System API:
 
 ##### Tech Stack
 
-* [React] - A javascript library for building user interfaces
-* [Redux] - A predictable state container for JavaScript apps.
-* [Enzyme] - A JavaScript Testing utility for React
-* [Materialize] - A great UI boilerplate for modern web apps
-* Node.js - An evented I/O for the backend
-* Express - A node.js framework for routing
-* [Webpack] - A file bundler and task runner
-* [Sequelize] - Sequelize is a promise-based ORM for Node.js and io.js.
-* [JWT] - Used to authenticate users, to enable them access the app routes
-* [Postgresql]: SQL database
+* **React** - A javascript library for building user interfaces
+
+* **React-router** - A javascript library for routing in react applications
+
+* **Redux** - A predictable state container for JavaScript apps.
+
+* **Materialize** - A great UI boilerplate for modern web apps
+
+* **Node.js** - A server-side JavaScript runtime engine built on Chrome's V8 JavaScript engine
+
+* **Express** - A node.js framework for routing
+
+* **Webpack** - A file bundler and task runner
+
+* **Sequelize** - A promise-based ORM for Node.js and io.js.
+
+* **JWT** - Used to authenticate users, to enable them access the app routes
+
+* **Postgresql**: object-relational database management system (ORDBMS)
+
+* **ESlint** - Javscript linting utility
+
+* **Babel** - A community driven tool that allows you write latest versions of javascript.
+
+* **Bcrypt** - A password hashing function designed by Niels Provos and David Mazières, based on the Blowfish cipher.
+
+##### Test Dependencies
+
+* **Mocha**: A feature-rich JavaScript test framework running on Node.js and in the browser.
+
+* **Chai**: A BDD/TDD assertion library for node and the browser that can be paired with any javascript testing framework.
+
+* **Enzyme**: Enzyme is a JavaScript Testing utility for React
+
+* **Sinon**: Standalone test spies, stubs and mocks for JavaScript. Works with any unit testing framework.
+
+##### How To Use
+* Visit <http://docgenie.herokuapp.com/> to use this app online.
+
+OR Install and use locally
 
 ##### How To Install
 
-N.B: DocGenie requires Node.js v4+ to run
+`N.B: DocGenie requires Node.js v4+ to run`
 
 * Clone/download this repository then run the following commands:
 ```
 $ cd DocGenie
 $ npm install
 $ npm run start:dev
-$ npm start
 $ npm test
 ```
-
-##### How to use
-* Visit http://docgenie.herokuapp.com/ to use this app online.
 
 ##### Run in Postman
 
@@ -80,48 +106,54 @@ $ npm test
 ##### API Documentation
 
 The API has routes, each dedicated to a single task that uses HTTP response codes to indicate API status and error messages.
-You can find the full API documentation here: https://andela-mharuna.github.io/slate
+You can find the full API documentation here: <https://andela-mharuna.github.io/slate>
 
 ##### Authentication
 
-* Users are assigned a token when signup or signin. This token is needed for subsequent HTTP requests to the API for authentication and can be attached as values to the header's x-acess-token or authorization key. API requests made without authentication will fail with the status code ```401: Unauthorized Access```.
+* Users are assigned a token on signup or signin. This token is needed for subsequent HTTP requests to the API for authentication and can be attached as values to the header's x-access-token or authorization key. API requests made without authentication will fail with the status code `401: Unauthorized Access`.
 
-####### Below are the API endpoints and their functions:
+##### Below are the API endpoints and their functions:
 
-* EndPoint	Functionality
- - POST /auth/api/users/login : Logs a user in.
- - POST /api/users/logout :	Logs a user out.
- - POST /auth/api/users : 	Creates a new user.
- - GET /api/users	: Find matching instances of user.
- - GET /api/users/:id	Find a particular user.
- - PUT /api/users :	Update user attributes.
- - DELETE /api/users	: Delete user.
- - POST /api/documents :	Creates a new document instance.
- - GET /api/documents :	Find matching instances of documents.
- - GET /api/documents/:id :	Find a particular document.
- - PUT /api/documents :	Update document attributes.
- - DELETE /api/documents/:id	: Delete document.
- - GET /api/users/:id/documents :	Find all documents belonging to the user.
- - GET /api/search/users/:key :	Gets all users whose names match the search-key
- - GET /api/search/documents/:term	Get all documents with title and content matching the search-key
+###### EndPoints
+ - POST /auth/api/users/login: Logs a user in.
+ - POST /api/users/logout: Logs a user out.
+ - POST /auth/api/users: Creates a new user.
+ - GET /api/users: Find matching instances of user.
+ - GET /api/users/:id: Find a particular user.
+ - PUT /api/users: Update user attributes.
+ - DELETE /api/users: Delete user.
+ - POST /api/documents: Creates a new document instance.
+ - GET /api/documents: Find matching instances of documents.
+ - GET /api/documents/:id: Find a particular document.
+ - PUT /api/documents: Update document attributes.
+ - DELETE /api/documents/:id: Delete document.
+ - GET /api/users/:id/documents: Find all documents belonging to the user.
+ - GET /api/search/users/:searchKey: Gets all users whose names match the search-key
+ - GET /api/search/documents/:searchKey: Get all documents with title and content matching the search-key
 
 
-###### Limitations:
+##### Limitations:
 
 - The limitations to the DocGenie API are as follows:
 
-* Users cannot upload images in their documents yet.
-* Users cannot share documents with people on social platforms, but can make document public to make it available to other users in the app.
+* Users cannot upload images in their documents.
+* Users cannot share documents with people on social platforms like Twitter, Facebook, etc
 
-###### Contributing
+##### Contributing
 
 - Contributors are welcome to further enhance the features of this API by contributing to its development. The following guidelines should guide you in contributing to this project:
 
-* Download/Clone this repository.
-* Install the dependencies using npm install.
-* Run npm start:dev to start the application.
-* To test: run npm test.
-* Fork this repo to your own repository.
-* Create a new branch: git checkout -b new-branch-name.
-* Work on a new feature and push to your branch.
-* Create a pull request to the staging branch of this repo.
+* Fork this repository to your own account.
+* Download/Clone your own forked repository to your local machine.
+* Create a new branch: `git checkout -b new-branch-name`.
+* Install the dependencies using `npm install`.
+* Rename .env_example to .env and add the required information.
+* Run `npm run start:dev` to start the application in development mode.
+* To run application unit tests: `npm test`.
+* To run end-to-end tests: `npm run e2e-test`
+* Work on a new feature and push to your remote branch: `git push origin your-branch-name`
+* Raise a pull request to the staging branch of this repo.
+* For the branch-naming, commit messages and pull request conventions used for this project, kindly check the wiki
+of this repo here: <https://github.com/andela-mharuna/DocGenie/wiki>
+* This project uses javascript ES6 and follows the airbnb style-guide: <https://github.com/airbnb/javascript>
+
