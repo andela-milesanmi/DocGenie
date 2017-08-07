@@ -9,8 +9,8 @@ import { AllUsers } from '../../app/components/users/AllUsers.jsx';
 
 
 describe('AllUsers component', () => {
-  const mockStore = configureStore([thunk]);
   let component;
+  const mockStore = configureStore([thunk]);
   const store = mockStore({ documents: {},
     user: { currentProfile: { id: 10 } } });
 

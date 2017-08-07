@@ -22,7 +22,8 @@ const getUserToken = (data) => {
 };
 
 describe('Documents Controller', () => {
-  let adminToken, userToken;
+  let adminToken;
+  let userToken;
   before(() => {
     return models.Role.create(mockData.adminRole)
       .then((roleData) => {
@@ -48,9 +49,9 @@ describe('Documents Controller', () => {
     return models.Role.sequelize.sync({ force: true });
   });
 
-  it('should allow an admin user fetch ALL public and role-based documents',
+  it('should allow an admin user fetch ALL available documents',
     (done) => {
-      const { username } = mockData.bulkDocuments[0];
+      const { userId, content, title, access } = mockData.bulkDocuments[0];
       chai.request(server)
         .get('/api/documents')
         .set('authorization', adminToken)
@@ -59,13 +60,18 @@ describe('Documents Controller', () => {
           expect(response.body.documents[0].id).to.equal(1);
           expect(response.body.documents[1].id).to.equal(2);
           expect(response.body.documents[2].id).to.equal(3);
-          expect(response.body.documents[1].username).to.equal(username);
+          expect(response.body.documents[0].userId).to.equal(userId);
+          expect(response.body.documents[0].title).to.equal(title);
+          expect(response.body.documents[0].content).to.equal(content);
+          expect(response.body.documents[0].access).to.equal(access);
           expect(response.body).to.be.an('object').that.has
             .all.keys('documents', 'pagination');
+          expect(response.body.pagination.totalCount)
+            .to.equal(mockData.bulkDocuments.length);
           done();
         });
     });
-  it('should allow an admin user add a public document to database',
+  it('should allow an admin user create a public document',
     (done) => {
       const { title, content, access } = mockData.publicDocument;
       chai.request(server)
@@ -75,13 +81,10 @@ describe('Documents Controller', () => {
         .end((error, response) => {
           expect(response).to.have.status(201);
           expect(response.body).to.have.property('userId');
-          expect(response.body).to.have.property('title');
-          expect(response.body).to.have.property('access');
-          expect(response.body).to.have.property('content');
+          expect(response.body).to.have.property('title').to.equal(title);
+          expect(response.body).to.have.property('access').to.equal(access);
+          expect(response.body).to.have.property('content').to.equal(content);
           expect(response.body.userId).to.equal(1);
-          expect(response.body.title).to.equal(title);
-          expect(response.body.content).to.equal(content);
-          expect(response.body.access).to.equal(access);
           done();
         });
     });
@@ -94,6 +97,7 @@ describe('Documents Controller', () => {
         expect(response).to.have.status(400);
         expect(response.body).to.not.have.property('access');
         expect(response.body).to.not.have.property('content');
+        expect(response.body).to.eql({ message: 'Please fill all fields' });
         done();
       });
   });
@@ -106,13 +110,10 @@ describe('Documents Controller', () => {
       .end((error, response) => {
         expect(response).to.have.status(201);
         expect(response.body).to.have.property('userId');
-        expect(response.body).to.have.property('title');
-        expect(response.body).to.have.property('access');
-        expect(response.body).to.have.property('content');
+        expect(response.body).to.have.property('title').to.equal(title);
+        expect(response.body).to.have.property('access').to.equal(access);
+        expect(response.body).to.have.property('content').to.equal(content);
         expect(response.body.userId).to.equal(1);
-        expect(response.body.title).to.equal(title);
-        expect(response.body.access).to.equal(access);
-        expect(response.body.content).to.equal(content);
         done();
       });
   });
@@ -142,14 +143,10 @@ describe('Documents Controller', () => {
         .send(mockData.roleDocument)
         .end((error, response) => {
           expect(response).to.have.status(201);
-          expect(response.body).to.have.property('userId');
-          expect(response.body).to.have.property('title');
-          expect(response.body).to.have.property('access');
-          expect(response.body).to.have.property('content');
+          expect(response.body).to.have.property('title').to.equal(title);
+          expect(response.body).to.have.property('access').to.equal(access);
+          expect(response.body).to.have.property('content').to.equal(content);
           expect(response.body.userId).to.equal(1);
-          expect(response.body.title).to.equal(title);
-          expect(response.body.content).to.equal(content);
-          expect(response.body.access).to.equal(access);
           done();
         });
     });
@@ -158,15 +155,14 @@ describe('Documents Controller', () => {
       chai.request(server)
         .put('/api/documents/8')
         .set('authorization', adminToken)
-        .send({ title: 'sample doc', content: 'sample document updated' })
+        .send({ title: 'Here we go', content: 'sample document updated' })
         .end((error, response) => {
           expect(response).to.have.status(200);
-          expect(response.body).to.have.property('id');
-          expect(response.body).to.have.property('userId');
-          expect(response.body).to.have.property('title');
-          expect(response.body).to.have.property('access');
-          expect(response.body.title).to.equal('sample doc');
-          expect(response.body.content).to.equal('sample document updated');
+          expect(response.body).to.have.property('userId').to.equal(1);
+          expect(response.body).to.have.property('title')
+            .to.equal('Here we go');
+          expect(response.body).to.have.property('content')
+            .to.equal('sample document updated');
           done();
         });
     });
@@ -183,7 +179,7 @@ describe('Documents Controller', () => {
           done();
         });
     });
-  it('should allow a user delete a document and see a message',
+  it('should allow an admin user delete a document and see a message',
     (done) => {
       chai.request(server)
         .delete('/api/documents/2')
@@ -195,7 +191,7 @@ describe('Documents Controller', () => {
           done();
         });
     });
-  it('should allow a user search for particular documents',
+  it('should allow an admin user search for a particular document(s)',
     (done) => {
       const { username, fullname, email } = mockData.publicDocument;
 
@@ -215,7 +211,6 @@ describe('Documents Controller', () => {
 
   // ***** Regular user ****
   it('should allow a regular user list ALL documents', (done) => {
-    const { username } = mockData.bulkDocuments[0];
     chai.request(server)
       .get('/api/documents')
       .set('authorization', userToken)
@@ -223,13 +218,20 @@ describe('Documents Controller', () => {
         expect(response).to.have.status(200);
         expect(response.body).to.be.an('object').that.has
           .all.keys('documents', 'pagination');
-        expect(response.body.documents[1].username).to.equal(username);
+        expect(response.body.documents[0].title).to.equal('public document');
+        expect(response.body.documents[0].content)
+          .to.equal('public document created');
+        expect(response.body.documents[0].access).to.equal(0);
+        expect(response.body).to.be.an('object').that.has
+          .all.keys('documents', 'pagination');
+        expect(response.body.pagination.totalCount)
+          .to.equal(mockData.bulkDocuments.length);
         done();
       });
   });
   it('should allow a regular user create a public document',
     (done) => {
-      const { access, content } = mockData.userPublicDocument;
+      const { title, access, content } = mockData.userPublicDocument;
 
       chai.request(server)
         .post('/api/documents')
@@ -237,12 +239,10 @@ describe('Documents Controller', () => {
         .send(mockData.userPublicDocument)
         .end((error, response) => {
           expect(response).to.have.status(201);
-          expect(response.body).to.have.property('userId');
-          expect(response.body).to.have.property('title');
-          expect(response.body).to.have.property('access');
-          expect(response.body).to.have.property('content');
-          expect(response.body.access).to.equal(access);
-          expect(response.body.content).to.equal(content);
+          expect(response.body).to.have.property('userId').to.equal(2);
+          expect(response.body).to.have.property('title').to.equal(title);
+          expect(response.body).to.have.property('access').to.equal(access);
+          expect(response.body).to.have.property('content').to.equal(content);
           done();
         });
     });
@@ -256,12 +256,13 @@ describe('Documents Controller', () => {
           expect(response).to.have.status(400);
           expect(response.body).to.not.have.property('access');
           expect(response.body).to.not.have.property('content');
+          expect(response.body).to.eql({ message: 'Please fill all fields' });
           done();
         });
     });
   it('should allow a regular user create a private document',
     (done) => {
-      const { access, content } = mockData.userPrivateDocument;
+      const { userId, title, access, content } = mockData.userPrivateDocument;
 
       chai.request(server)
         .post('/api/documents')
@@ -271,12 +272,10 @@ describe('Documents Controller', () => {
           expect(response).to.have.status(201);
           expect(response.body).to.be.an('object');
           expect(response.body).to.have.property('id');
-          expect(response.body).to.have.property('userId');
-          expect(response.body).to.have.property('title');
-          expect(response.body).to.have.property('access');
-          expect(response.body).to.have.property('content');
-          expect(response.body.access).to.equal(access);
-          expect(response.body.content).to.equal(content);
+          expect(response.body).to.have.property('userId').to.equal(userId);
+          expect(response.body).to.have.property('title').to.equal(title);
+          expect(response.body).to.have.property('access').to.equal(access);
+          expect(response.body).to.have.property('content').to.equal(content);
           done();
         });
     });
@@ -285,14 +284,13 @@ describe('Documents Controller', () => {
       chai.request(server)
         .put('/api/documents/3')
         .set('authorization', userToken)
-        .send({ content: 'public user doc updated' })
+        .send({ title: '235 Ikorodu road', content: 'public user doc updated' })
         .end((error, response) => {
           expect(response).to.have.status(200);
           expect(response.body).to.be.an('object');
-          expect(response.body).to.have.property('id');
-          expect(response.body).to.have.property('userId');
-          expect(response.body).to.have.property('title');
-          expect(response.body).to.have.property('access');
+          expect(response.body).to.have.property('userId').to.equal(2);
+          expect(response.body).to.have.property('title')
+            .to.equal('235 Ikorodu road');
           expect(response.body.content).to.equal('public user doc updated');
           done();
         });

@@ -57,7 +57,7 @@ module.exports = {
     if (request.decoded.roleId === 1) {
       next();
     } else {
-      return response.status(401).json({
+      return response.status(403).json({
         message: 'Sorry, You are not authorized to perform this action',
       });
     }
