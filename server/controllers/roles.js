@@ -14,7 +14,7 @@ module.exports = {
       },
     }).then((existingRole) => {
       if (existingRole.length > 0) {
-        return response.status(400).json({ message:
+        return response.status(409).json({ message:
            'Role already exists' });
       }
       return Role

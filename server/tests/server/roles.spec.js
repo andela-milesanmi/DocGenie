@@ -22,8 +22,8 @@ const getUserToken = (data) => {
 };
 
 describe('Roles Controller', () => {
-  let adminToken,
-    userToken;
+  let adminToken;
+  let userToken;
 
   before(() => {
     return models.Role.create(mockData.adminRole)
@@ -56,7 +56,9 @@ describe('Roles Controller', () => {
         .get('/api/roles')
         .set('authorization', userToken)
         .end((error, response) => {
-          expect(response).to.have.status(401);
+          expect(response).to.have.status(403);
+          expect(response.body).to.eql({ message:
+             'Sorry, You are not authorized to perform this action' });
           done();
         });
     });
@@ -67,7 +69,9 @@ describe('Roles Controller', () => {
         .delete('/api/roles/1')
         .set('authorization', userToken)
         .end((error, response) => {
-          expect(response).to.have.status(401);
+          expect(response).to.have.status(403);
+          expect(response.body).to.eql({ message:
+             'Sorry, You are not authorized to perform this action' });
           done();
         });
     });
@@ -78,7 +82,9 @@ describe('Roles Controller', () => {
         .set('authorization', adminToken)
         .send({ title: 'admin' })
         .end((error, response) => {
-          expect(response).to.have.status(400);
+          expect(response).to.have.status(409);
+          expect(response.body).to.eql({ message:
+           'Role already exists' });
           done();
         });
     });

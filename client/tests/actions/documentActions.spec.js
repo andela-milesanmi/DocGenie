@@ -14,11 +14,11 @@ const mockStore = configureMockStore([thunk]);
 
 
 describe('Document Actions', () => {
-  let store,
-    axiosGetStub,
-    axiosPostStub,
-    axiosPutStub,
-    axiosDeleteStub;
+  let store;
+  let axiosGetStub;
+  let axiosPostStub;
+  let axiosPutStub;
+  let axiosDeleteStub;
   const response = { data: {
     documents: ['I am one document'],
     pagination: 'pagination object'

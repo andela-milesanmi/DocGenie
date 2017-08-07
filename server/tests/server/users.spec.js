@@ -22,8 +22,8 @@ const getUserToken = (data) => {
 };
 
 describe('Users', () => {
-  let userToken,
-    adminToken;
+  let userToken;
+  let adminToken;
 
   before(() => {
     return models.Role.create(mockData.adminRole)
@@ -79,12 +79,14 @@ describe('Users', () => {
           done();
         });
     });
-  it('should not be able to access an authenticated route without a token',
+  it('should not be able to access any authenticated route without a token',
     (done) => {
       chai.request(server)
         .get('/api/users')
         .end((error, response) => {
           expect(response).to.have.status(401);
+          expect(response.body).to.eql({ message:
+             'Token required for access' });
           done();
         });
     });
@@ -124,7 +126,7 @@ describe('Users', () => {
     const { username, fullname } = mockData.firstUser;
     chai.request(server)
       .get('/api/search/users/?searchKey=admin01')
-      .set('authorization', userToken)
+      .set('authorization', adminToken)
       .end((error, response) => {
         expect(response).to.have.status(200);
         expect(response.body).to.be.an('object');

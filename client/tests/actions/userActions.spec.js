@@ -14,12 +14,12 @@ import { createUser,
 const mockStore = configureMockStore([thunk]);
 
 describe('User Actions', () => {
-  let store,
-    axiosGetStub,
-    axiosPostStub,
-    axiosPutStub,
-    axiosDeleteStub,
-    browserHistorySpy;
+  let store;
+  let axiosGetStub;
+  let axiosPostStub;
+  let axiosPutStub;
+  let axiosDeleteStub;
+  let browserHistorySpy;
   const response = { data: {
     user: { fullname: 'one user' },
     users: [{ id: 1, userId: 34, fullname: 'two users' }],

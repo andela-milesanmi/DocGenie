@@ -9,8 +9,8 @@ import Home from '../../app/components/Home.jsx';
 
 
 describe('Home component', () => {
-  const mockStore = configureStore([thunk]);
   let component;
+  const mockStore = configureStore([thunk]);
   const store = mockStore({ documents: {},
     user: { currentProfile: { id: 10 } } });
 
