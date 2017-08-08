@@ -112,29 +112,9 @@ You can find the full API documentation here: <https://andela-mharuna.github.io/
 
 * Users are assigned a token on signup or signin. This token is needed for subsequent HTTP requests to the API for authentication and can be attached as values to the header's x-access-token or authorization key. API requests made without authentication will fail with the status code `401: Unauthorized Access`.
 
-##### Below are the API endpoints and their functions:
-
-###### EndPoints
- - POST /auth/api/users/login: Logs a user in.
- - POST /api/users/logout: Logs a user out.
- - POST /auth/api/users: Creates a new user.
- - GET /api/users: Find matching instances of user.
- - GET /api/users/:id: Find a particular user.
- - PUT /api/users: Update user attributes.
- - DELETE /api/users: Delete user.
- - POST /api/documents: Creates a new document instance.
- - GET /api/documents: Find matching instances of documents.
- - GET /api/documents/:id: Find a particular document.
- - PUT /api/documents: Update document attributes.
- - DELETE /api/documents/:id: Delete document.
- - GET /api/users/:id/documents: Find all documents belonging to the user.
- - GET /api/search/users/:searchKey: Gets all users whose names match the search-key
- - GET /api/search/documents/:searchKey: Get all documents with title and content matching the search-key
-
-
 ##### Limitations:
 
-- The limitations to the DocGenie API are as follows:
+- The limitations to the DocGenie Application are as follows:
 
 * Users cannot upload images in their documents.
 * Users cannot share documents with people on social platforms like Twitter, Facebook, etc
