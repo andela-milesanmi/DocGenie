@@ -88,19 +88,20 @@ describe('Documents Controller', () => {
           done();
         });
     });
-  it('should fail to create a new document if content is empty', (done) => {
-    chai.request(server)
-      .post('/api/documents')
-      .set('authorization', adminToken)
-      .send(mockData.invalidDocument)
-      .end((error, response) => {
-        expect(response).to.have.status(400);
-        expect(response.body).to.not.have.property('access');
-        expect(response.body).to.not.have.property('content');
-        expect(response.body).to.eql({ message: 'Please fill all fields' });
-        done();
-      });
-  });
+  it('should NOT allow an admin user create a new document if content is empty',
+    (done) => {
+      chai.request(server)
+        .post('/api/documents')
+        .set('authorization', adminToken)
+        .send(mockData.invalidDocument)
+        .end((error, response) => {
+          expect(response).to.have.status(400);
+          expect(response.body).to.not.have.property('access');
+          expect(response.body).to.not.have.property('content');
+          expect(response.body).to.eql({ message: 'Please fill all fields' });
+          done();
+        });
+    });
   it('should allow admin create a private document', (done) => {
     const { title, access, content } = mockData.privateDocument;
     chai.request(server)
